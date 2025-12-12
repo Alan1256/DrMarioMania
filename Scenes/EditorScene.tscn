@@ -528,10 +528,10 @@ screenMan = NodePath("../../../../EditorPauseManager")
 musicPreviewPlayer = NodePath("../../../../../MusicPreviewPlayer")
 settingName = &"CustomLevelMusic"
 
-[node name="PopUpButtonMobile" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/MusicScreen/SongCategoryContainer/MarginContainer/SongCategories/CustomMusicContainer" index="0" node_paths=PackedStringArray("popUpGroup")]
+[node name="PopUpButtonMobile" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/MusicScreen/SongCategoryContainer/MarginContainer/SongCategories/CustomMusicContainer" index="1" node_paths=PackedStringArray("popUpGroup")]
 popUpGroup = NodePath("../../../../../../../../PopUpGroup")
 
-[node name="PopUpButtonPC" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/MusicScreen/SongCategoryContainer/MarginContainer/SongCategories/CustomMusicContainer" index="1" node_paths=PackedStringArray("popUpGroup")]
+[node name="PopUpButtonPC" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/MusicScreen/SongCategoryContainer/MarginContainer/SongCategories/CustomMusicContainer" index="2" node_paths=PackedStringArray("popUpGroup")]
 popUpGroup = NodePath("../../../../../../../../PopUpGroup")
 
 [node name="LevelSettingsScreen" type="Control" parent="EditorPauseLayer/ScreenCentre/ScreenContainer" index="3" node_paths=PackedStringArray("InitialHoverNode")]
@@ -1510,6 +1510,7 @@ texture = ExtResource("3_6i3kl")
 hframes = 3
 vframes = 10
 
+[connection signal="pressed" from="PauseLayer/ScreenCentre/ScreenContainer/SettingsScreen/BackButton" to="PauseLayer/PauseManager" method="GoBack"]
 [connection signal="text_changed" from="EditorPauseLayer/ScreenCentre/ScreenContainer/SaveScreen/VBoxContainer/LevelNameBox" to="EditorPauseLayer/ScreenCentre/ScreenContainer/SaveScreen/VBoxContainer/LevelNameBox" method="UpdateLevelName"]
 [connection signal="pressed" from="EditorPauseLayer/ScreenCentre/ScreenContainer/SaveScreen/VBoxContainer/SaveButton" to="EditorPauseLayer/EditorPauseManager" method="GoBack"]
 [connection signal="pressed" from="EditorPauseLayer/ScreenCentre/ScreenContainer/SaveScreen/VBoxContainer/SaveButton" to="EditorManager" method="SaveLevel"]

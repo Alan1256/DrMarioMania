@@ -328,7 +328,6 @@ public partial class JarManager : Node
 
                 if (basicSettingChunks.Length > 6)
 				{
-                	GD.Print("is using: " + basicSettingChunks[6]);
                     bool usingCol = basicSettingChunks[6] == "1";
                     CommonGameSettings.IsCustomLevelUsingCustomBgColour = usingCol;
 					
@@ -519,7 +518,9 @@ public partial class JarManager : Node
 
 		DisablePowerUpSpawning = true;
 		DeleteAllPowerUps();
-	}
+
+        VirusRing.DefeatAllNonDefeatedViruses();
+    }
 
 	public void GameOver()
 	{		
@@ -1878,6 +1879,33 @@ public partial class JarManager : Node
 		// Remove group of junk segments just created from queuedJunkSegments
 		queuedJunkSegments.RemoveAt(0);
 	}
+
+	// changes colour of tile
+	public bool PaintTile(Vector2I pos, int colour)
+	{
+		// can only paint if tile exists and has an assigned colour
+        if (IsTilePresent(pos) && GetTileColour(pos) > 0)
+		{
+			// get source id + atlas
+            int sourceID = GetTileSourceID(pos);
+            Vector2I atlas = GetTileAtlas(pos);
+
+			// set atlas to match colour
+			atlas.Y = colour;
+			if (sourceID != GameConstants.powerUpSourceID)
+                atlas.Y -= 1;
+
+			if (sourceID == GameConstants.virusSourceID)
+                virusesRemaining[pos] = colour;
+
+            // set cell
+            jarTiles.SetCell(pos, sourceID, atlas);
+
+            return true;
+        }
+		else
+            return false;
+    }
 
 	// Destroys tile at given position - returns true if pos is not empty, aka something gets destroyed
 	public bool DestroyTile(Vector2I pos, bool forceInsta = false, bool dontActivatePowerUp = false)

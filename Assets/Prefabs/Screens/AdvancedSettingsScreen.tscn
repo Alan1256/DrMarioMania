@@ -52,6 +52,7 @@ text = "CUSTOM GAMEPLAY STYLE"
 horizontal_alignment = 1
 
 [node name="SettingsContainer" type="ScrollContainer" parent="."]
+clip_contents = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -411,7 +412,7 @@ vframes = 10
 frame = 1
 
 [node name="PowerUps" type="Control" parent="SettingsContainer/BoxContainer"]
-custom_minimum_size = Vector2(0, 59)
+custom_minimum_size = Vector2(0, 47)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -457,7 +458,11 @@ Lightning (vertical): Destroys objects in its column and doesn't get stopped by 
 
 Lightning (horizontal): Same as above, but destroys objects in its row instead.
 
-Fallinator: Causes objects above and below it to fall downwards."
+Fallinator: Causes objects above and below it to fall downwards.
+
+Paint Bucket (vertical): Changes the colour of viruses, pills, etc above and below it.
+
+Paint Bucket (horizontal): Same as above, but affects objects on either side of it instead."
 alignDescToLeft = true
 
 [node name="PowerUpContainer" type="FlowContainer" parent="SettingsContainer/BoxContainer/PowerUps" node_paths=PackedStringArray("firstButton")]
@@ -467,15 +472,16 @@ anchor_right = 1.0
 offset_left = 1.0
 offset_top = 14.0
 offset_right = -1.0
-offset_bottom = 35.0
+offset_bottom = 28.0
 grow_horizontal = 2
+theme_override_constants/h_separation = 2
 script = ExtResource("4_3i0vp")
 commonGameSettings = ExtResource("5_b2lsy")
 themeList = ExtResource("6_js1ir")
 firstButton = NodePath("Button")
 
 [node name="Button" type="Button" parent="SettingsContainer/BoxContainer/PowerUps/PowerUpContainer"]
-custom_minimum_size = Vector2(20, 21)
+custom_minimum_size = Vector2(13, 14)
 layout_mode = 2
 focus_neighbor_top = NodePath("../../PopUpButton")
 mouse_filter = 1
@@ -483,22 +489,22 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_jqtnu")
 toggle_mode = true
 
 [node name="Sprite2D" type="Sprite2D" parent="SettingsContainer/BoxContainer/PowerUps/PowerUpContainer/Button"]
-position = Vector2(11, 11)
-scale = Vector2(2, 2)
+position = Vector2(7, 7)
 texture = ExtResource("4_7bqxt")
-hframes = 7
+hframes = 12
 vframes = 11
-frame = 7
+frame = 12
 
 [node name="SpecialPowerUpContainer" type="FlowContainer" parent="SettingsContainer/BoxContainer/PowerUps" node_paths=PackedStringArray("firstButton")]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 1.0
-offset_top = 37.0
+offset_top = 32.0
 offset_right = -1.0
-offset_bottom = 58.0
+offset_bottom = 46.0
 grow_horizontal = 2
+theme_override_constants/h_separation = 2
 script = ExtResource("4_3i0vp")
 isSpecialPowerUps = true
 commonGameSettings = ExtResource("5_b2lsy")
@@ -506,7 +512,7 @@ themeList = ExtResource("6_js1ir")
 firstButton = NodePath("Button")
 
 [node name="Button" type="Button" parent="SettingsContainer/BoxContainer/PowerUps/SpecialPowerUpContainer"]
-custom_minimum_size = Vector2(20, 21)
+custom_minimum_size = Vector2(13, 14)
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../../../PowerUpMeter/PopUpButton")
 mouse_filter = 1
@@ -515,10 +521,9 @@ toggle_mode = true
 
 [node name="Sprite2D" type="Sprite2D" parent="SettingsContainer/BoxContainer/PowerUps/SpecialPowerUpContainer/Button"]
 material = ExtResource("5_1lxi6")
-position = Vector2(11, 11)
-scale = Vector2(2, 2)
+position = Vector2(7, 7)
 texture = ExtResource("4_7bqxt")
-hframes = 7
+hframes = 12
 vframes = 11
 
 [node name="PowerUpMeter" type="Control" parent="SettingsContainer/BoxContainer"]

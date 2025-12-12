@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using Godot;
 
-public partial class PowerUpPlus : BaseShootPowerUp
+public partial class PowerUpPaint : BaseShootPowerUp
 {
+    [Export] private bool isHorizontal;
     [Export] private Godot.Collections.Array<Sprite2D> projectiles;
     private Vector2[] projectileDirections = { Vector2.Up, Vector2.Down, Vector2.Left, Vector2.Right };
     protected float[] projectileEndPositions;
-    protected Vector2I[] gridPositions = new Vector2I[4];
-    protected Vector2I[] lastGridPositions = new Vector2I[4];
+    protected Vector2I[] gridPositions = new Vector2I[2];
+    protected Vector2I[] lastGridPositions = new Vector2I[2];
     protected bool[] finishedProjectiles = { false, false, false, false };
     public override Texture2D Texture
     {
@@ -39,6 +40,12 @@ public partial class PowerUpPlus : BaseShootPowerUp
         projectileEndPositions = new float[4]{ jarMan.JarTopPos, jarMan.JarBottomPos, jarMan.JarLeftPos, jarMan.JarRightPos };
 	}
 
+    // tries to change the colour of a tile unless its unpaintable, returns whethe was success or not
+    protected bool AttemptToPaintSegment(Vector2I pos)
+    {
+        return jarMan.PaintTile(pos, colour);
+    }
+
     // Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
     {
@@ -53,15 +60,17 @@ public partial class PowerUpPlus : BaseShootPowerUp
             if (finishedProjectiles[i])
                 continue;
 
+            int dirIndex = isHorizontal ? i + 2 : i;
+
             remainingProjectiles++;
             
-            projectiles[i].Position += projectileDirections[i] * speed * (float)delta;
+            projectiles[i].Position += projectileDirections[dirIndex] * speed * (float)delta;
             gridPositions[i] = WorldPosToGridPos(projectiles[i].GlobalPosition);
 
             if (gridPositions[i] != lastGridPositions[i])
             {
                 List<Vector2I> positions = GetPositionsBetweenPositions(lastGridPositions[i], gridPositions[i], true);
-                bool destroyedAnything = false;
+                bool changedAnything = false;
                 bool doRebound = false;
 
                 for (int j = 0; j < positions.Count; j++)
@@ -72,26 +81,26 @@ public partial class PowerUpPlus : BaseShootPowerUp
                         finishedProjectiles[i] = true;
                     }
 
-                    if (AttemptToDestroySegment(positions[j]))
-                        destroyedAnything = true;
+                    if (AttemptToPaintSegment(positions[j]))
+                        changedAnything = true;
 
                     if (doRebound)
                         break;
                 }
 
-                if (destroyedAnything)
+                if (changedAnything)
                     sfxMan.Play("SingleHit");
             }
             
             lastGridPositions[i] = gridPositions[i];
 
-            float endPos = projectileEndPositions[i];
+            float endPos = projectileEndPositions[dirIndex];
 
-            if (projectileDirections[i].Y == 0)
+            if (projectileDirections[dirIndex].Y == 0)
             {
                 float x = projectiles[i].GlobalPosition.X;
 
-                if (projectileDirections[i].X < 0)
+                if (projectileDirections[dirIndex].X < 0)
                 {
                     if (x <= endPos)
                         finishedProjectiles[i] = true;
@@ -106,7 +115,7 @@ public partial class PowerUpPlus : BaseShootPowerUp
             {
                 float y = projectiles[i].GlobalPosition.Y;
 
-                if (projectileDirections[i].Y < 0)
+                if (projectileDirections[dirIndex].Y < 0)
                 {
                     if (y <= endPos)
                         finishedProjectiles[i] = true;

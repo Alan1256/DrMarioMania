@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dqamxvisnf3cf"]
+
+[ext_resource type="PackedScene" uid="uid://vtgshvtuuuxs" path="res://Assets/Prefabs/PowerUps/PowerUpPaintV.tscn" id="1_mtotx"]
+
+[node name="PowerUpPaintH" instance=ExtResource("1_mtotx")]
+isHorizontal = true
+powerUp = 10

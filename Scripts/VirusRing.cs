@@ -83,12 +83,29 @@ public partial class VirusRing : Control
         }
     }
 
+    public void DefeatAllNonDefeatedViruses()
+    {
+        foreach (VirusRingVirus virus in viruses)
+        {
+            if (!virus.IsDefeated)
+            {
+                if (!virus.IsStunned)
+                    stunnedVirusColours++;
+
+                virus.Stun(true);
+            }
+        }
+    }
+
     public void StunVirus(int colour, bool isDefeated)
     {
         foreach (VirusRingVirus virus in viruses)
         {
             if (virus.Colour == colour)
             {
+                if (virus.IsDefeated)
+                    break;
+
                 if (!virus.IsStunned)
                     stunnedVirusColours++;
 
