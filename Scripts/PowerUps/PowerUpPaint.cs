@@ -10,12 +10,10 @@ public partial class PowerUpPaint : BaseShootPowerUp
     protected Vector2I[] gridPositions = new Vector2I[2];
     protected Vector2I[] lastGridPositions = new Vector2I[2];
     protected bool[] finishedProjectiles = { false, false, false, false };
-    public override Texture2D Texture
+    public Texture2D PillTexture
     {
         set
         {
-            sprite.Texture = value;
-
             foreach (Sprite2D proj in projectiles)
             {
                 proj.Texture = value;
@@ -32,7 +30,8 @@ public partial class PowerUpPaint : BaseShootPowerUp
         {
 		    lastGridPositions[i] = InitialGridPos;
             projectiles[i].Material = sprite.Material;
-            projectiles[i].Frame = sprite.Frame;
+            // update frame to match power up colour
+            projectiles[i].Frame += projectiles[i].Hframes * (colour - 1);
         }
 
         sprite.Visible = false;

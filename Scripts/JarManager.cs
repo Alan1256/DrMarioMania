@@ -92,7 +92,7 @@ public partial class JarManager : Node
 	private double destroyTimer = 0;
 	private double autoFallTimer = 0;
 	private int destroyRow;
-	// key = pos, value = colour
+	// key = pos, value = original virus colour (if painted, value should still be its original colour)
 	private Dictionary<Vector2I, int> virusesRemaining = new Dictionary<Vector2I, int>();
 
 	// possible colours pill/power-ups can be
@@ -1798,6 +1798,12 @@ public partial class JarManager : Node
 		powerUp.SfxMan = SfxMan;
 		powerUp.Texture = ((TileSetAtlasSource)jarTiles.TileSet.GetSource(GameConstants.powerUpSourceID)).Texture;
 
+		if (pwr == PowerUp.PaintV || pwr == PowerUp.PaintH)
+		{
+            PowerUpPaint paint = powerUp as PowerUpPaint;
+			paint.PillTexture = ((TileSetAtlasSource)jarTiles.TileSet.GetSource(GameConstants.pillSourceID)).Texture;
+        }
+
 		jarTiles.GetParent().AddChild(powerUp);
 		powerUp.GetParent().MoveChild(powerUp, previewTiles.GetIndex());
 
@@ -1895,8 +1901,10 @@ public partial class JarManager : Node
 			if (sourceID != GameConstants.powerUpSourceID)
                 atlas.Y -= 1;
 
+			/*
 			if (sourceID == GameConstants.virusSourceID)
                 virusesRemaining[pos] = colour;
+			*/
 
             // set cell
             jarTiles.SetCell(pos, sourceID, atlas);
@@ -2061,7 +2069,7 @@ public partial class JarManager : Node
 
 			foreach (Vector2I pos in viruses)
 			{
-				if (virusesRemaining[pos] == colour)
+				if (GetTileColour(pos) == colour)
 				{
 					DestroyTile(pos);
 				}
