@@ -1889,25 +1889,25 @@ public partial class JarManager : Node
 	// changes colour of tile
 	public bool PaintTile(Vector2I pos, int colour)
 	{
-		// can only paint if tile exists and has an assigned colour
+        // can only paint if tile exists and has an assigned colour
         if (IsTilePresent(pos) && GetTileColour(pos) > 0)
 		{
 			// get source id + atlas
             int sourceID = GetTileSourceID(pos);
-            Vector2I atlas = GetTileAtlas(pos);
+            Vector2I oldAtlas = GetTileAtlas(pos);
+            Vector2I newAtlas = oldAtlas;
 
-			// set atlas to match colour
-			atlas.Y = colour;
+            // set atlas to match colour
+            newAtlas.Y = colour;
 			if (sourceID != GameConstants.powerUpSourceID)
-                atlas.Y -= 1;
+                newAtlas.Y -= 1;
 
-			/*
-			if (sourceID == GameConstants.virusSourceID)
-                virusesRemaining[pos] = colour;
-			*/
+			// if atlas hasn't changed, must already be the given colour so return false
+			if (oldAtlas == newAtlas)
+                return false;
 
             // set cell
-            jarTiles.SetCell(pos, sourceID, atlas);
+            jarTiles.SetCell(pos, sourceID, newAtlas);
 
             return true;
         }

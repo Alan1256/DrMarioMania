@@ -88,7 +88,7 @@ public partial class PowerUpPaint : BaseShootPowerUp
                 }
 
                 if (changedAnything)
-                    sfxMan.Play("SingleHit");
+                    sfxMan.Play("Paint");
             }
             
             lastGridPositions[i] = gridPositions[i];
