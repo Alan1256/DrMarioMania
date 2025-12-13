@@ -26,10 +26,13 @@ public partial class PowerUpPaint : BaseShootPowerUp
     // Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+        // if rainbow, choose random possible colour
+        if (colour == 0)
+            colour = jarMan.PossibleColours[GD.RandRange(0, jarMan.PossibleColours.Count - 1)];
+
         for (int i = 0; i < projectiles.Count; i++)
         {
 		    lastGridPositions[i] = InitialGridPos;
-            projectiles[i].Material = sprite.Material;
             // update frame to match power up colour
             projectiles[i].Frame += projectiles[i].Hframes * (colour - 1);
         }
