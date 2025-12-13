@@ -392,80 +392,14 @@ text = "v0.0.0"
 icon = null
 script = ExtResource("13_bgt3e")
 title = "v0.0.0 - CHANGE LOG"
-description = "- Custom music can now have user-defined loop points, press the \"i\" button in the music menu for more info.
+description = "GAMEPLAY:
 
-- The custom music buttons no longer show file extensions
-
-- The random music option (\"???\") now randomises the music after each round
-
-- Auto repeat now occurs instantly when falling and a space becomes available while already holding left or right
-
-- Game now defaults to fullscreen
-
-- Improved button naviation on per-player multiplayer screens
-
-v1.3.0 CHANGES:
-
-GAMEPLAY:
-
-- New gameplay styles:
-
-  - Big Jar: The jar has
-    twice the width!
-
-- Added support for variable jar widths:
-
-- - The jar width can be
-    changed in the Custom
-    Gameplay Style menu
-
-- - For custom levels,
-    width size buttons
-    have been added to
-    the editor
-
-Lightning power up:
-  Destroys all viruses/
-  bricks in its way and
-  doesn't get stopped by
-  any blocks. Comes in
+Paint bucket power up:
+  Change the colour of
+  viruses, pills, etc in
+  its path. Comes in
   vertical and horizontal
-  variants.
-
-Fallinator power up:
-  Causes objects in its
-  column to fall
-  downwards.
-
-- New level pack containing 8 levels added
-
-- Adjusted the \"Items\" gameplay style's possible power-ups
-
-VISUALS:
-
-- Backgrounds can now be tinted a custom colour - press the colour icon in the corner of theme preview panels
-
-- Mouse cursor now hides during gameplay
-
-- Levels in level packs now display their pack and level numbers during gameplay
-
-AUDIO:
-
-- Added 4 new Mario Kart music tracks
-
-- Once 3 viruses remain, a jingle will play then the music will speed up. This can be toggled on or off in settings.
-
-- WhatsApp theme now uses Mania music instead of NES
-
-FIXES & IMPROVEMENTS:
-
-- Fixed missing power-up direction/radius previews
-
-- If the game window is too small to fit all jars on-screen, the camera will zoom out
-
-- Fixed next pill preview sizes being wrong when playing Pill Mix in multiplayer
-
-- Fixed pill inside jar being scaled-down if exiting/re-entering an editor playtest under specific conditions"
+  variants."
 alignDescToLeft = true
 popUpGroup = NodePath("../../../PopUpGroup")
 
