@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Threading.Tasks;
 using static PowerUpEnums;
@@ -95,13 +96,21 @@ public partial class JarManager : Node
 	// key = pos, value = original virus colour (if painted, value should still be its original colour)
 	private Dictionary<Vector2I, int> virusesRemaining = new Dictionary<Vector2I, int>();
 
+
+	// all the colours of the initial jar tiles (excluding -1 and 0 as they corrispond to non-colour and rainbow)
+	private List<int> jarColours = new List<int>();
+	public List<int> JarColours { get { return jarColours; } }
+
 	// possible colours pill/power-ups can be
-	private List<int> possibleColours = new List<int>();
-	public List<int> PossibleColours { get { return possibleColours; } }
+	// these are set to jarColours's colours unless specified in advanced settings
+	private List<int> possiblePillColours = new List<int>();
+	public List<int> PossiblePillColours { get { return possiblePillColours; } }
+	private List<int> possiblePowerUpColours = new List<int>();
+	public List<int> PossiblePowerUpColours { get { return possiblePowerUpColours; } }
 
 	// if overrideCustomLevelColours exist, the original colours prior to being replaced are added here
-	private List<int> originalPossibleColours = new List<int>();
-	private bool HaveColoursBeenReplaced { get { return originalPossibleColours.Count > 0; } }
+	private List<int> originalJarColours = new List<int>();
+	private bool HaveColoursBeenReplaced { get { return originalJarColours.Count > 0; } }
 
 
 	// power-up tiles which are forced to not fall - used for power-ups place in the level editor, which shouldn't fall unlike obtained power-ups
@@ -728,36 +737,36 @@ public partial class JarManager : Node
 		PlayerGameSettings.ColourCount = presentColours.Count;
 	}
 
-	// Replace possibleColours with newColours
-	public void ReplacePossibleColours(Godot.Collections.Array<int> newColours)
+	// Replace jarColours with newColours
+	public void ReplaceJarColours(Godot.Collections.Array<int> newColours)
 	{
-		// Backup original colours into originalPossibleColours
-		if (originalPossibleColours.Count == 0)
-			originalPossibleColours = new List<int>(possibleColours);
+		// Backup original colours into originalJarColours
+		if (originalJarColours.Count == 0)
+			originalJarColours = new List<int>(jarColours);
 
-		// Indexes in originalPossibleColours/possibleColours to skip since they already exist in newColours
+		// Indexes in originalJarColours/jarColours to skip since they already exist in newColours
 		List<int> segColIndexesToSkip = new List<int>();
-		// Colours in newColours that don't need to be used as they're already in originalPossibleColours
+		// Colours in newColours that don't need to be used as they're already in originalJarColours
 		List<int> newColoursToSkip = new List<int>();
 		
 		// Fill in segColIndexesToSkip and newColoursToSkip
 		foreach (var newCol in newColours)
 		{
-			if (originalPossibleColours.Contains(newCol))
+			if (originalJarColours.Contains(newCol))
 			{
 				//GD.Print("this col already exists:" + newCol);
-				segColIndexesToSkip.Add(originalPossibleColours.IndexOf(newCol));
+				segColIndexesToSkip.Add(originalJarColours.IndexOf(newCol));
 				newColoursToSkip.Add(newCol);
 			}
 		}
 
-		// No. of colours to change (smallest of newColours and possibleColours count, minus any colours to be skipped)
-		int remainingChanges = Mathf.Min(newColours.Count, possibleColours.Count) - newColoursToSkip.Count;
+		// No. of colours to change (smallest of newColours and jarColours count, minus any colours to be skipped)
+		int remainingChanges = Mathf.Min(newColours.Count, jarColours.Count) - newColoursToSkip.Count;
 
 		int segColIndex = 0;
 		int newColIndex = 0;
 
-		// Replace colours in possibleColours with newColours, skipping possibleColours that don't need changed (as exist in newColours) and skipping newColours that don't need to be used (as exist in possibleColours)
+		// Replace colours in jarColours with newColours, skipping jarColours that don't need changed (as exist in newColours) and skipping newColours that don't need to be used (as exist in jarColours)
 		while (remainingChanges > 0)
 		{
 			if (!segColIndexesToSkip.Contains(segColIndex))
@@ -770,8 +779,8 @@ public partial class JarManager : Node
 				}
 				else
 				{
-					//GD.Print("replacing " + possibleColours[segColIndex] + " with " + newColours[newColIndex]);
-					possibleColours[segColIndex] = newColours[newColIndex];
+					//GD.Print("replacing " + jarColours[segColIndex] + " with " + newColours[newColIndex]);
+					jarColours[segColIndex] = newColours[newColIndex];
 					remainingChanges--;
 					newColIndex++;
 				}
@@ -781,23 +790,72 @@ public partial class JarManager : Node
 		}
 	}
 
+	// updates pill/power-up colours, either based on jarColours OR chosen pill/power colours if any were set in settings, replacing any if colour overrides exist
+	private void UpdatePossiblePillAndPowerUpColours()
+	{
+		possiblePillColours.Clear();
+		possiblePowerUpColours.Clear();
+
+        var updateList = (List<int> posCols, List<int> chosenSpecCols) =>
+        {
+			// if empty, use jar colours
+			if (chosenSpecCols.Count() == 0)
+			{
+                posCols.AddRange(jarColours);
+            }
+			// else, use chosenSpecCols (only using colours which are also in (original)JarColours)
+			else
+			{
+                List<int> jarCols = HaveColoursBeenReplaced ? originalJarColours : jarColours;
+
+                foreach (int col in chosenSpecCols)
+				{
+					if (jarCols.Contains(col))
+                        posCols.Add(col);
+                }
+
+				// if posCols is empty (aka chosenSpecCols doesn't share any colours with jar), just use all of jarColours as a fallback
+				if (posCols.Count == 0)
+				{
+                    GD.Print("no common colours");
+                    posCols.AddRange(jarColours);
+				}
+				// else if Have(Jar)ColoursBeenReplaced, replace posCols colours to match jarcolour's overriden colours
+				else if (HaveColoursBeenReplaced)
+				{
+					for (int i = 0; i < posCols.Count; i++)
+					{
+						if (jarCols.Contains(posCols[i]))
+						{
+							int index = jarCols.IndexOf(posCols[i]);
+							posCols[i] = jarColours[index];
+						}
+					}
+				}
+			}
+        };
+
+        updateList(possiblePillColours, PlayerGameSettings.chosenPillSpecificColours);
+        updateList(possiblePowerUpColours, PlayerGameSettings.chosenPowerUpSpecificColours);
+    }
+
 	public async void GenerateCustomLevel()
 	{
 		virusesRemaining.Clear();
-		possibleColours.Clear();
-		originalPossibleColours.Clear();
+		jarColours.Clear();
+		originalJarColours.Clear();
 
 		List<int> virusColours = new List<int>();
 		
-		// Find possible colours that pills/power-ups should come in
+		// Find possible colours used in the level
 		foreach (JarTileData tile in customLevelTiles.Values)
 		{
 			int colour = tile.colour;
 			
-			// if any instance of this colour appears, add to possibleColours
-			if (colour > 0 && !possibleColours.Contains(colour))
+			// if any instance of this colour appears, add to jarColours
+			if (colour > 0 && !jarColours.Contains(colour))
 			{
-				possibleColours.Add(colour);
+				jarColours.Add(colour);
 			}
 
 			// if a virus of this colour appears, add to virusColours
@@ -806,37 +864,40 @@ public partial class JarManager : Node
 		}
 
 		// Fallback possible colour if level is empty
-		if (possibleColours.Count == 0)
-			possibleColours.Add(1);
+		if (jarColours.Count == 0)
+			jarColours.Add(1);
 
 		// Fallback virus colour if virusColours is empty
 		if (virusColours.Count == 0)
 		{
-			if (possibleColours.Count == 0)
+			if (jarColours.Count == 0)
 				virusColours.Add(1);
 			else
-				virusColours.Add(possibleColours[0]);
+				virusColours.Add(jarColours[0]);
 		}
 
-		possibleColours.Sort();
+		jarColours.Sort();
 		virusColours.Sort();
 
-		// replace virusColours and possibleColours values with overrideCustomLevelColours if present
+		// replace virusColours and jarColours values with overrideCustomLevelColours if present
 		if (CommonGameSettings.CurrentThemeHasOverrideCustomLevelColours)
 		{
 			Godot.Collections.Array<int> newColours = CommonGameSettings.CurrentThemeOverrideCustomLevelColours;
 
-			ReplacePossibleColours(newColours);
+			ReplaceJarColours(newColours);
 
 			for (int i = 0; i < virusColours.Count; i++)
 			{
-				if (originalPossibleColours.Contains(virusColours[i]))
-					virusColours[i] = possibleColours[originalPossibleColours.IndexOf(virusColours[i])];
+				if (originalJarColours.Contains(virusColours[i]))
+					virusColours[i] = jarColours[originalJarColours.IndexOf(virusColours[i])];
 			}
 		}
 
-		// randomise next pill colours based of possibleColours
-		pillMan.RandomiseNextPillColours();
+        // update pill/power-up colours
+        UpdatePossiblePillAndPowerUpColours();
+
+        // randomise next pill colours based of possiblePillColours
+        pillMan.RandomiseNextPillColours();
 		if (PlayerGameSettings.IsUsingPowerUps)
 			PowerUpMeter.QueueNewPowerUp();
 
@@ -872,7 +933,7 @@ public partial class JarManager : Node
 			// if possible colours have been replaced, change tile colour
 			if (HaveColoursBeenReplaced && colour > 0)
 			{
-				int newColour = possibleColours[originalPossibleColours.IndexOf(colour)];
+				int newColour = jarColours[originalJarColours.IndexOf(colour)];
 				atlas += Vector2I.Down * (newColour - colour);
 				colour = newColour;
 			}
@@ -949,7 +1010,7 @@ public partial class JarManager : Node
 		List<int> virusColours = new List<int>();
 
 		virusesRemaining.Clear();
-		possibleColours.Clear();
+		jarColours.Clear();
 
 		int gap = 6;
 		if (virusLevel > 18)
@@ -976,18 +1037,21 @@ public partial class JarManager : Node
 			int colour = PlayerGameSettings.ChosenColours[(firstVirus + i) % PlayerGameSettings.ColourCount];
 			virusColours.Add(colour);
 
-			if (!possibleColours.Contains(colour))
-				possibleColours.Add(colour);
+			if (!jarColours.Contains(colour))
+				jarColours.Add(colour);
 		}
 
-		// randomise next pill colours based of possibleColours
+		// update pill/power-up colours
+        UpdatePossiblePillAndPowerUpColours();
+
+		// randomise next pill colours based of jarColours
 		pillMan.RandomiseNextPillColours();
 		if (PlayerGameSettings.IsUsingPowerUps)
 			PowerUpMeter.QueueNewPowerUp();
 
 		// Create viruses of each possible colour in the virus ring/magnifying glass
 		if (VirusRing != null)
-			VirusRing.CreateViruses(possibleColours);
+			VirusRing.CreateViruses(jarColours);
 
 		for (int i = 0; i < virusCount; i++)
 		{
@@ -1761,7 +1825,7 @@ public partial class JarManager : Node
 			for (int i = 0; i < Mathf.Min(lineComboColours.Count, maxJunkSegments); i++)
 			{
 				int colour = lineComboColours[i];
-				junkColourIndexes.Add(possibleColours.IndexOf(colour));
+				junkColourIndexes.Add(jarColours.IndexOf(colour));
 			}
 
 			// Send junk colours to receiving player
@@ -1869,14 +1933,14 @@ public partial class JarManager : Node
 			// Get index of colour (not the colour itself as colours could vary between players)
 			int colourIndex = segmentsToCreate[i];
 
-			// if the colour index is out of range of this player's possibleColours, fix it to it is
-			if (colourIndex > possibleColours.Count - 1)
+			// if the colour index is out of range of this player's possiblePillColours, fix it to it is
+			if (colourIndex > possiblePillColours.Count - 1)
 			{
-				colourIndex = colourIndex % possibleColours.Count;
+				colourIndex = colourIndex % possiblePillColours.Count;
 			}
 
 			// Set cell at pos to single pill segment of colour based on colourIndex
-			jarTiles.SetCell(pos, GameConstants.pillSourceID, new Vector2I(PillConstants.atlasSingle, possibleColours[colourIndex] - 1));
+			jarTiles.SetCell(pos, GameConstants.pillSourceID, new Vector2I(PillConstants.atlasSingle, possiblePillColours[colourIndex] - 1));
 
 			// Add segment to fall list
 			AddTileToFall(pos);

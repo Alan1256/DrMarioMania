@@ -26,9 +26,9 @@ public partial class PowerUpPaint : BaseShootPowerUp
     // Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-        // if rainbow, choose random possible colour
+        // if rainbow, choose random colour that a pill can be
         if (colour == 0)
-            colour = jarMan.PossibleColours[GD.RandRange(0, jarMan.PossibleColours.Count - 1)];
+            colour = jarMan.PossiblePillColours[GD.RandRange(0, jarMan.PossiblePillColours.Count - 1)];
 
         for (int i = 0; i < projectiles.Count; i++)
         {

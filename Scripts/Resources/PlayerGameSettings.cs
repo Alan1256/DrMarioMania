@@ -50,6 +50,8 @@ public partial class PlayerGameSettings : Resource
             PowerUpMeterMaxLevel = otherPlayer.PowerUpMeterMaxLevel;
             FasterAutoRepeat = otherPlayer.FasterAutoRepeat;
             AvailablePillShapes = new List<PillShape>(otherPlayer.AvailablePillShapes);
+            chosenPillSpecificColours = new List<int>(otherPlayer.chosenPillSpecificColours);
+            chosenPowerUpSpecificColours = new List<int>(otherPlayer.chosenPowerUpSpecificColours);
             JarSize = otherPlayer.JarSize;
         }
     }
@@ -91,6 +93,8 @@ public partial class PlayerGameSettings : Resource
 
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Double);
+                    chosenPillSpecificColours.Clear();
+                    chosenPowerUpSpecificColours.Clear();
 
                     break;
                 // quad
@@ -114,6 +118,8 @@ public partial class PlayerGameSettings : Resource
 
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Double);
+                    chosenPillSpecificColours.Clear();
+                    chosenPowerUpSpecificColours.Clear();
 
                     break;
                 // custom
@@ -141,6 +147,8 @@ public partial class PlayerGameSettings : Resource
 
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Double);
+                    chosenPillSpecificColours.Clear();
+                    chosenPowerUpSpecificColours.Clear();
 
                     for (int i = 0; i < PowerUpConstants.itemStylePowerUps.Length; i++)
                     {
@@ -173,6 +181,8 @@ public partial class PlayerGameSettings : Resource
 
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Luigi);
+                    chosenPillSpecificColours.Clear();
+                    chosenPowerUpSpecificColours.Clear();
 
                     break;
                 // all pill shapes
@@ -195,6 +205,8 @@ public partial class PlayerGameSettings : Resource
                         JarSize = GameConstants.DefaultJarSize;
 
                     ClearPowerUps();
+                    chosenPillSpecificColours.Clear();
+                    chosenPowerUpSpecificColours.Clear();
 
                     AvailablePillShapes.Clear();
                     for (int i = 0; i < GameConstants.NoOfPillShapes; i++)
@@ -224,6 +236,8 @@ public partial class PlayerGameSettings : Resource
                     
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Double);
+                    chosenPillSpecificColours.Clear();
+                    chosenPowerUpSpecificColours.Clear();
 
                     break;
                 // modern (default)
@@ -247,6 +261,8 @@ public partial class PlayerGameSettings : Resource
                     
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Double);
+                    chosenPillSpecificColours.Clear();
+                    chosenPowerUpSpecificColours.Clear();
                     
                     break;
             }
@@ -396,6 +412,12 @@ public partial class PlayerGameSettings : Resource
     public float RepeatedMoveSpeed { get { return repeatedMoveSpeed; } }
     public List<PillShape> AvailablePillShapes = new List<PillShape> { PillShape.Double };
 
+    // CUSTOM/PRE-MADE LEVELS ONLY
+    // Normally, pills and power-ups come in any of the colours found in the jar.
+    // However, pills/power-ups can be set to use a unique set of colours instead, which are used if these lists aren't empty.
+    public List<int> chosenPillSpecificColours = new List<int>();
+    public List<int> chosenPowerUpSpecificColours = new List<int>();
+
     private void SetSinglePillShape(PillShape shape)
     {
         AvailablePillShapes.Clear();
@@ -490,6 +512,24 @@ public partial class PlayerGameSettings : Resource
             code += JarSize.X;
             code += subItemDivider;
             code += JarSize.Y;
+
+            code += itemDivider;
+
+            for (int i = 0; i < chosenPillSpecificColours.Count; i++)
+            {
+                code += (int)chosenPillSpecificColours[i];
+                if (i < chosenPillSpecificColours.Count - 1)
+                    code += subItemDivider;
+            }
+
+            code += itemDivider;
+
+            for (int i = 0; i < chosenPowerUpSpecificColours.Count; i++)
+            {
+                code += (int)chosenPowerUpSpecificColours[i];
+                if (i < chosenPowerUpSpecificColours.Count - 1)
+                    code += subItemDivider;
+            }
         }
 
         code += itemDivider;
@@ -598,8 +638,36 @@ public partial class PlayerGameSettings : Resource
                     JarSize = new Vector2I(int.Parse(jarSizeData[0]), int.Parse(jarSizeData[1]));
                 }
                 
-                if (codeChunks.Length > 20)
-                    VirusDifficulty = int.Parse(codeChunks[20]);
+
+                if (codeChunks.Length > 20 && false)
+                {
+                    string[] pillData = codeChunks[20].Split(subItemDivider);
+                    string[] pwrData = codeChunks[21].Split(subItemDivider);
+
+                    chosenPillSpecificColours.Clear();
+                    chosenPowerUpSpecificColours.Clear();
+
+                    if (pillData[0] != "")
+                    {
+                        for (int i = 0; i < pillData.Length; i++)
+                        {
+                            chosenPillSpecificColours.Add(int.Parse(pillData[i]));
+                        }
+                    }
+
+                    if (pwrData[0] != "")
+                    {
+                        for (int i = 0; i < pwrData.Length; i++)
+                        {
+                            chosenPowerUpSpecificColours.Add(int.Parse(pwrData[i]));
+                        }
+                    }
+                }
+
+                // below must be at bottom as it is always placed after custom game rule settings ===========
+
+                if (codeChunks.Length > 22)
+                    VirusDifficulty = int.Parse(codeChunks[22]);
             }
             else
             {
