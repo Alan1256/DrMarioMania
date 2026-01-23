@@ -525,6 +525,31 @@ texture = ExtResource("4_7bqxt")
 hframes = 12
 vframes = 11
 
+[node name="ClearButton" type="Button" parent="SettingsContainer/BoxContainer/PowerUps"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -52.0
+offset_top = 12.0
+offset_right = -4.0
+offset_bottom = 28.0
+grow_horizontal = 0
+text = "CLEAR"
+
+[node name="ToggleButton" type="Button" parent="SettingsContainer/BoxContainer/PowerUps"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -52.0
+offset_top = 30.0
+offset_right = -4.0
+offset_bottom = 46.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 6
+text = "TOGGLE"
+
 [node name="PowerUpMeter" type="Control" parent="SettingsContainer/BoxContainer"]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
@@ -875,6 +900,11 @@ grow_horizontal = 2
 grow_vertical = 0
 focus_neighbor_top = NodePath("../SettingsContainer/BoxContainer/FasterAutoFall/ToggleButton")
 text = "OK"
+
+[connection signal="pressed" from="SettingsContainer/BoxContainer/PowerUps/ClearButton" to="SettingsContainer/BoxContainer/PowerUps/PowerUpContainer" method="Clear"]
+[connection signal="pressed" from="SettingsContainer/BoxContainer/PowerUps/ClearButton" to="SettingsContainer/BoxContainer/PowerUps/SpecialPowerUpContainer" method="Clear"]
+[connection signal="pressed" from="SettingsContainer/BoxContainer/PowerUps/ToggleButton" to="SettingsContainer/BoxContainer/PowerUps/PowerUpContainer" method="Toggle"]
+[connection signal="pressed" from="SettingsContainer/BoxContainer/PowerUps/ToggleButton" to="SettingsContainer/BoxContainer/PowerUps/SpecialPowerUpContainer" method="Toggle"]
 
 [editable path="SettingsContainer/BoxContainer/Hold"]
 [editable path="SettingsContainer/BoxContainer/LockDelay"]

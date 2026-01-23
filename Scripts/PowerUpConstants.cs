@@ -8,6 +8,6 @@ public static class PowerUpConstants
     public static int specialChance = 5;
 
     // power-ups available in the default items gameplay style
-    public static readonly PowerUp[] itemStylePowerUps = { PowerUp.Thwomp, PowerUp.Shell, PowerUp.Plus, PowerUp.Bomb, PowerUp.PillBlaster, PowerUp.VirusBlaster, PowerUp.PushDown };
+    public static readonly PowerUp[] itemStylePowerUps = { PowerUp.Thwomp, PowerUp.Shell, PowerUp.Plus, PowerUp.Bomb, PowerUp.PillBlaster, PowerUp.VirusBlaster, PowerUp.PushDown, PowerUp.PaintV, PowerUp.PaintH };
     public static readonly PowerUp[] itemStyleSpecialPowerUps = { PowerUp.Thwomp, PowerUp.Shell, PowerUp.Plus, PowerUp.Bomb, PowerUp.PillBlaster, PowerUp.PushDown };
 }

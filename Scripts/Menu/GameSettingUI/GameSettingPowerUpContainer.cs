@@ -49,6 +49,27 @@ public partial class GameSettingPowerUpContainer : FlowContainer
         UpdateVisuals();
 	}
 
+    public void Clear()
+    {
+        AvailablePowerUps.Clear();
+        UpdateVisuals();
+    }
+
+    public void Toggle()
+    {
+        for (int i = 0; i < Enum.GetValues(typeof(PowerUp)).Length; i++)
+        {
+            PowerUp pwr = (PowerUp)i;
+
+            if (AvailablePowerUps.Contains(pwr))
+                AvailablePowerUps.Remove(pwr);
+            else
+                AvailablePowerUps.Add(pwr);
+        }
+
+        UpdateVisuals();
+    }
+
     private void SetPowerUpState(PowerUp id)
     {
         int index = (int)id;

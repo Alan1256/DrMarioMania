@@ -244,7 +244,6 @@ popUpGroup = NodePath("../PopUpGroup")
 screenContainer = NodePath(".")
 
 [node name="MainScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("InitialHoverNode")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -399,7 +398,13 @@ Paint bucket power up:
   viruses, pills, etc in
   its path. Comes in
   vertical and horizontal
-  variants."
+  variants.
+
+OTHER:
+
+Added clear and toggle power-up buttons to the Custom Gameplay Style screen.
+
+Expanded help menu to explain additional game modes and multiplayer."
 alignDescToLeft = true
 popUpGroup = NodePath("../../../PopUpGroup")
 
@@ -1075,6 +1080,7 @@ focus_neighbor_left = NodePath("../../BackButton")
 text = "4"
 
 [node name="MultiplayerPlayerScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("titleLabel", "nextButton", "allUseP1SettingsButton", "copyButton", "backButton", "colourGroup", "menuMan", "screenMan", "InitialHoverNode")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1639,27 +1645,23 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -60.0
-offset_top = 7.0
-offset_right = 60.0
-offset_bottom = 15.0
+offset_left = -112.0
+offset_top = 9.0
+offset_right = 8.0
+offset_bottom = 17.0
 grow_horizontal = 2
 text = "HOW TO PLAY"
-horizontal_alignment = 1
 
 [node name="PageTitle" type="Label" parent="UILayer/MenuScreenManager/HelpScreen"]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -34.0
-offset_top = 83.0
-offset_right = 118.0
-offset_bottom = 91.0
+offset_left = -39.0
+offset_top = 9.0
+offset_right = 113.0
+offset_bottom = 17.0
 grow_horizontal = 2
-grow_vertical = 2
 text = "1. Intro"
 horizontal_alignment = 2
 
@@ -1671,7 +1673,7 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -121.0
-offset_top = -91.0
+offset_top = -87.0
 offset_right = 121.0
 offset_bottom = 78.0
 grow_horizontal = 2
@@ -1714,6 +1716,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -3.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -1725,7 +1729,6 @@ HardDropUpControllerGroups = [NodePath("ControllerControls/UpHardDropGroup")]
 commonGameSettings = ExtResource("17_7dvs3")
 
 [node name="ArrowControls" type="Control" parent="UILayer/MenuScreenManager/HelpScreen/HelpPanel/PageContainer/PageLabel/ControlsContainer"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2645,6 +2648,7 @@ text = "Hold"
 horizontal_alignment = 1
 
 [node name="ControllerControls" type="Control" parent="UILayer/MenuScreenManager/HelpScreen/HelpPanel/PageContainer/PageLabel/ControlsContainer"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -3022,6 +3026,7 @@ text = "The aim of the game is to clear out all the viruses inside of a jar usin
 Pill are made out of 2 segments with randomised colours. They will fall from the top of the jar one at a time.
 
 You can move falling pills sideways, rotate them, or move them downwards faster (soft-dropping)."
+vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("20_ahywv")
 title = "Pills"
@@ -3043,6 +3048,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
 text = "If at least 4 pill segments or viruses of the same colour match in a row or column, they will be eliminated from the jar.
 
 Place your pills carefully to clear out all the viruses!"
+vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("20_ahywv")
 title = "Matching"
@@ -3064,6 +3070,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
 text = "If pills or viruses get cleared causing a pill to remain in mid-air, it will be affected by gravity and fall.
 
 You do not have direct control over pills in this state, but if you plan ahead, you could cause a chain reaction of multiple matches in a single move!"
+vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("20_ahywv")
 title = "Avalanche"
@@ -3086,6 +3093,7 @@ text = "The more viruses you defeat in a single move,
 the more you'll be rewarded for each virus in that move.
 
 Try to aim for a high score!"
+vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("20_ahywv")
 title = "Scoring"
@@ -3109,6 +3117,7 @@ text = "As the game progresses, the speed of the falling pills will increase.
 If you manage to clear out all of the viruses, you'll proceed onto the next level.
 
 If you block the top of the jar where pills start falling from, then the game will be over."
+vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("20_ahywv")
 title = "Win/Lose"
@@ -3127,14 +3136,39 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
-text = "Before starting a game in classic mode, you'll be met with various options allowing you to customise the game!
+text = "CLASSIC: Clear the viruses and go for a high score! You can choose the gameplay style, difficulty, music and visuals.
 
-You can choose between how many viruses to start of with, how fast pills should fall, different gamemodes, including making your own!
+LEVEL PACKS: Play through and clear a selection of hand-crafted levels!
 
-There are also several visual themes and music tracks to choose from!"
+CUSTOM LEVELS: Design, play and export your own levels! You can also import level codes made by others."
+vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("20_ahywv")
-title = "Customisation"
+title = "1P Game Modes"
+
+[node name="PageLabel8" type="Label" parent="UILayer/MenuScreenManager/HelpScreen/HelpPanel/PageContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 3.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
+text = "In multiplayer, you can compete locally with your friends.
+
+Everyone plays in their own virus jar. The first to clear theirs or become the last one standing wins!
+
+If you clear multiple lines in a single move, you can send junk pills to clutter an opponent's jar."
+vertical_alignment = 1
+autowrap_mode = 3
+script = ExtResource("20_ahywv")
+title = "Multiplayer"
 
 [node name="PageNumber" type="Label" parent="UILayer/MenuScreenManager/HelpScreen/HelpPanel"]
 layout_mode = 1
@@ -3143,14 +3177,12 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -46.0
-offset_top = -15.0
-offset_right = -22.0
-offset_bottom = -7.0
+offset_left = -43.0
+offset_top = 9.0
+offset_right = -19.0
+offset_bottom = 17.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
 text = "0/0"
 
 [node name="PreviousButton" type="Button" parent="UILayer/MenuScreenManager/HelpScreen/HelpPanel"]
@@ -3160,12 +3192,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -66.0
-offset_top = -19.0
-offset_right = -50.0
-offset_bottom = -3.0
+offset_left = -63.0
+offset_top = 5.0
+offset_right = -47.0
+offset_bottom = 21.0
 grow_horizontal = 0
 grow_vertical = 0
+focus_neighbor_left = NodePath("../../BackButton")
 text = "<"
 
 [node name="NextButton" type="Button" parent="UILayer/MenuScreenManager/HelpScreen/HelpPanel"]
@@ -3175,10 +3208,9 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -19.0
-offset_top = -19.0
-offset_right = -3.0
-offset_bottom = -3.0
+offset_left = -16.0
+offset_top = 5.0
+offset_bottom = 21.0
 grow_horizontal = 0
 grow_vertical = 0
 text = ">"
