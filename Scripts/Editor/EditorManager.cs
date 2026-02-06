@@ -78,7 +78,7 @@ public partial class EditorManager : Node
         if (!CanPressButtons)
             return;
 
-        jarMan.SavePresentColoursToGameSettings();
+        jarMan.SaveLevelColoursToGameSettings();
         
         Input.MouseMode = Input.MouseModeEnum.Hidden;
         cursor.Visible = false;
@@ -133,7 +133,7 @@ public partial class EditorManager : Node
 
     public void SaveLevel()
     {
-        jarMan.SavePresentColoursToGameSettings();
+        jarMan.SaveLevelColoursToGameSettings();
 
         UserCustomLevelEntry customLevelEntry = new UserCustomLevelEntry();
 
@@ -410,7 +410,7 @@ public partial class EditorManager : Node
 
         editorPauseMan.SetScreen(screen);
     }
-
+    
     public void SetIsPaused(bool b)
     {
         isPaused = b;
@@ -419,7 +419,10 @@ public partial class EditorManager : Node
         editorPauseMan.SetPauseMenuVisibility(b);
 
         if (b)
+        {
+            jarMan.SaveLevelColoursToGameSettings();
             sfxMan.Play("Pause");
+        }
     }
 
     public void UpdateSidebarPosition(float jarWidth)

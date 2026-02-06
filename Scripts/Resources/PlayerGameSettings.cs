@@ -50,8 +50,8 @@ public partial class PlayerGameSettings : Resource
             PowerUpMeterMaxLevel = otherPlayer.PowerUpMeterMaxLevel;
             FasterAutoRepeat = otherPlayer.FasterAutoRepeat;
             AvailablePillShapes = new List<PillShape>(otherPlayer.AvailablePillShapes);
-            chosenPillSpecificColours = new List<int>(otherPlayer.chosenPillSpecificColours);
-            chosenPowerUpSpecificColours = new List<int>(otherPlayer.chosenPowerUpSpecificColours);
+            ChosenPillSpecificColours = new List<int>(otherPlayer.ChosenPillSpecificColours);
+            ChosenPowerUpSpecificColours = new List<int>(otherPlayer.ChosenPowerUpSpecificColours);
             JarSize = otherPlayer.JarSize;
         }
     }
@@ -93,8 +93,8 @@ public partial class PlayerGameSettings : Resource
 
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Double);
-                    chosenPillSpecificColours.Clear();
-                    chosenPowerUpSpecificColours.Clear();
+                    ChosenPillSpecificColours.Clear();
+                    ChosenPowerUpSpecificColours.Clear();
 
                     break;
                 // quad
@@ -118,8 +118,8 @@ public partial class PlayerGameSettings : Resource
 
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Double);
-                    chosenPillSpecificColours.Clear();
-                    chosenPowerUpSpecificColours.Clear();
+                    ChosenPillSpecificColours.Clear();
+                    ChosenPowerUpSpecificColours.Clear();
 
                     break;
                 // custom
@@ -147,8 +147,8 @@ public partial class PlayerGameSettings : Resource
 
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Double);
-                    chosenPillSpecificColours.Clear();
-                    chosenPowerUpSpecificColours.Clear();
+                    ChosenPillSpecificColours.Clear();
+                    ChosenPowerUpSpecificColours.Clear();
 
                     for (int i = 0; i < PowerUpConstants.itemStylePowerUps.Length; i++)
                     {
@@ -181,8 +181,8 @@ public partial class PlayerGameSettings : Resource
 
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Luigi);
-                    chosenPillSpecificColours.Clear();
-                    chosenPowerUpSpecificColours.Clear();
+                    ChosenPillSpecificColours.Clear();
+                    ChosenPowerUpSpecificColours.Clear();
 
                     break;
                 // all pill shapes
@@ -205,8 +205,8 @@ public partial class PlayerGameSettings : Resource
                         JarSize = GameConstants.DefaultJarSize;
 
                     ClearPowerUps();
-                    chosenPillSpecificColours.Clear();
-                    chosenPowerUpSpecificColours.Clear();
+                    ChosenPillSpecificColours.Clear();
+                    ChosenPowerUpSpecificColours.Clear();
 
                     AvailablePillShapes.Clear();
                     for (int i = 0; i < GameConstants.NoOfPillShapes; i++)
@@ -236,8 +236,8 @@ public partial class PlayerGameSettings : Resource
                     
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Double);
-                    chosenPillSpecificColours.Clear();
-                    chosenPowerUpSpecificColours.Clear();
+                    ChosenPillSpecificColours.Clear();
+                    ChosenPowerUpSpecificColours.Clear();
 
                     break;
                 // modern (default)
@@ -261,8 +261,8 @@ public partial class PlayerGameSettings : Resource
                     
                     ClearPowerUps();
                     SetSinglePillShape(PillShape.Double);
-                    chosenPillSpecificColours.Clear();
-                    chosenPowerUpSpecificColours.Clear();
+                    ChosenPillSpecificColours.Clear();
+                    ChosenPowerUpSpecificColours.Clear();
                     
                     break;
             }
@@ -415,8 +415,8 @@ public partial class PlayerGameSettings : Resource
     // CUSTOM/PRE-MADE LEVELS ONLY
     // Normally, pills and power-ups come in any of the colours found in the jar.
     // However, pills/power-ups can be set to use a unique set of colours instead, which are used if these lists aren't empty.
-    public List<int> chosenPillSpecificColours = new List<int>();
-    public List<int> chosenPowerUpSpecificColours = new List<int>();
+    public List<int> ChosenPillSpecificColours = new List<int>();
+    public List<int> ChosenPowerUpSpecificColours = new List<int>();
 
     private void SetSinglePillShape(PillShape shape)
     {
@@ -515,19 +515,19 @@ public partial class PlayerGameSettings : Resource
 
             code += itemDivider;
 
-            for (int i = 0; i < chosenPillSpecificColours.Count; i++)
+            for (int i = 0; i < ChosenPillSpecificColours.Count; i++)
             {
-                code += (int)chosenPillSpecificColours[i];
-                if (i < chosenPillSpecificColours.Count - 1)
+                code += (int)ChosenPillSpecificColours[i];
+                if (i < ChosenPillSpecificColours.Count - 1)
                     code += subItemDivider;
             }
 
             code += itemDivider;
 
-            for (int i = 0; i < chosenPowerUpSpecificColours.Count; i++)
+            for (int i = 0; i < ChosenPowerUpSpecificColours.Count; i++)
             {
-                code += (int)chosenPowerUpSpecificColours[i];
-                if (i < chosenPowerUpSpecificColours.Count - 1)
+                code += (int)ChosenPowerUpSpecificColours[i];
+                if (i < ChosenPowerUpSpecificColours.Count - 1)
                     code += subItemDivider;
             }
         }
@@ -644,14 +644,14 @@ public partial class PlayerGameSettings : Resource
                     string[] pillData = codeChunks[20].Split(subItemDivider);
                     string[] pwrData = codeChunks[21].Split(subItemDivider);
 
-                    chosenPillSpecificColours.Clear();
-                    chosenPowerUpSpecificColours.Clear();
+                    ChosenPillSpecificColours.Clear();
+                    ChosenPowerUpSpecificColours.Clear();
 
                     if (pillData[0] != "")
                     {
                         for (int i = 0; i < pillData.Length; i++)
                         {
-                            chosenPillSpecificColours.Add(int.Parse(pillData[i]));
+                            ChosenPillSpecificColours.Add(int.Parse(pillData[i]));
                         }
                     }
 
@@ -659,7 +659,7 @@ public partial class PlayerGameSettings : Resource
                     {
                         for (int i = 0; i < pwrData.Length; i++)
                         {
-                            chosenPowerUpSpecificColours.Add(int.Parse(pwrData[i]));
+                            ChosenPowerUpSpecificColours.Add(int.Parse(pwrData[i]));
                         }
                     }
                 }

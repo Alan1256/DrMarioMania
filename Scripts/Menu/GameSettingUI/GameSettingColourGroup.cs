@@ -7,10 +7,11 @@ public partial class GameSettingColourGroup : Control
 	[Export] protected CommonGameSettings commonGameSettings;
 	[Export] protected ThemeList themeList;
 	[Export] protected Label colourCountLabel;
-	[Export] private Button firstButton;
+	[Export] protected Button firstButton;
 
-	private List<Button> buttons = new List<Button>();
-	private List<Sprite2D> buttonSprites = new List<Sprite2D>();
+	protected List<Button> buttons = new List<Button>();
+	protected List<Sprite2D> buttonSprites = new List<Sprite2D>();
+	protected int buttonSpriteOffset = 11;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -46,7 +47,7 @@ public partial class GameSettingColourGroup : Control
 	}
 
 	// Updates the size of the ChosenColours array depending on ColourCount's value, either adding additional colours or removing unnessicary ones
-	private void FixUnequalColourCountss()
+	protected void FixUnequalColourCounts()
 	{
 		PlayerGameSettings settings = commonGameSettings.CurrentPlayerGameSettings;
 
@@ -58,15 +59,15 @@ public partial class GameSettingColourGroup : Control
 
 	public void UpdateVisuals()
 	{
-		FixUnequalColourCountss();
+		FixUnequalColourCounts();
 
 		SetVirusTextures(commonGameSettings.CurrentTheme);
-		UpdateColourCountWarning();
+		UpdateColourCount();
 		RefreshButtonStates();
 	}
 
 	// Checks whether the count of the ChosenColours array is unequal to the value of ColourCount, updates colourCountLabel accordingly
-	private void UpdateColourCountWarning()
+	protected void UpdateColourCount()
 	{
 		int colourArrayCount = commonGameSettings.CurrentPlayerGameSettings.ChosenColours.Count;
 		int colourCount = commonGameSettings.CurrentPlayerGameSettings.ColourCount;
@@ -78,7 +79,7 @@ public partial class GameSettingColourGroup : Control
 	}
 
 	// Updates the on/off states of each button based on the no. of colours selected in gameSettings
-	private void RefreshButtonStates()
+	protected void RefreshButtonStates()
 	{
 		for (int i = 0; i < buttons.Count; i++)
 		{
@@ -87,12 +88,12 @@ public partial class GameSettingColourGroup : Control
 
 			// unpressed buttons should have partially-transparent sprites
 			buttonSprites[i].SelfModulate = new Color(1,1,1, buttons[i].ButtonPressed ? 1 : 0.25f);
-			buttonSprites[i].Position = new Vector2(11, buttons[i].ButtonPressed ? 12 : 11);
+			buttonSprites[i].Position = new Vector2(buttonSpriteOffset, buttons[i].ButtonPressed ? buttonSpriteOffset + 1 : buttonSpriteOffset);
 		}
 	}
 
 	// set whether or not the colour "i" is included in the ChosenColours list or not
-	private void SetColourState(bool state, int colour)
+	protected void SetColourState(bool state, int colour)
 	{
 		if (state)
 		{
@@ -106,12 +107,12 @@ public partial class GameSettingColourGroup : Control
 		}
 		
 		buttonSprites[colour - 1].SelfModulate = new Color(1,1,1, state ? 1 : 0.25f);
-		buttonSprites[colour - 1].Position = new Vector2(11, state ? 12 : 11);
+		buttonSprites[colour - 1].Position = new Vector2(buttonSpriteOffset, state ? buttonSpriteOffset + 1 : buttonSpriteOffset);
 
 		// Sort order of colours
 		commonGameSettings.CurrentPlayerGameSettings.ChosenColours.Sort();
 		
-		UpdateColourCountWarning();
+		UpdateColourCount();
 	}
 
 	// Set virus sprites based on theme value given

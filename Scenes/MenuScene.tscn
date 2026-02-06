@@ -244,6 +244,7 @@ popUpGroup = NodePath("../PopUpGroup")
 screenContainer = NodePath(".")
 
 [node name="MainScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("InitialHoverNode")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -399,6 +400,8 @@ Paint bucket power up:
   its path. Comes in
   vertical and horizontal
   variants.
+
+Custom levels pill/power-up override thing - to-do write this
 
 OTHER:
 
@@ -3668,7 +3671,6 @@ button_group = SubResource("ButtonGroup_4u0so")
 button_group = SubResource("ButtonGroup_4u0so")
 
 [node name="ModeSingleScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("InitialHoverNode")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -3677,7 +3679,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("20_w70yh")
-InitialHoverNode = NodePath("VBoxContainer/ClassicButton")
+InitialHoverNode = NodePath("GridContainer/ClassicButton")
 
 [node name="Title" type="Label" parent="UILayer/MenuScreenManager/ModeSingleScreen"]
 layout_mode = 1
@@ -3692,22 +3694,22 @@ grow_horizontal = 2
 text = "GAME MODES"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/MenuScreenManager/ModeSingleScreen"]
+[node name="GridContainer" type="GridContainer" parent="UILayer/MenuScreenManager/ModeSingleScreen"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -70.0
-offset_top = -50.0
-offset_right = 70.0
-offset_bottom = 50.0
+offset_left = -104.0
+offset_top = -34.0
+offset_right = 104.0
+offset_bottom = 34.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
+columns = 2
 
-[node name="ClassicButton" type="Button" parent="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer"]
+[node name="ClassicButton" type="Button" parent="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -3715,8 +3717,7 @@ size_flags_vertical = 0
 text = "CLASSIC"
 icon = ExtResource("61_ailxn")
 
-[node name="MarathonButton" type="Button" parent="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer"]
-visible = false
+[node name="MarathonButton" type="Button" parent="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -3724,20 +3725,22 @@ size_flags_vertical = 0
 text = "MARATHON"
 icon = ExtResource("73_d5veu")
 
-[node name="OfficialLevelsButton" type="Button" parent="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer"]
+[node name="OfficialLevelsButton" type="Button" parent="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
-text = "LEVEL PACKS"
+text = "LEVEL
+PACKS"
 icon = ExtResource("70_y4wno")
 
-[node name="CustomLevelsButton" type="Button" parent="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer"]
+[node name="CustomLevelsButton" type="Button" parent="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
-text = "CUSTOM LEVELS"
+text = "CUSTOM
+LEVELS"
 icon = ExtResource("61_j0n44")
 
 [node name="BackButton" type="Button" parent="UILayer/MenuScreenManager/ModeSingleScreen"]
@@ -4663,15 +4666,15 @@ normalMusicPlayer = NodePath("../MusicPlayer")
 [connection signal="pressed" from="UILayer/MenuScreenManager/UserCustomLevelScreen/PreviousButton" to="UILayer/MenuScreenManager/UserCustomLevelScreen/CustomLevelPanelContainer" method="PreviousPage"]
 [connection signal="pressed" from="UILayer/MenuScreenManager/UserCustomLevelScreen/NextButton" to="UILayer/MenuScreenManager/UserCustomLevelScreen/CustomLevelPanelContainer" method="NextPage"]
 [connection signal="pressed" from="UILayer/MenuScreenManager/SettingsScreen/BackButton" to="UILayer/MenuScreenManager" method="GoBack"]
-[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer/ClassicButton" to="MenuManager" method="SetGameMode" binds= [0]]
-[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer/ClassicButton" to="UILayer/MenuScreenManager" method="SetScreen" binds= [1]]
-[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer/MarathonButton" to="MenuManager" method="SetGameMode" binds= [1]]
-[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer/MarathonButton" to="UILayer/MenuScreenManager" method="SetScreen" binds= [17]]
-[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer/OfficialLevelsButton" to="MenuManager" method="SetGameMode" binds= [0]]
-[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer/OfficialLevelsButton" to="UILayer/MenuScreenManager" method="SetScreen" binds= [16]]
-[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer/CustomLevelsButton" to="UILayer/MenuScreenManager/UserCustomLevelScreen/CustomLevelPanelContainer" method="UpdateVisuals"]
-[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer/CustomLevelsButton" to="MenuManager" method="SetGameMode" binds= [0]]
-[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/VBoxContainer/CustomLevelsButton" to="UILayer/MenuScreenManager" method="SetScreen" binds= [11]]
+[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer/ClassicButton" to="MenuManager" method="SetGameMode" binds= [0]]
+[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer/ClassicButton" to="UILayer/MenuScreenManager" method="SetScreen" binds= [1]]
+[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer/MarathonButton" to="MenuManager" method="SetGameMode" binds= [1]]
+[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer/MarathonButton" to="UILayer/MenuScreenManager" method="SetScreen" binds= [17]]
+[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer/OfficialLevelsButton" to="MenuManager" method="SetGameMode" binds= [0]]
+[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer/OfficialLevelsButton" to="UILayer/MenuScreenManager" method="SetScreen" binds= [16]]
+[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer/CustomLevelsButton" to="UILayer/MenuScreenManager/UserCustomLevelScreen/CustomLevelPanelContainer" method="UpdateVisuals"]
+[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer/CustomLevelsButton" to="MenuManager" method="SetGameMode" binds= [0]]
+[connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/GridContainer/CustomLevelsButton" to="UILayer/MenuScreenManager" method="SetScreen" binds= [11]]
 [connection signal="pressed" from="UILayer/MenuScreenManager/ModeSingleScreen/BackButton" to="UILayer/MenuScreenManager" method="GoBack"]
 [connection signal="pressed" from="UILayer/MenuScreenManager/ModeMultiScreen/VBoxContainer/VersusButton" to="UILayer/MenuScreenManager/MultiplayerPlayerScreen" method="InitialisePlayerConfiguring"]
 [connection signal="pressed" from="UILayer/MenuScreenManager/ModeMultiScreen/VBoxContainer/VersusButton" to="MenuManager" method="SetGameMode" binds= [0]]

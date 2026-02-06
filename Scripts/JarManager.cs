@@ -712,9 +712,9 @@ public partial class JarManager : Node
 	}
 
 	// Scan tiles for colours and update PlayerGameSettings' ChosenColours and ColourCount accordingly
-	public void SavePresentColoursToGameSettings()
+	public void SaveLevelColoursToGameSettings()
 	{
-		List<int> presentColours = new List<int>();
+		List<int> levelColours = new List<int>();
 
 		for (int y = jarOrigin.Y; y < jarOrigin.Y + JarSize.Y; y++)
 		{
@@ -724,17 +724,17 @@ public partial class JarManager : Node
 
 				int colour = GetTileColour(pos);
 
-				if (colour > 0 && !presentColours.Contains(colour))
-					presentColours.Add(colour);
+				if (colour > 0 && !levelColours.Contains(colour))
+					levelColours.Add(colour);
 			}
 		}
 
 		// Fallback colour if level is empty
-		if (presentColours.Count == 0)
-			presentColours.Add(1);
+		if (levelColours.Count == 0)
+			levelColours.Add(1);
 
-		PlayerGameSettings.ChosenColours = new Godot.Collections.Array<int>(presentColours);
-		PlayerGameSettings.ColourCount = presentColours.Count;
+		PlayerGameSettings.ChosenColours = new Godot.Collections.Array<int>(levelColours);
+		PlayerGameSettings.ColourCount = levelColours.Count;
 	}
 
 	// Replace jarColours with newColours
@@ -835,8 +835,8 @@ public partial class JarManager : Node
 			}
         };
 
-        updateList(possiblePillColours, PlayerGameSettings.chosenPillSpecificColours);
-        updateList(possiblePowerUpColours, PlayerGameSettings.chosenPowerUpSpecificColours);
+        updateList(possiblePillColours, PlayerGameSettings.ChosenPillSpecificColours);
+        updateList(possiblePowerUpColours, PlayerGameSettings.ChosenPowerUpSpecificColours);
     }
 
 	public async void GenerateCustomLevel()

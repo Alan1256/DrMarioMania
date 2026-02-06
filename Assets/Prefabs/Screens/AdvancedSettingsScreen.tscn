@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://db3d4vw78ejqe"]
+[gd_scene load_steps=15 format=3 uid="uid://db3d4vw78ejqe"]
 
 [ext_resource type="Script" path="res://Scripts/Menu/Screens/AdvancedSettingsScreen.cs" id="1_gddgy"]
 [ext_resource type="FontFile" uid="uid://c2e4sl3d40to5" path="res://Assets/Fonts/PressStart2P.ttf" id="2_0262g"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://Scripts/Menu/GameSettingUI/GameSettingPillShapeContainer.cs" id="5_xcg6l"]
 [ext_resource type="Resource" uid="uid://cwxx0untun2hu" path="res://Assets/Resources/ThemeList.tres" id="6_js1ir"]
 [ext_resource type="Texture2D" uid="uid://dlska1epmujlf" path="res://Assets/Sprites/Themes/Modern/PillTiles.png" id="8_ujrh5"]
+[ext_resource type="Script" path="res://Scripts/Menu/GameSettingUI/GameSettingNextColourOverrideContainer.cs" id="12_xkqdr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jqtnu"]
 content_margin_left = 4.0
@@ -619,6 +620,120 @@ tick_count = 16
 ticks_on_borders = true
 settingName = &"PowerUpMeterMaxLevel"
 numberLabel = NodePath("../PowerUpMeterLabel/Number")
+
+[node name="OverrideColours" type="Control" parent="SettingsContainer/BoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 47)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="SettingsContainer/BoxContainer/OverrideColours"]
+layout_mode = 1
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 185.0
+offset_bottom = 9.0
+text = "Next Colour Overrides"
+
+[node name="PopUpButton" parent="SettingsContainer/BoxContainer/OverrideColours" instance=ExtResource("4_utjcu")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -31.0
+offset_top = -2.0
+offset_right = -19.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 1
+focus_neighbor_bottom = NodePath("../NextColourOverrideContainer/Button")
+title = "POWER-UPS"
+description = "Pills or power-ups that get thrown into the jar normally come in ANY of the colours already present in the level. However, you can override this and cause only certain colours to appear, for pills and power-ups separately.
+
+Leave this empty if you just want any of the level's colours to be used for upcoming pills/power-ups like normal."
+alignDescToLeft = true
+
+[node name="ColourLabel" type="Label" parent="SettingsContainer/BoxContainer/OverrideColours"]
+layout_mode = 2
+offset_left = 1.0
+offset_top = 17.0
+offset_right = 25.0
+offset_bottom = 25.0
+text = "ANY"
+
+[node name="NextColourOverrideContainer" type="FlowContainer" parent="SettingsContainer/BoxContainer/OverrideColours" node_paths=PackedStringArray("firstButton", "colourCountLabel")]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 29.0
+offset_top = 14.0
+offset_right = -1.0
+offset_bottom = 28.0
+grow_horizontal = 2
+theme_override_constants/h_separation = 2
+script = ExtResource("12_xkqdr")
+firstButton = NodePath("Button")
+colourCountLabel = NodePath("../ColourLabel")
+commonGameSettings = ExtResource("5_b2lsy")
+themeList = ExtResource("6_js1ir")
+
+[node name="Button" type="Button" parent="SettingsContainer/BoxContainer/OverrideColours/NextColourOverrideContainer"]
+custom_minimum_size = Vector2(13, 14)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jqtnu")
+toggle_mode = true
+
+[node name="Sprite2D" type="Sprite2D" parent="SettingsContainer/BoxContainer/OverrideColours/NextColourOverrideContainer/Button"]
+position = Vector2(7, 7)
+texture = ExtResource("8_ujrh5")
+hframes = 6
+vframes = 10
+frame = 4
+
+[node name="ColourLabel2" type="Label" parent="SettingsContainer/BoxContainer/OverrideColours"]
+layout_mode = 2
+offset_left = 1.0
+offset_top = 35.0
+offset_right = 25.0
+offset_bottom = 43.0
+text = "ANY"
+
+[node name="NextColourOverrideContainer2" type="FlowContainer" parent="SettingsContainer/BoxContainer/OverrideColours" node_paths=PackedStringArray("firstButton", "colourCountLabel")]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 29.0
+offset_top = 32.0
+offset_right = -1.0
+offset_bottom = 46.0
+grow_horizontal = 2
+theme_override_constants/h_separation = 2
+script = ExtResource("12_xkqdr")
+isForPowerUps = true
+firstButton = NodePath("Button")
+colourCountLabel = NodePath("../ColourLabel2")
+commonGameSettings = ExtResource("5_b2lsy")
+themeList = ExtResource("6_js1ir")
+
+[node name="Button" type="Button" parent="SettingsContainer/BoxContainer/OverrideColours/NextColourOverrideContainer2"]
+custom_minimum_size = Vector2(13, 14)
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../../../Hold/ToggleButton")
+mouse_filter = 1
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jqtnu")
+toggle_mode = true
+
+[node name="Sprite2D" type="Sprite2D" parent="SettingsContainer/BoxContainer/OverrideColours/NextColourOverrideContainer2/Button"]
+position = Vector2(7, 7)
+texture = ExtResource("4_7bqxt")
+hframes = 12
+vframes = 11
+frame = 13
 
 [node name="Hold" parent="SettingsContainer/BoxContainer" instance=ExtResource("4_tr5vp")]
 layout_mode = 2

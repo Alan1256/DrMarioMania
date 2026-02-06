@@ -902,6 +902,9 @@ popUpGroup = NodePath("../../../../../../../PopUpGroup")
 [node name="PopUpButton" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer/PowerUpMeter" index="1" node_paths=PackedStringArray("popUpGroup")]
 popUpGroup = NodePath("../../../../../../../PopUpGroup")
 
+[node name="OverrideColours" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer" index="6"]
+visible = true
+
 [node name="PopUpButton" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer/Hold" index="2" node_paths=PackedStringArray("popUpGroup")]
 popUpGroup = NodePath("../../../../../../../PopUpGroup")
 
