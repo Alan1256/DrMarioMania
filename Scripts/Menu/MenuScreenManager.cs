@@ -11,7 +11,6 @@ public partial class MenuScreenManager : BaseHistoryScreenManager
 	[Export] private CommonGameSettings commonGameSettings;
 	[Export] private MultiplayerPlayerScreen multiPlayerScreen;
 	[Export] private MultiplayerControlContainer multiControlCon;
-	[Export] private PopUpGroup popUpGroup;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -69,12 +68,6 @@ public partial class MenuScreenManager : BaseHistoryScreenManager
 	public override void GoBack()
 	{
 		backFrame = Engine.GetFramesDrawn();
-		
-		if (popUpGroup.IsOpen)
-		{
-			popUpGroup.HidePopUp();
-			return;
-		}
 
 		// if currentScreen is 0, return
 		if (currentScreen == 0)
@@ -146,7 +139,10 @@ public partial class MenuScreenManager : BaseHistoryScreenManager
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (Input.IsActionJustPressed("ui_cancel"))
+		if (!canUseKeyInput)
+            return;
+
+        if (Input.IsActionJustPressed("ui_cancel"))
 		{
 			GoBack();
 		}

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://mdtbub1d7nur"]
+[gd_scene load_steps=23 format=3 uid="uid://mdtbub1d7nur"]
 
 [ext_resource type="Script" path="res://Scripts/Menu/Screens/BaseScreen.cs" id="1_alo62"]
 [ext_resource type="FontFile" uid="uid://c2e4sl3d40to5" path="res://Assets/Fonts/PressStart2P.ttf" id="2_pjlc0"]
@@ -18,6 +18,8 @@
 [ext_resource type="Texture2D" uid="uid://dlska1epmujlf" path="res://Assets/Sprites/Themes/Modern/PillTiles.png" id="12_hga4x"]
 [ext_resource type="Script" path="res://Scripts/Menu/ActiveOverrideColourIcon.cs" id="13_sdsow"]
 [ext_resource type="Texture2D" uid="uid://7u8pt2fy5cjb" path="res://Assets/Sprites/UI/Arrow.png" id="13_xpjln"]
+[ext_resource type="Script" path="res://Scripts/Menu/KeybindListenerGroup.cs" id="19_c0vhy"]
+[ext_resource type="Material" uid="uid://d0mvlpdi7fs7q" path="res://Assets/Materials/BlurMaterial.tres" id="19_dxajb"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_xddtc"]
 
@@ -494,7 +496,7 @@ to-do:
 - update multi-con inputs
   after leaving sttngs"
 
-[node name="KeybindsContainer" type="VBoxContainer" parent="PageContainer/ScrollContainer/VBoxContainer2" node_paths=PackedStringArray("firstActionPanel")]
+[node name="KeybindsContainer" type="VBoxContainer" parent="PageContainer/ScrollContainer/VBoxContainer2" node_paths=PackedStringArray("firstActionPanel", "listenerGroup")]
 layout_mode = 2
 script = ExtResource("8_rap86")
 keyboardPrefix = "KeyboardFull"
@@ -502,6 +504,7 @@ controllerPrefix = "ControllerSingle"
 actionNames = Array[StringName]([&"Rotate Right", &"Rotate Left"])
 actionIDs = Array[StringName]([&"RotateRight", &"RotateLeft"])
 firstActionPanel = NodePath("ActionPanel")
+listenerGroup = NodePath("../../../../KeybindListenerGroup")
 commonGameSettings = ExtResource("11_dmxr5")
 
 [node name="ActionPanel" type="Control" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer" node_paths=PackedStringArray("actionNameLabel", "keyboardActionsContainer", "controllerActionsContainer", "addButton")]
@@ -913,6 +916,64 @@ offset_bottom = -7.0
 grow_vertical = 0
 text = "BACK"
 icon = ExtResource("4_o54ul")
+
+[node name="KeybindListenerGroup" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("19_c0vhy")
+
+[node name="Background" type="Control" parent="KeybindListenerGroup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="KeybindListenerGroup/Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.27451)
+
+[node name="Blur" type="ColorRect" parent="KeybindListenerGroup/Background"]
+material = ExtResource("19_dxajb")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="KeybindListenerGroup"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -4.0
+offset_right = 20.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Press key or button...
+
+
+Wait 3 secs to not
+make any changes."
+horizontal_alignment = 1
 
 [connection signal="pressed" from="TabButtons/Button" to="PageContainer" method="SetPage" binds= [0]]
 [connection signal="pressed" from="TabButtons/Button2" to="PageContainer" method="SetPage" binds= [1]]

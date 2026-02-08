@@ -443,7 +443,10 @@ public partial class GameManager : Node
 	public override void _Process(double delta)
 	{
         if (Input.IsActionJustPressed("ui_cancel") && isPaused)
-            pauseMan.GoBack();
+        {
+            if (pauseMan.CanUseKeyInput)
+                pauseMan.GoBack();
+        }
 		else if (isGameOngoing && (Input.IsActionJustPressed("Pause") || (IsInEditorScene && Input.IsActionJustPressed("EditorPlayTest"))))
         {
             if (IsInEditorScene)

@@ -226,7 +226,7 @@ themeList = ExtResource("14_pe025")
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 
-[node name="MenuScreenManager" type="Control" parent="UILayer" node_paths=PackedStringArray("menuMan", "musicPreviewPlayer", "multiPlayerScreen", "multiControlCon", "popUpGroup", "screenContainer")]
+[node name="MenuScreenManager" type="Control" parent="UILayer" node_paths=PackedStringArray("menuMan", "musicPreviewPlayer", "multiPlayerScreen", "multiControlCon", "screenContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -240,7 +240,6 @@ musicPreviewPlayer = NodePath("../../MusicPreviewPlayer")
 commonGameSettings = ExtResource("17_7dvs3")
 multiPlayerScreen = NodePath("MultiplayerPlayerScreen")
 multiControlCon = NodePath("MultiplayerInputScreen/ControlContainer")
-popUpGroup = NodePath("../PopUpGroup")
 screenContainer = NodePath(".")
 
 [node name="MainScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("InitialHoverNode")]
@@ -3669,6 +3668,9 @@ button_group = SubResource("ButtonGroup_4u0so")
 
 [node name="Button4" parent="UILayer/MenuScreenManager/SettingsScreen/PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/ThemeContainer" index="4"]
 button_group = SubResource("ButtonGroup_4u0so")
+
+[node name="KeybindListenerGroup" parent="UILayer/MenuScreenManager/SettingsScreen" index="4" node_paths=PackedStringArray("screenMan")]
+screenMan = NodePath("../..")
 
 [node name="ModeSingleScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("InitialHoverNode")]
 layout_mode = 1

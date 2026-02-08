@@ -20,8 +20,7 @@ public partial class PopUpGroup : Control
     // Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-        if (screenMan != null)
-            okButton.Pressed += () => screenMan.GoBack();
+        SetProcess(false);
     }
 
     public void ShowPopUp(string title, string desc, bool alignDescToLeft)
@@ -39,6 +38,10 @@ public partial class PopUpGroup : Control
 
         lastFocusNode = GetViewport().GuiGetFocusOwner();
         okButton.GrabFocus();
+
+        screenMan.SetCanUseKeyInput(false);
+
+        SetProcess(true);
     }
 
     public void HidePopUp()
@@ -46,6 +49,18 @@ public partial class PopUpGroup : Control
         aniPlayer.Play("Hide");
         lastFocusNode.GrabFocus();
 
+        screenMan.CallDeferred("SetCanUseKeyInput", true);
+
         isOpen = false;
+        SetProcess(false);
     }
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+		if (isOpen && Input.IsActionJustPressed("ui_cancel"))
+		{
+			HidePopUp();
+		}
+	}
 }

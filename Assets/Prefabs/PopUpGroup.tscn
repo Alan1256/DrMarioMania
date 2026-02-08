@@ -312,3 +312,5 @@ text = "words words words words words words words words words words words "
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[connection signal="pressed" from="PopUpBox/OkButton" to="." method="HidePopUp"]

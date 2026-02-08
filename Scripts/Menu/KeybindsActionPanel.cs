@@ -26,8 +26,23 @@ public partial class KeybindsActionPanel : Control
 
 	private void PressAddButton()
 	{
+        keybindsCon.ListenerGroup.StartListening(this);
+    }
 
-	}
+	public void AddEventToAction(InputEvent @event)
+	{
+		// determine whether event is controller input or not
+        bool isControllerInput = @event is InputEventJoypadButton || @event is InputEventJoypadMotion;
+
+		// get action id based on isControllerInput
+        string actID = isControllerInput ? ControllerActionID : KeyboardActionID;
+		
+		// add event if it doesn't exist already
+		if (!InputMap.ActionHasEvent(actID, @event))
+        	InputMap.ActionAddEvent(actID, @event);
+
+        UpdateVisuals();
+    }
 
 	private int CreateEventButtons(string actID, Container container)
 	{

@@ -367,6 +367,9 @@ button_group = SubResource("ButtonGroup_o2we1")
 [node name="Button4" parent="PauseLayer/ScreenCentre/ScreenContainer/SettingsScreen/PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/ThemeContainer" index="4"]
 button_group = SubResource("ButtonGroup_fqxxv")
 
+[node name="KeybindListenerGroup" parent="PauseLayer/ScreenCentre/ScreenContainer/SettingsScreen" index="4" node_paths=PackedStringArray("screenMan")]
+screenMan = NodePath("../../../../PauseManager")
+
 [node name="PauseAniPlayer" type="AnimationPlayer" parent="PauseLayer"]
 libraries = {
 "": SubResource("AnimationLibrary_v3bw1")

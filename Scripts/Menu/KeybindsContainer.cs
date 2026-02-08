@@ -12,6 +12,8 @@ public partial class KeybindsContainer : Control
     [Export] private Array<string> actionNames;
     [Export] private Array<string> actionIDs;
     [Export] private KeybindsActionPanel firstActionPanel;
+    [Export] private KeybindListenerGroup listenerGroup;
+    public KeybindListenerGroup ListenerGroup { get { return listenerGroup; } }
     [Export] private CommonGameSettings commonGameSettings;
 
     private List<KeybindsActionPanel> actionPanels = new();

@@ -11,7 +11,11 @@ public partial class BaseScreenManager : Node
 	// frame at which GoBack was called
 	protected int backFrame;
 
-	// Called when the node enters the scene tree for the first time.
+	// enables/disables key input shortcuts (e.g. going back via esc)
+    protected bool canUseKeyInput = true;
+	public bool CanUseKeyInput { get { return canUseKeyInput; } }
+
+    // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
 		// Get each "screen" control node under this node and add them to the screens list
@@ -29,6 +33,11 @@ public partial class BaseScreenManager : Node
 		screens[currentScreen].Visible = true;
 
 		GrabFocusOfFirstButton();
+	}
+
+	public void SetCanUseKeyInput(bool b)
+	{
+		canUseKeyInput = b;
 	}
 
     // focus on the current screen's initial hover node

@@ -447,7 +447,10 @@ public partial class EditorManager : Node
             return;
 
         if (isPaused && Input.IsActionJustPressed("ui_cancel"))
-            editorPauseMan.GoBack();
+        {
+            if (editorPauseMan.CanUseKeyInput)
+                editorPauseMan.GoBack();
+        }
 		else if (Input.IsActionJustPressed("Pause") && !IsSelectionPresent)
         {
             if (!isPaused)
