@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://mdtbub1d7nur"]
+[gd_scene load_steps=21 format=3 uid="uid://mdtbub1d7nur"]
 
 [ext_resource type="Script" path="res://Scripts/Menu/Screens/BaseScreen.cs" id="1_alo62"]
 [ext_resource type="FontFile" uid="uid://c2e4sl3d40to5" path="res://Assets/Fonts/PressStart2P.ttf" id="2_pjlc0"]
@@ -9,8 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://kqh3uxtqxbxw" path="res://Assets/Sprites/UI/ButtonIcons/BackIcon.png" id="4_o54ul"]
 [ext_resource type="Script" path="res://Scripts/Menu/FullScreenToggleButton.cs" id="7_yjwfc"]
 [ext_resource type="PackedScene" uid="uid://b4pwwg8xgiew0" path="res://Assets/Prefabs/PopUpButton.tscn" id="8_nmiub"]
+[ext_resource type="Script" path="res://Scripts/Menu/KeybindsContainer.cs" id="8_rap86"]
 [ext_resource type="Script" path="res://Scripts/Menu/OverrideColourContainer.cs" id="9_ymv8w"]
 [ext_resource type="Resource" uid="uid://cwxx0untun2hu" path="res://Assets/Resources/ThemeList.tres" id="10_1k6cy"]
+[ext_resource type="Script" path="res://Scripts/Menu/KeybindsActionPanel.cs" id="10_iyd86"]
 [ext_resource type="Resource" uid="uid://cwkwokd34qh80" path="res://Assets/Resources/CommonGameSettings.tres" id="11_dmxr5"]
 [ext_resource type="Texture2D" uid="uid://c12jrpj0uv1b6" path="res://Assets/Sprites/UI/ButtonIcons/DeleteIcon.png" id="12_a3nmb"]
 [ext_resource type="Texture2D" uid="uid://dlska1epmujlf" path="res://Assets/Sprites/Themes/Modern/PillTiles.png" id="12_hga4x"]
@@ -104,6 +106,7 @@ follow_focus = true
 scroll_deadzone = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PageContainer/ScrollContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
@@ -331,7 +334,6 @@ text = "TOGGLE"
 script = ExtResource("7_yjwfc")
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="PageContainer/ScrollContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
@@ -372,6 +374,7 @@ settingName = &"ManualAutoFallSpeedUp"
 isCommonSetting = true
 
 [node name="UpActionKeyboardPanel" type="Control" parent="PageContainer/ScrollContainer/VBoxContainer2"]
+visible = false
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -404,6 +407,7 @@ settingName = &"IsUpHardDropKeyboard"
 isCommonSetting = true
 
 [node name="UpActionControllerPanel" type="Control" parent="PageContainer/ScrollContainer/VBoxContainer2"]
+visible = false
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -466,6 +470,121 @@ onString = "SWITCH-STYLE"
 offString = "XBOX-STYLE"
 settingName = &"SwapABButtons"
 isCommonSetting = true
+
+[node name="KeybindsTitlePanel" type="Control" parent="PageContainer/ScrollContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="TitleLabel" type="Label" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsTitlePanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 1.0
+offset_top = 4.0
+offset_right = -1.0
+offset_bottom = 12.0
+grow_horizontal = 2
+text = "Configure Keybinds
+to-do:
+- add/change/delete buttons
+- save/load actions,
+- remove old rot/drop thng
+- update multi-con inputs
+  after leaving sttngs"
+
+[node name="KeybindsContainer" type="VBoxContainer" parent="PageContainer/ScrollContainer/VBoxContainer2" node_paths=PackedStringArray("firstActionPanel")]
+layout_mode = 2
+script = ExtResource("8_rap86")
+keyboardPrefix = "KeyboardFull"
+controllerPrefix = "ControllerSingle"
+actionNames = Array[StringName]([&"Rotate Right", &"Rotate Left"])
+actionIDs = Array[StringName]([&"RotateRight", &"RotateLeft"])
+firstActionPanel = NodePath("ActionPanel")
+commonGameSettings = ExtResource("11_dmxr5")
+
+[node name="ActionPanel" type="Control" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer" node_paths=PackedStringArray("actionNameLabel", "keyboardActionsContainer", "controllerActionsContainer", "addButton")]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+script = ExtResource("10_iyd86")
+actionNameLabel = NodePath("Label")
+keyboardActionsContainer = NodePath("KeyContainer")
+controllerActionsContainer = NodePath("ControllerContainer")
+addButton = NodePath("PlusButton")
+
+[node name="Label" type="Label" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 1.0
+offset_top = 4.0
+offset_right = -1.0
+offset_bottom = 12.0
+grow_horizontal = 2
+text = "Rotate Left"
+horizontal_alignment = 1
+
+[node name="PlusButton" type="Button" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -33.0
+offset_right = -1.0
+offset_bottom = 16.0
+grow_horizontal = 0
+mouse_filter = 1
+text = "ADD"
+
+[node name="KeyContainer" type="VBoxContainer" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 1.0
+offset_top = 18.0
+offset_right = -105.0
+offset_bottom = 52.0
+grow_horizontal = 2
+theme_override_constants/separation = 2
+
+[node name="ToggleButton" type="Button" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel/KeyContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Left Arrow"
+text_overrun_behavior = 1
+
+[node name="ToggleButton2" type="Button" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel/KeyContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Left Arrow"
+text_overrun_behavior = 1
+
+[node name="ToggleButton3" type="Button" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel/KeyContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Left Arrow"
+text_overrun_behavior = 1
+
+[node name="ControllerContainer" type="VBoxContainer" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 105.0
+offset_top = 18.0
+offset_right = -1.0
+offset_bottom = 52.0
+grow_horizontal = 2
+theme_override_constants/separation = 2
+
+[node name="ToggleButton" type="Button" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel/ControllerContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Button 2"
+text_overrun_behavior = 1
+
+[node name="Gap" type="Control" parent="PageContainer/ScrollContainer/VBoxContainer2"]
+layout_mode = 2
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="PageContainer/ScrollContainer"]
 visible = false
@@ -799,6 +918,7 @@ icon = ExtResource("4_o54ul")
 [connection signal="pressed" from="TabButtons/Button2" to="PageContainer" method="SetPage" binds= [1]]
 [connection signal="pressed" from="TabButtons/Button3" to="PageContainer" method="SetPage" binds= [2]]
 [connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer/FullScreenPanel/FullScreenButton" to="PageContainer/ScrollContainer/VBoxContainer/FullScreenPanel/FullScreenButton" method="ToggleFullScreen"]
+[connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel/PlusButton" to="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel" method="PressAddButton"]
 [connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/ThemeContainer/Button" to="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer" method="SetColourOrder" binds= [0]]
 [connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/ThemeContainer/Button2" to="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer" method="SetColourOrder" binds= [1]]
 [connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/ThemeContainer/Button3" to="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer" method="SetColourOrder" binds= [2]]

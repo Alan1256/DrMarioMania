@@ -28,6 +28,11 @@ public partial class ControllerInputInitialiser : Node
 				{
 					// create controller index-specific input action for multiplayer
 					string newInput = origInput.Replace("Single", "Multi" + j);
+
+					// erase if already exists
+					if (InputMap.HasAction(newInput))
+						InputMap.EraseAction(newInput);
+
 					InputMap.AddAction(newInput);
 
 					// create new events with new controller index (j)
