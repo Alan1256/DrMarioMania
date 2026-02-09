@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://mdtbub1d7nur"]
+[gd_scene load_steps=26 format=3 uid="uid://mdtbub1d7nur"]
 
 [ext_resource type="Script" path="res://Scripts/Menu/Screens/BaseScreen.cs" id="1_alo62"]
 [ext_resource type="FontFile" uid="uid://c2e4sl3d40to5" path="res://Assets/Fonts/PressStart2P.ttf" id="2_pjlc0"]
@@ -13,10 +13,12 @@
 [ext_resource type="Script" path="res://Scripts/Menu/OverrideColourContainer.cs" id="9_ymv8w"]
 [ext_resource type="Resource" uid="uid://cwxx0untun2hu" path="res://Assets/Resources/ThemeList.tres" id="10_1k6cy"]
 [ext_resource type="Script" path="res://Scripts/Menu/KeybindsActionPanel.cs" id="10_iyd86"]
+[ext_resource type="Texture2D" uid="uid://dbh02018ysodo" path="res://Assets/Sprites/UI/ButtonIcons/DeleteIconKeyboard.png" id="11_4wuql"]
 [ext_resource type="Script" path="res://Scripts/Menu/KeybindsActionEventButton.cs" id="11_8wm6v"]
 [ext_resource type="Resource" uid="uid://cwkwokd34qh80" path="res://Assets/Resources/CommonGameSettings.tres" id="11_dmxr5"]
 [ext_resource type="Texture2D" uid="uid://c12jrpj0uv1b6" path="res://Assets/Sprites/UI/ButtonIcons/DeleteIcon.png" id="12_a3nmb"]
 [ext_resource type="Texture2D" uid="uid://dlska1epmujlf" path="res://Assets/Sprites/Themes/Modern/PillTiles.png" id="12_hga4x"]
+[ext_resource type="Texture2D" uid="uid://bewiamdh6i4l8" path="res://Assets/Sprites/UI/ButtonIcons/DeleteIconController.png" id="12_vo7fi"]
 [ext_resource type="Script" path="res://Scripts/Menu/ActiveOverrideColourIcon.cs" id="13_sdsow"]
 [ext_resource type="Texture2D" uid="uid://7u8pt2fy5cjb" path="res://Assets/Sprites/UI/Arrow.png" id="13_xpjln"]
 [ext_resource type="Script" path="res://Scripts/Menu/KeybindListenerGroup.cs" id="19_c0vhy"]
@@ -443,7 +445,7 @@ settingName = &"IsUpHardDropController"
 isCommonSetting = true
 
 [node name="SwapABButtonsPanel" type="Control" parent="PageContainer/ScrollContainer/VBoxContainer2"]
-custom_minimum_size = Vector2(0, 24)
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -475,6 +477,11 @@ offString = "XBOX/PS"
 settingName = &"SwapABButtons"
 isCommonSetting = true
 
+[node name="ColorRect" type="ColorRect" parent="PageContainer/ScrollContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0, 0, 0, 0.396078)
+
 [node name="KeybindsTitlePanel" type="Control" parent="PageContainer/ScrollContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 14)
 layout_mode = 2
@@ -495,7 +502,6 @@ text = "Configure Keybinds
 
 
 to-do:
-- delete buttons
 - save/load actions,
 - remove old rot/drop thng
 - update multi-con inputs
@@ -525,13 +531,12 @@ addButton = NodePath("PlusButton")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 1.0
+offset_left = 2.0
 offset_top = 4.0
 offset_right = -1.0
 offset_bottom = 12.0
 grow_horizontal = 2
 text = "Rotate Left"
-horizontal_alignment = 1
 
 [node name="PlusButton" type="Button" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel"]
 layout_mode = 1
@@ -543,7 +548,31 @@ offset_right = -1.0
 offset_bottom = 16.0
 grow_horizontal = 0
 mouse_filter = 1
-text = "ADD"
+text = "NEW"
+
+[node name="ClearKeyButton" type="Button" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -81.0
+offset_right = -59.0
+offset_bottom = 16.0
+grow_horizontal = 0
+mouse_filter = 1
+icon = ExtResource("11_4wuql")
+
+[node name="ClearConButton" type="Button" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -57.0
+offset_right = -35.0
+offset_bottom = 16.0
+grow_horizontal = 0
+mouse_filter = 1
+icon = ExtResource("12_vo7fi")
 
 [node name="KeyContainer" type="VBoxContainer" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel"]
 layout_mode = 1
@@ -994,6 +1023,8 @@ horizontal_alignment = 1
 [connection signal="pressed" from="TabButtons/Button3" to="PageContainer" method="SetPage" binds= [2]]
 [connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer/FullScreenPanel/FullScreenButton" to="PageContainer/ScrollContainer/VBoxContainer/FullScreenPanel/FullScreenButton" method="ToggleFullScreen"]
 [connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel/PlusButton" to="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel" method="ListenForNewEvent"]
+[connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel/ClearKeyButton" to="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel" method="ClearActionEvents" binds= [false]]
+[connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel/ClearConButton" to="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer/ActionPanel" method="ClearActionEvents" binds= [true]]
 [connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/ThemeContainer/Button" to="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer" method="SetColourOrder" binds= [0]]
 [connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/ThemeContainer/Button2" to="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer" method="SetColourOrder" binds= [1]]
 [connection signal="pressed" from="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/ThemeContainer/Button3" to="PageContainer/ScrollContainer/VBoxContainer3/OverrideColoursPanel/OverrideColourContainer" method="SetColourOrder" binds= [2]]

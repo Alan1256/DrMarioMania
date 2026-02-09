@@ -34,6 +34,12 @@ public partial class KeybindsActionPanel : Control
         keybindsCon.ListenerGroup.StartListeningToReplace(this, evnt);
     }
 
+	public void ClearActionEvents(bool isControllerInput)
+	{
+		InputMap.ActionEraseEvents(isControllerInput ? ControllerActionID : KeyboardActionID);
+        UpdateVisuals();
+    }
+
 	public void AddEventToAction(InputEvent evnt)
 	{
 		// determine whether event is controller input or not
