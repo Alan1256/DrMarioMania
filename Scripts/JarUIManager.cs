@@ -258,7 +258,7 @@ public partial class JarUIManager : Node
 
 		// controller
 		if (inputSettings.MultiplayerIsUsingController)
-			holdKeyLabel.Text = "L";
+			holdKeyLabel.Text = "";
 		// full/exclusive keyboard
 		else if (inputSettings.MultiplayerIsControlMethodExclusive)
 			holdKeyLabel.Text = "C";

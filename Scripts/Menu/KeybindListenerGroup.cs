@@ -102,6 +102,8 @@ public partial class KeybindListenerGroup : Control
 
         if (isValidInput)
 		{
+            @event.Device = -1;
+
             if (IsReplacing)
                 currentActionPanel.ReplaceEventToAction(@event, eventToReplace, !IsReplacingKeyboard);
             else

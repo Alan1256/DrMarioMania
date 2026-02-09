@@ -2,10 +2,9 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class ControllerInputInitialiser : Node
+public static class ControllerInputInitialiser
 {
-    // Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public static void GenerateIndexSpecificControllerActions()
 	{
 		Godot.Collections.Array<StringName> inputs = InputMap.GetActions();
 
@@ -26,14 +25,14 @@ public partial class ControllerInputInitialiser : Node
 				// for each controller index (0-3)...
 				for (int j = 0; j < 4; j++)
 				{
-					// create controller index-specific input action for multiplayer
+					// create controller index-specific input action for multiplayer, or clear events if already exists
 					string newInput = origInput.Replace("Single", "Multi" + j);
 
-					// erase if already exists
 					if (InputMap.HasAction(newInput))
-						InputMap.EraseAction(newInput);
+						InputMap.ActionEraseEvents(newInput);
+					else
+						InputMap.AddAction(newInput);
 
-					InputMap.AddAction(newInput);
 
 					// create new events with new controller index (j)
 					foreach (InputEvent evnt in origEvents)
@@ -47,5 +46,5 @@ public partial class ControllerInputInitialiser : Node
 				}
 			}
 		}
-	}
+    }
 }

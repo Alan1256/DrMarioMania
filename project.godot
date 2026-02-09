@@ -25,7 +25,6 @@ config/icon="res://Assets/Sprites/Icons/Icon.png"
 [autoload]
 
 FullScreenManager="*res://Scripts/FullScreenManager.cs"
-ControllerInputInitialiser="*res://Scripts/ControllerInputInitialiser.cs"
 SaveAndQuitManager="*res://Assets/Prefabs/NotificationManager.tscn"
 
 [display]

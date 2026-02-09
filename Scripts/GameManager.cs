@@ -81,6 +81,10 @@ public partial class GameManager : Node
             commonGameSettings.CustomLevelGameSettings.Reset();
         }
 
+        // if multiplayer, generate controller-inputs per controller index
+        if (commonGameSettings.IsMultiplayer)
+            ControllerInputInitialiser.GenerateIndexSpecificControllerActions();
+
         CreateJars();
 
         gameThemer.UpdateAllVisualsAndSfx();
@@ -414,6 +418,12 @@ public partial class GameManager : Node
         {
             pauseMan.SetScreen(0);
             sfxMan.Play("Pause");
+        }
+        else
+        {
+            // if multiplayer, generate controller-inputs per controller index
+            if (commonGameSettings.IsMultiplayer)
+                ControllerInputInitialiser.GenerateIndexSpecificControllerActions();
         }
 
         touchControlsMan.ShowTouchControlsIfAvailable(!b);
