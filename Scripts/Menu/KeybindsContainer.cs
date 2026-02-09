@@ -40,4 +40,24 @@ public partial class KeybindsContainer : Control
             actionPanels.Add(panel);
         }
 	}
+
+    public void RevertKeybindsToDefault()
+    {
+        // for each panel...
+        foreach (KeybindsActionPanel panel in actionPanels)
+        {
+            panel.RevertEventsToDefault(commonGameSettings);
+        }
+
+        UpdateVisuals();
+    }
+
+    public void UpdateVisuals()
+    {
+        // update visuals for each panel
+        foreach (KeybindsActionPanel panel in actionPanels)
+        {
+            panel.UpdateVisuals();
+        }
+    }
 }

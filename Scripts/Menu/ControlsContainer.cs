@@ -21,8 +21,8 @@ public partial class ControlsContainer : PageContainer
 
     public void UpdateInputVisuals()
     {
-        bool useHardDropUpKeyboard = commonGameSettings.IsUpHardDropKeyboard;
-        bool useHardDropUpController = commonGameSettings.IsUpHardDropController;
+        bool useHardDropUpKeyboard = false;
+        bool useHardDropUpController = true;
 
         foreach (Control group in RotateUpKeyboardGroups)
         {

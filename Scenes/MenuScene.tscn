@@ -400,7 +400,16 @@ Paint bucket power up:
   vertical and horizontal
   variants.
 
-Custom levels pill/power-up override thing - to-do write this
+Custom keybinds:
+  You can now configure
+  the inputs for the full
+  keyboard and controller.
+
+Next colour overrides:
+  Custom levels can now
+  specify which colours
+  of pills/power-ups drop
+  into the jar.
 
 OTHER:
 
@@ -1631,7 +1640,6 @@ focus_neighbor_left = NodePath("../BackButton")
 text = "NEXT"
 
 [node name="HelpScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("InitialHoverNode")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -3009,6 +3017,29 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_8bdlw")
 icon = ExtResource("23_gcu0b")
 
+[node name="Label" type="Label" parent="UILayer/MenuScreenManager/HelpScreen/HelpPanel/PageContainer/PageLabel"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -143.0
+offset_top = -18.0
+offset_right = -7.0
+offset_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 0)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 0)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 0
+text = "(default binds)"
+horizontal_alignment = 2
+vertical_alignment = 2
+
 [node name="PageLabel2" type="Label" parent="UILayer/MenuScreenManager/HelpScreen/HelpPanel/PageContainer"]
 visible = false
 layout_mode = 1
@@ -3673,6 +3704,7 @@ button_group = SubResource("ButtonGroup_4u0so")
 screenMan = NodePath("../..")
 
 [node name="ModeSingleScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("InitialHoverNode")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

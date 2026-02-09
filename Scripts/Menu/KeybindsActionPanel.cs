@@ -70,6 +70,25 @@ public partial class KeybindsActionPanel : Control
         UpdateVisuals();
     }
 
+	public void RevertEventsToDefault(CommonGameSettings settings)
+	{
+		// erase all of this panel's action's events, then restore defaults from CommonGameSettings
+		var RestoreEventsForAction = (string actID) =>
+        {
+			InputMap.ActionEraseEvents(actID);
+
+            // add default events to the action
+			foreach (InputEvent evnt in settings.GetDefaultKeybindsForAction(actID))
+			{
+				InputMap.ActionAddEvent(actID, evnt);
+			}
+        };
+
+		// do it for keyboard actions first then controller
+        RestoreEventsForAction(KeyboardActionID);
+        RestoreEventsForAction(ControllerActionID);
+    }
+
 	private int CreateEventButtons(string actID, Container container)
 	{
 		if (InputMap.HasAction(actID))

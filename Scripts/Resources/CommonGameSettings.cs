@@ -289,57 +289,6 @@ public partial class CommonGameSettings : Resource
 
         }
     }
-    public bool IsUpHardDropKeyboard
-    {
-        get
-        {
-            return isUpHardDropKeyboard;
-        }
-        set
-        {
-            // skip is setting is already matching
-            if (isUpHardDropKeyboard == value)
-                return;
-
-            isUpHardDropKeyboard = value;
-
-            CopyActions("KeyboardFullHardDrop" + (value ? "Up" : "Unique"), "KeyboardFullHardDrop");
-            CopyActions("KeyboardFullRotateRight" + (value ? "WithoutUp" : "WithUp"), "KeyboardFullRotateRight");
-        }
-    }
-    public bool IsUpHardDropController
-    {
-        get
-        {
-            return isUpHardDropController;
-        }
-        set
-        {
-            // skip is setting is already matching
-            if (isUpHardDropController == value)
-                return;
-
-            isUpHardDropController = value;
-
-            // for single player
-            CopyActions("ControllerSingleHardDrop" + (value ? "Up" : "Unique"), "ControllerSingleHardDrop");
-            CopyActions("ControllerSingleRotateRight" + (value ? "WithoutUp" : "WithUp"), "ControllerSingleRotateRight");
-            
-            // if multiplayer controller inputs have been generated...
-            if (InputMap.HasAction("ControllerMulti1HardDrop"))
-            {
-                // for each controller index (0-3) for multiplayer...
-                for (int i = 0; i < 4; i++)
-                {
-                    string prefix = "ControllerMulti" + i;
-                    CopyActions(prefix + (value ? "HardDropUp" : "HardDropUnique"), prefix + "HardDrop");
-                    CopyActions(prefix + "RotateRight" + (value ? "WithoutUp" : "WithUp"), prefix + "RotateRight");
-                }
-            }
-        }
-    }
-    private bool isUpHardDropKeyboard = false;
-    private bool isUpHardDropController = true;
 
     private void CopyActions(string sourceAction, string modifyingAction)
     {
@@ -475,6 +424,28 @@ public partial class CommonGameSettings : Resource
     public int LastUserCustomLevelPage { get; set; } = 0;
     public int LastOfficialCustomLevelPage { get; set; } = 0;
 
+    private Godot.Collections.Dictionary<StringName, Godot.Collections.Array<InputEvent>> defaultKeybinds = new();
+
+    public Godot.Collections.Array<InputEvent> GetDefaultKeybindsForAction(string actID)
+    {
+        return defaultKeybinds[actID];
+    }
+
+    private void BackUpKeybindsAsDefault()
+    {
+        defaultKeybinds.Clear();
+        
+        foreach (StringName actID in InputMap.GetActions())
+        {
+            defaultKeybinds.Add(actID, new());
+
+            foreach (InputEvent evnt in InputMap.ActionGetEvents(actID))
+            {
+                defaultKeybinds[actID].Add(evnt);
+            }
+        }
+    }
+
     public void SaveToFile()
     {
         GD.Print("About to save config file...");
@@ -494,8 +465,6 @@ public partial class CommonGameSettings : Resource
         config.SetValue("Quick Game Settings", "IsGhostPillEnabled", IsGhostPillEnabled);
         config.SetValue("Quick Game Settings", "IsHardDropEnabled", IsHardDropEnabled);
         config.SetValue("Input Settings", "ManualAutoFallSpeedUp", ManualAutoFallSpeedUp);
-        config.SetValue("Input Settings", "IsUpHardDropKeyboard", IsUpHardDropKeyboard);
-        config.SetValue("Input Settings", "IsUpHardDropController", IsUpHardDropController);
         config.SetValue("Input Settings", "SwapABButtons", SwapABButtons);
 
         config.SetValue("Graphics Settings", "LastWindowMode", (int)DisplayServer.WindowGetMode());
@@ -521,6 +490,12 @@ public partial class CommonGameSettings : Resource
 
     public void LoadFromFile()
     {
+        // save default keybinds before loading any data
+        if (!HasLoadedSettings)
+        {
+            BackUpKeybindsAsDefault();
+        }
+
         GD.Print("About to load config file...");
 
         ConfigFile config = new ConfigFile();
@@ -550,8 +525,6 @@ public partial class CommonGameSettings : Resource
             IsHardDropEnabled = (bool)config.GetValue("Quick Game Settings", "IsHardDropEnabled");
 
             ManualAutoFallSpeedUp = (bool)config.GetValue("Input Settings", "ManualAutoFallSpeedUp");
-            IsUpHardDropKeyboard = (bool)config.GetValue("Input Settings", "IsUpHardDropKeyboard");
-            IsUpHardDropController = (bool)config.GetValue("Input Settings", "IsUpHardDropController");
             SwapABButtons = (bool)config.GetValue("Input Settings", "SwapABButtons");
         }
 
@@ -561,8 +534,6 @@ public partial class CommonGameSettings : Resource
             IsGhostPillEnabled = (bool)config.GetValue("Quick Settings", "IsGhostPillEnabled");
             IsHardDropEnabled = (bool)config.GetValue("Quick Settings", "IsHardDropEnabled");
             ManualAutoFallSpeedUp = (bool)config.GetValue("Quick Settings", "ManualAutoFallSpeedUp");
-            IsUpHardDropKeyboard = (bool)config.GetValue("Quick Settings", "IsUpHardDropKeyboard");
-            IsUpHardDropController = (bool)config.GetValue("Quick Settings", "IsUpHardDropController");
         }
 
         if (config.HasSectionKey("Graphics Settings", "LastWindowMode"))
