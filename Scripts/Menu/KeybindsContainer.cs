@@ -5,23 +5,19 @@ using System.Collections.Generic;
 
 public partial class KeybindsContainer : Control
 {
-    [Export] private string keyboardPrefix;
-    public string KeyboardPrefix { get { return keyboardPrefix; } }
-    [Export] private string controllerPrefix;
-    public string ControllerPrefix { get { return controllerPrefix; } }
-    [Export] private Array<string> actionNames;
-    [Export] private Array<string> actionIDs;
     [Export] private KeybindsActionPanel firstActionPanel;
     [Export] private KeybindListenerGroup listenerGroup;
     public KeybindListenerGroup ListenerGroup { get { return listenerGroup; } }
     [Export] private CommonGameSettings commonGameSettings;
+    [Export] private CustomisableActionList actionList;
+    public CustomisableActionList ActionList { get { return actionList; } }
 
     private List<KeybindsActionPanel> actionPanels = new();
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
-        for (int i = 0; i < actionNames.Count; i++)
+        for (int i = 0; i < actionList.ActionNames.Count; i++)
 		{
 			KeybindsActionPanel panel;
             
@@ -33,8 +29,8 @@ public partial class KeybindsContainer : Control
                 AddChild(panel);
             }
 
-            panel.ActionName = actionNames[i];
-            panel.ActionID = actionIDs[i];
+            panel.ActionName = actionList.ActionNames[i];
+            panel.ActionID = actionList.ActionIDs[i];
             panel.KeybindsCon = this;
             panel.UpdateVisuals();
             actionPanels.Add(panel);

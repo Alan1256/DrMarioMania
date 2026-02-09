@@ -25,6 +25,7 @@ public partial class CommonGameSettings : Resource
 
 
     [ExportGroup("Other Resources")]
+    [Export] private CustomisableActionList actionList;
     [Export] public ThemeList themeList { get; set; }
 
     // The player that is being configured in the menu
@@ -446,6 +447,45 @@ public partial class CommonGameSettings : Resource
         }
     }
 
+    // gets dictonary of all customisable actions and their input events
+    private Godot.Collections.Dictionary<StringName, Godot.Collections.Array<InputEvent>> GetCustomisableActionEvents()
+    {
+        Godot.Collections.Dictionary<StringName, Godot.Collections.Array<InputEvent>> actionEvents = new();
+        
+        foreach (StringName actionID in actionList.ActionIDs)
+        {
+            var AddEventsToAction = (StringName actID) =>
+            {
+                actionEvents.Add(actID, new());
+
+                foreach (InputEvent evnt in InputMap.ActionGetEvents(actID))
+                {
+                    actionEvents[actID].Add(evnt);
+                }
+            };
+
+            AddEventsToAction(actionList.KeyboardPrefix + actionID);
+            AddEventsToAction(actionList.ControllerPrefix + actionID);
+        }
+
+        return actionEvents;
+    }
+
+    // replaces events for each given action by the given input events
+    // dictonary key: action id, value: array of input events
+    private void SetActionEvents(Godot.Collections.Dictionary<StringName, Godot.Collections.Array<InputEvent>> actionEvents)
+    {
+        foreach (StringName actID in actionEvents.Keys)
+        {
+            InputMap.ActionEraseEvents(actID);
+
+            foreach (InputEvent evnt in actionEvents[actID])
+            {
+                InputMap.ActionAddEvent(actID, evnt);
+            }
+        }
+    }
+
     public void SaveToFile()
     {
         GD.Print("About to save config file...");
@@ -466,6 +506,7 @@ public partial class CommonGameSettings : Resource
         config.SetValue("Quick Game Settings", "IsHardDropEnabled", IsHardDropEnabled);
         config.SetValue("Input Settings", "ManualAutoFallSpeedUp", ManualAutoFallSpeedUp);
         config.SetValue("Input Settings", "SwapABButtons", SwapABButtons);
+        config.SetValue("Input Settings", "Keybinds", GetCustomisableActionEvents());
 
         config.SetValue("Graphics Settings", "LastWindowMode", (int)DisplayServer.WindowGetMode());
         config.SetValue("Graphics Settings", "OverrideCustomLevelColours", overrideCustomLevelColours);
@@ -526,6 +567,15 @@ public partial class CommonGameSettings : Resource
 
             ManualAutoFallSpeedUp = (bool)config.GetValue("Input Settings", "ManualAutoFallSpeedUp");
             SwapABButtons = (bool)config.GetValue("Input Settings", "SwapABButtons");
+        }
+
+        if (config.HasSectionKey("Input Settings", "Keybinds"))
+        {
+            Godot.Collections.Dictionary<StringName, Godot.Collections.Array<InputEvent>> actionEvents;
+
+            actionEvents = new Godot.Collections.Dictionary<StringName, Godot.Collections.Array<InputEvent>>((Godot.Collections.Dictionary)config.GetValue("Input Settings", "Keybinds"));
+
+            SetActionEvents(actionEvents);
         }
 
         // for legacy setting format

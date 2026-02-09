@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://mdtbub1d7nur"]
+[gd_scene load_steps=28 format=3 uid="uid://mdtbub1d7nur"]
 
 [ext_resource type="Script" path="res://Scripts/Menu/Screens/BaseScreen.cs" id="1_alo62"]
 [ext_resource type="FontFile" uid="uid://c2e4sl3d40to5" path="res://Assets/Fonts/PressStart2P.ttf" id="2_pjlc0"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://Scripts/Menu/KeybindsContainer.cs" id="8_rap86"]
 [ext_resource type="Script" path="res://Scripts/Menu/OverrideColourContainer.cs" id="9_ymv8w"]
 [ext_resource type="Resource" uid="uid://cwxx0untun2hu" path="res://Assets/Resources/ThemeList.tres" id="10_1k6cy"]
+[ext_resource type="Resource" uid="uid://b2st5wgqfol7r" path="res://Assets/Resources/CustomisableActionList.tres" id="10_2qp3e"]
 [ext_resource type="Script" path="res://Scripts/Menu/KeybindsActionPanel.cs" id="10_iyd86"]
 [ext_resource type="Texture2D" uid="uid://dbh02018ysodo" path="res://Assets/Sprites/UI/ButtonIcons/DeleteIconKeyboard.png" id="11_4wuql"]
 [ext_resource type="Script" path="res://Scripts/Menu/KeybindsActionEventButton.cs" id="11_8wm6v"]
@@ -437,7 +438,6 @@ text = "Configure Keybinds
 
 
 to-do:
-- save/load actions,
 - update multi-con inputs
   after leaving sttngs"
 
@@ -445,13 +445,10 @@ to-do:
 layout_mode = 2
 theme_override_constants/separation = 6
 script = ExtResource("8_rap86")
-keyboardPrefix = "KeyboardFull"
-controllerPrefix = "ControllerSingle"
-actionNames = Array[StringName]([&"Rotate Left", &"Rotate Right", &"Move Left", &"Move Right", &"Soft Drop", &"Hard Drop", &"Hold Slot"])
-actionIDs = Array[StringName]([&"RotateLeft", &"RotateRight", &"MoveLeft", &"MoveRight", &"SoftDrop", &"HardDrop", &"Hold"])
 firstActionPanel = NodePath("ActionPanel")
 listenerGroup = NodePath("../../../../KeybindListenerGroup")
 commonGameSettings = ExtResource("11_dmxr5")
+actionList = ExtResource("10_2qp3e")
 
 [node name="ActionPanel" type="Control" parent="PageContainer/ScrollContainer/VBoxContainer2/KeybindsContainer" node_paths=PackedStringArray("actionNameLabel", "keyboardActionsContainer", "controllerActionsContainer", "addButton")]
 custom_minimum_size = Vector2(0, 34)

@@ -7,8 +7,8 @@ public partial class KeybindsActionPanel : Control
     public string ActionName { get { return actionNameLabel.Text; } set { actionNameLabel.Text = value; } }
     private string actionID;
     public string ActionID { get { return actionID; } set { actionID = value; } }
-    private string KeyboardActionID { get { return keybindsCon.KeyboardPrefix + actionID; } }
-    private string ControllerActionID { get { return keybindsCon.ControllerPrefix + actionID; } }
+    private string KeyboardActionID { get { return keybindsCon.ActionList.KeyboardPrefix + actionID; } }
+    private string ControllerActionID { get { return keybindsCon.ActionList.ControllerPrefix + actionID; } }
 	private KeybindsContainer keybindsCon;
     public KeybindsContainer KeybindsCon { get { return keybindsCon; } set { keybindsCon = value; } }
     [Export] private Container keyboardActionsContainer;

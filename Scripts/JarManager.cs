@@ -796,7 +796,7 @@ public partial class JarManager : Node
 		possiblePillColours.Clear();
 		possiblePowerUpColours.Clear();
 
-        var updateList = (List<int> posCols, List<int> chosenSpecCols) =>
+        var UpdateList = (List<int> posCols, List<int> chosenSpecCols) =>
         {
 			// if empty, use jar colours
 			if (chosenSpecCols.Count() == 0)
@@ -835,8 +835,8 @@ public partial class JarManager : Node
 			}
         };
 
-        updateList(possiblePillColours, PlayerGameSettings.ChosenPillSpecificColours);
-        updateList(possiblePowerUpColours, PlayerGameSettings.ChosenPowerUpSpecificColours);
+        UpdateList(possiblePillColours, PlayerGameSettings.ChosenPillSpecificColours);
+        UpdateList(possiblePowerUpColours, PlayerGameSettings.ChosenPowerUpSpecificColours);
     }
 
 	public async void GenerateCustomLevel()

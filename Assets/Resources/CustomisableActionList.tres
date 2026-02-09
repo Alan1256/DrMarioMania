@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://b2st5wgqfol7r"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/CustomisableActionList.cs" id="1_e00qg"]
+
+[resource]
+script = ExtResource("1_e00qg")
+KeyboardPrefix = "KeyboardFull"
+ControllerPrefix = "ControllerSingle"
+ActionNames = Array[String](["Rotate Left", "Rotate Right", "Move Left", "Move Right", "Soft Drop", "Hard Drop", "Hold"])
+ActionIDs = Array[String](["RotateLeft", "RotateRight", "MoveLeft", "MoveRight", "SoftDrop", "HardDrop", "Hold"])
