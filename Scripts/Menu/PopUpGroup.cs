@@ -39,7 +39,8 @@ public partial class PopUpGroup : Control
         lastFocusNode = GetViewport().GuiGetFocusOwner();
         okButton.GrabFocus();
 
-        screenMan.SetCanUseKeyInput(false);
+        if (screenMan != null)
+            screenMan.SetCanUseKeyInput(false);
 
         SetProcess(true);
     }
@@ -47,9 +48,12 @@ public partial class PopUpGroup : Control
     public void HidePopUp()
     {
         aniPlayer.Play("Hide");
-        lastFocusNode.GrabFocus();
 
-        screenMan.CallDeferred("SetCanUseKeyInput", true);
+        if (lastFocusNode != null)
+            lastFocusNode.GrabFocus();
+
+        if (screenMan != null)
+            screenMan.CallDeferred("SetCanUseKeyInput", true);
 
         isOpen = false;
         SetProcess(false);
