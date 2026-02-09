@@ -4,13 +4,21 @@ using System;
 public partial class KeybindListenerGroup : Control
 {
     [Export] private BaseScreenManager screenMan;
+    [Export] private string genericText;
+    [Export] private string keyboardText;
+    [Export] private string controllerText;
+    [Export] private Label label;
 
     // last focused node before opening the popup
     private Control lastFocusNode;
+
     private KeybindsActionPanel currentActionPanel;
+    private InputEvent eventToReplace = null;
+
+    private bool IsReplacing { get { return eventToReplace != null; } }
+    private bool IsReplacingKeyboard { get { return eventToReplace is InputEventKey; } }
 
     private bool isListening = false;
-	
     private const float waitDuration = 3;
     private float waitTimer;
 
@@ -21,8 +29,25 @@ public partial class KeybindListenerGroup : Control
         SetProcess(false);
     }
 
-    public void StartListening(KeybindsActionPanel panel)
+    public void StartListeningToReplace(KeybindsActionPanel panel, InputEvent evnt)
     {
+        eventToReplace = evnt;
+        StartListening(panel);
+    }
+
+    public void StartListeningForNew(KeybindsActionPanel panel)
+    {
+        eventToReplace = null;
+        StartListening(panel);
+    }
+
+    private void StartListening(KeybindsActionPanel panel)
+    {
+        if (IsReplacing)
+            label.Text = IsReplacingKeyboard ? keyboardText : controllerText;
+        else
+            label.Text = genericText;
+
         Visible = true;
         isListening = true;
 
@@ -67,9 +92,21 @@ public partial class KeybindListenerGroup : Control
         if (!isListening)
             return;
 
-        if (@event is InputEventKey || @event is InputEventJoypadButton || @event is InputEventJoypadMotion)
+        
+        // input is valid if it is keyboard input + if not replacing or replacing a keyboard input
+        bool isValidInput = @event is InputEventKey && (!IsReplacing || IsReplacingKeyboard);
+
+        // input is valid if it is controller input + if not replacing or replacing a controller input
+        if (!isValidInput)
+            isValidInput = (@event is InputEventJoypadButton || @event is InputEventJoypadMotion) && (!IsReplacing || !IsReplacingKeyboard);
+
+        if (isValidInput)
 		{
-            currentActionPanel.AddEventToAction(@event);
+            if (IsReplacing)
+                currentActionPanel.ReplaceEventToAction(@event, eventToReplace, !IsReplacingKeyboard);
+            else
+                currentActionPanel.AddEventToAction(@event);
+            
             CallDeferred("StopListening");
         }
     }

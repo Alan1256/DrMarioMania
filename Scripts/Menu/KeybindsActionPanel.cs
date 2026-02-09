@@ -24,22 +24,42 @@ public partial class KeybindsActionPanel : Control
 
 	}
 
-	private void PressAddButton()
+	public void ListenForNewEvent()
 	{
-        keybindsCon.ListenerGroup.StartListening(this);
+        keybindsCon.ListenerGroup.StartListeningForNew(this);
     }
 
-	public void AddEventToAction(InputEvent @event)
+	public void ListenToReplaceEvent(InputEvent evnt)
+	{
+        keybindsCon.ListenerGroup.StartListeningToReplace(this, evnt);
+    }
+
+	public void AddEventToAction(InputEvent evnt)
 	{
 		// determine whether event is controller input or not
-        bool isControllerInput = @event is InputEventJoypadButton || @event is InputEventJoypadMotion;
+        bool isControllerInput = evnt is InputEventJoypadButton || evnt is InputEventJoypadMotion;
 
 		// get action id based on isControllerInput
         string actID = isControllerInput ? ControllerActionID : KeyboardActionID;
 		
 		// add event if it doesn't exist already
-		if (!InputMap.ActionHasEvent(actID, @event))
-        	InputMap.ActionAddEvent(actID, @event);
+		if (!InputMap.ActionHasEvent(actID, evnt))
+        	InputMap.ActionAddEvent(actID, evnt);
+
+        UpdateVisuals();
+    }
+
+	public void ReplaceEventToAction(InputEvent newEvnt, InputEvent oldEvnt, bool isControllerInput)
+	{
+		// get action id based on isControllerInput
+        string actID = isControllerInput ? ControllerActionID : KeyboardActionID;
+
+		// remove old event
+        InputMap.ActionEraseEvent(actID, oldEvnt);
+
+        // add event if it doesn't exist already
+		if (!InputMap.ActionHasEvent(actID, newEvnt))
+        	InputMap.ActionAddEvent(actID, newEvnt);
 
         UpdateVisuals();
     }
@@ -66,38 +86,25 @@ public partial class KeybindsActionPanel : Control
 				// if within no. of actions...
 				else
 				{
-					Button button;
+					KeybindsActionEventButton button;
 
 					// if beyond no. of buttons...
 					if (i >= buttonCount)
 					{
 						// create duplicate button
-						button = container.GetChild(0).Duplicate() as Button;
+						button = container.GetChild(0).Duplicate() as KeybindsActionEventButton;
 						container.AddChild(button);
 					}
 					else
 					{
 						// use existing button and show it
-						button = container.GetChild<Button>(i);
+						button = container.GetChild<KeybindsActionEventButton>(i);
 						button.Visible = true;
 					}
 
-					// set button text to event
-					string eventText;
-
-					// if controller...
-					if (container == controllerActionsContainer)
-					{
-						eventText = actionEvents[i].AsText().Replace("Joypad", "");
-					}
-					// if keyboard...
-					else
-					{
-						eventText = (actionEvents[i] as InputEventKey).AsTextPhysicalKeycode();
-					}
-
-					button.Text = eventText;
-				}
+                    // set button text to event
+                    button.SetActionIDAndEvent(actID, actionEvents[i], container == controllerActionsContainer);
+                }
 			}
 
             return actionEvents.Count;
