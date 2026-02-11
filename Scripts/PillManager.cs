@@ -96,6 +96,10 @@ public partial class PillManager : Node
 	private int nextPillsUsed = 0;
 	private bool canUseDebugMode = false;
 
+	// if the to-be active pill has been thrown but something (avalanche) is holding it up from falling/becoming controllable
+    private bool isPillWaitingToFall = false;
+    public bool IsPillWaitingToFall { get { return isPillWaitingToFall; } }
+	
 	private bool IsActionJustPressed(string action)
 	{
 		return jarMan.IsActionJustPressed(action);
@@ -153,8 +157,9 @@ public partial class PillManager : Node
 
 		pillsUsed = 0;
 		nextPillsUsed = 0;
+        isPillWaitingToFall = false;
 
-		if (PlayerGameSettings.SpeedLevel == 2)
+        if (PlayerGameSettings.SpeedLevel == 2)
             fallSpeed = initialHiFallSpeed;
         else if (PlayerGameSettings.SpeedLevel == 0)
             fallSpeed = initialLowFallSpeed;
@@ -210,7 +215,11 @@ public partial class PillManager : Node
 
 	private void Hold()
 	{
-		ThrowNextPill(holdPill.Visible, true);
+		// if marathon/endless mode, do push-up countdown, but don't cause any falling to happen if it needs to immediately
+		if (CommonGameSettings.GameMode == 1)
+        	jarMan.ReducePushUpCountdown(true);
+
+        ThrowNextPill(holdPill.Visible, true);
 
 		if (activePill.IsPowerUp)
 			activePill.SetPowerUpPreviewVisibility(false);
@@ -310,9 +319,15 @@ public partial class PillManager : Node
 		SetProcess(true);
 	}
 
-	public void ActivateNextPill()
+	public void StartFallingAfterWait()
 	{
-		pillsUsed++;
+        isPillWaitingToFall = false;
+        SetProcess(true);
+    }
+
+    private void ActivateNextPill()
+	{
+        pillsUsed++;
 
 		if (!CommonGameSettings.IsMultiplayer)
 			Mario.ResetFrame();
@@ -384,13 +399,24 @@ public partial class PillManager : Node
 
 		// Check for hazards, if found disable processing to signal to place the pill right away (if found here, the player's gonna be in a fun loop)
 		if (ArePillTilesTouchingHazard(activePill.GridPos))
+		{
+            SetProcess(false);
 			AddPillToTilemap(activePill);
+        }
 		// Check if the active pill isn't blocked by anything - proceed if clear, otherwise do a game over
 		else if (AreTargetPosCellsFree(activePill.GridPos))
 		{
 			currentState = pillStates.Controlling;
 			UpdateActivePillPosition();
-			SetProcess(true);
+
+            if (jarMan.DoTilesToFallExist)
+			{
+                isPillWaitingToFall = true;
+				SetProcess(false);
+				jarMan.SetProcess(true);
+			}
+			else
+				SetProcess(true);
 		}
 		else
 		{
@@ -628,7 +654,8 @@ public partial class PillManager : Node
 		{
 			throwingPill.Position = throwStartPos;
             throwingPill.SetRotation(0);
-            ActivateNextPill();
+
+			ActivateNextPill();
 
             throwingPill.ResetScale();
 
@@ -681,8 +708,10 @@ public partial class PillManager : Node
 		if (IsActionJustPressed("Hold") && PlayerGameSettings.IsHoldEnabled)
 		{
 			if (!wasHoldUsed)
+			{
 				Hold();
-			return;
+				return;
+			}
 		}
 
 		UpdateTimers(dt);

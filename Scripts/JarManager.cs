@@ -85,9 +85,10 @@ public partial class JarManager : Node
 	private Dictionary<int, List<int>> destroyedTiles = new Dictionary<int, List<int>>();
 	// Tiles to be shifted downwards
 	private Dictionary<int, List<int>> tilesToFall = new Dictionary<int, List<int>>();
+	public bool DoTilesToFallExist { get { return tilesToFall.Count != 0; } }
 
-	// Tiles that have landed after auto-falling that will be checked if any matches are present at them
-	private List<Vector2I> uncheckedLandedTiles = new List<Vector2I>();
+    // Tiles that have landed after auto-falling that will be checked if any matches are present at them
+    private List<Vector2I> uncheckedLandedTiles = new List<Vector2I>();
 
 	private bool destructionContainsVirus = false;
 	private double destroyTimer = 0;
@@ -1431,7 +1432,7 @@ public partial class JarManager : Node
 
 	public void AddPillToTilemap(Pill pill)
 	{
-		pill.Visible = false;
+        pill.Visible = false;
 		destroyTimer = 0;
 
 		Vector2I centrePos = pill.GridPos;
@@ -1589,19 +1590,21 @@ public partial class JarManager : Node
 		if (virusesRemaining.Count <= 3 && killedViruses && CommonGameSettings.GameMode != 1)
 			GameMan.PlayHurryUpJingleIfEnabled();
 
-        pillMan.ThrowNextPill();
+		if (pillMan.IsPillWaitingToFall)
+            pillMan.StartFallingAfterWait();
+        else
+        	pillMan.ThrowNextPill();
 	}
 
 	// ONLY USED FOR marathon/endless mode
-	// TO-DO: CALL THIS WHEN USING HOLD
-	private void ReducePushUpCountdown()
+	public void ReducePushUpCountdown(bool delayFall = false)
 	{
 		if (virusesRemaining.Count == 0)
 		{
 			GD.Print("ALL CLEARED, PUSHING UP MORE");
 
 			pushUpCountdown = throwsBeforePushUp;
-            DoPushUp(clearPushUpLines);
+            DoPushUp(clearPushUpLines, delayFall);
 		}
 		else
 		{
@@ -1614,14 +1617,14 @@ public partial class JarManager : Node
 			{
 				pushUpCountdown = throwsBeforePushUp;
 				// to-do: variable push up row amounts (random within range? based on highest virus y pos (closer to bottom = more rows)?)
-				DoPushUp(1);
+				DoPushUp(1, delayFall);
 			}
 		}
 	}
 
     // push up every tile by ROWS, and generates new viruses in the new bottom rows
     // if any tiles go above the top of the jar, its joever
-    private void DoPushUp(int rows)
+    private void DoPushUp(int rows, bool delayFall = false)
     {
         bool pushedOutOfJar = false;
         pushUpCount++;
@@ -1702,9 +1705,10 @@ public partial class JarManager : Node
 		{
             destroyTimer = 0;
 			autoFallTimer = 1;
-			SetProcess(true);
-        }
 
+			if (!delayFall)
+				SetProcess(true);
+        }
     }
 
     private bool TilesToDestroyContainsPos(Vector2I pos)

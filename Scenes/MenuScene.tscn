@@ -411,6 +411,9 @@ Next colour overrides:
   of pills/power-ups drop
   into the jar.
 
+FIXES:
+Fixed a pill-falling delay occuring when attempting to hold while the last held pill is in play.
+
 OTHER:
 
 Added clear and toggle power-up buttons to the Custom Gameplay Style screen.
