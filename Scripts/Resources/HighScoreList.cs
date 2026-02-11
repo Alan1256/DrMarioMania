@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using Godot.Collections;
+using System.Linq;
 
 public partial class HighScoreList : Resource
 {
@@ -18,15 +19,15 @@ public partial class HighScoreList : Resource
     private Dictionary<int, int> officialLevelHighScores = new Dictionary<int, int>();
     private Array<int> clearedOfficialLevels = new Array<int>();
 
-    // the maximum no. of score records saved for each specific game rule condition (aka a key)
+    // the maximum no. of score records saved for each specific game mode and game rule condition (aka a key)
     private const int maxScoreCount = 40;
 
-    // Gets an array of highscores for the current game rules (GameRuleKey, which includes GameplayStyle, SpeedLevel and UseScoreKeep)
-    public Array<int> GameRuleHighScores
+    // Gets an array of highscores for the current game mode/rules (GameTypeKey, which includes GameMode, GameplayStyle, SpeedLevel and UseScoreKeep)
+    public Array<int> CurrentGameTypeHighScores
     {
         get
         {
-            string key = GameRuleKey;
+            string key = CurrentGameTypeKey;
 
             if (highScores.ContainsKey(key))
             {
@@ -41,18 +42,34 @@ public partial class HighScoreList : Resource
         }
     }
 
-    // A string representing the current game rule conditions, used as the key in highScores
-    private string GameRuleKey
+    // A string representing the current game mode and game rule conditions, used as the key in highScores
+    private string CurrentGameTypeKey
     {
         get
         {
             string key = "";
             
-            key += commonGameSettings.CurrentPlayerGameSettings.GameplayStyle;
+            key += commonGameSettings.GameMode;
             key += ",";
-            key += commonGameSettings.CurrentPlayerGameSettings.SpeedLevel;
-            key += ",";
-            key += commonGameSettings.UseScoreKeep ? 1 : 0;
+
+            // CLASSIC
+            if (commonGameSettings.GameMode == 0)
+            {
+                key += commonGameSettings.CurrentPlayerGameSettings.GameplayStyle;
+                key += ",";
+                key += commonGameSettings.CurrentPlayerGameSettings.SpeedLevel;
+                key += ",";
+                key += commonGameSettings.UseScoreKeep ? 1 : 0;
+            }
+            // MARATHON/ENDLESS
+            else if (commonGameSettings.GameMode == 1)
+            {
+                key += commonGameSettings.CurrentPlayerGameSettings.VirusDifficulty;
+                key += ",";
+                key += commonGameSettings.CurrentPlayerGameSettings.GameplayStyle;
+                key += ",";
+                key += commonGameSettings.CurrentPlayerGameSettings.SpeedLevel;
+            }
 
             return key;
         }
@@ -71,8 +88,8 @@ public partial class HighScoreList : Resource
         return clearedOfficialLevels.Contains(lvlID);
     }
 
-    // Get the highscore for the current game rule conditions
-    public int GetGameRuleHighScore()
+    // Get the highscore for the current game mode/rule conditions OR custom level, if in one
+    public int GetCurrentHighScore()
     {
         if (commonGameSettings.IsCustomLevel)
         {
@@ -94,7 +111,7 @@ public partial class HighScoreList : Resource
                 return userCustomLevelList.CustomLevels[lvlID].highScore;
         }
 
-        string key = GameRuleKey;
+        string key = CurrentGameTypeKey;
 
         if (highScores.ContainsKey(key))
         {
@@ -108,7 +125,7 @@ public partial class HighScoreList : Resource
         }
     }
 
-    // Add a score to the list corrisponding to the current game rule conditions
+    // Add a score to the list corrisponding to the current game mode/rule conditions OR custom level if on one
     public void AddScore(int newScore, bool saveData)
     {
         GD.Print("adding score...");
@@ -148,7 +165,7 @@ public partial class HighScoreList : Resource
             return;
         }
 
-        string key = GameRuleKey;
+        string key = CurrentGameTypeKey;
 
         if (!highScores.ContainsKey(key))
         {
@@ -253,9 +270,27 @@ public partial class HighScoreList : Resource
 
         if (config.HasSection("HighScores"))
         {
-            foreach (string key in config.GetSectionKeys("HighScores"))
+            var highScoreKeys = config.GetSectionKeys("HighScores");
+
+            // if key can be split into 3 parts, then set usingLegacyKeyFormat to true
+            bool usingLegacyKeyFormat = false;
+            if (highScoreKeys.Count() != 0)
             {
-                highScores.Add(key, (Array<int>)config.GetValue("HighScores", key));
+                string[] splitKey = highScoreKeys[0].Split(',');
+                
+                if (splitKey.Count() == 3)
+                    usingLegacyKeyFormat = true;
+            }
+
+            foreach (string key in highScoreKeys)
+            {
+                string newKey = key;
+                // if using legacy key format, convert to new one
+
+                if (usingLegacyKeyFormat)
+                    newKey = "0," + key;
+
+                highScores.Add(newKey, (Array<int>)config.GetValue("HighScores", key));
             }
         }
 

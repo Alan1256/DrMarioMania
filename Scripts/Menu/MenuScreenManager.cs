@@ -146,5 +146,5 @@ public partial class MenuScreenManager : BaseHistoryScreenManager
 		{
 			GoBack();
 		}
-	}
+    }
 }

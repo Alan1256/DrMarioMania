@@ -74,7 +74,7 @@ public partial class UpdateableSettingScreen : BaseScreen
 	}
 
 	// updates the screen given's slider and button states based on their corrisponding game setting values
-	public void RefreshUpdateableSettingScreenValues()
+	public virtual void RefreshUpdateableSettingScreenValues()
 	{
 		foreach (Node node in updateableNodes)
 		{

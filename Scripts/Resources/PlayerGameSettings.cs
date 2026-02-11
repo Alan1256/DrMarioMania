@@ -275,7 +275,7 @@ public partial class PlayerGameSettings : Resource
     // used when a mode doesn't specify a virus level, instead using easy, normal, hard
     // each difficulty uses these predetermined virus levels:
     private int[] VirusDifficultyLevels = { 6, 10, 14 };
-    public int VirusDifficulty { get; set; }
+    public int VirusDifficulty { get; set; } = 1;
     public int VirusDifficultyLevel
     {
         get

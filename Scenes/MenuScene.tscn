@@ -1640,6 +1640,7 @@ focus_neighbor_left = NodePath("../BackButton")
 text = "NEXT"
 
 [node name="HelpScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("InitialHoverNode")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -3984,6 +3985,54 @@ grow_horizontal = 2
 text = "HIGH SCORES"
 horizontal_alignment = 1
 
+[node name="GameModeLabel" type="Label" parent="UILayer/MenuScreenManager/HighScoreScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -119.0
+offset_top = -86.0
+offset_right = -47.0
+offset_bottom = -78.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Game Mode"
+
+[node name="GameModeContainer" type="BoxContainer" parent="UILayer/MenuScreenManager/HighScoreScreen" node_paths=PackedStringArray("highScorePanel")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = -74.0
+offset_right = 88.0
+offset_bottom = -58.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = ExtResource("66_5mwtl")
+highScorePanel = NodePath("../HighScorePanel")
+settingName = &"GameMode"
+isCommonSetting = true
+commonGameSettings = ExtResource("17_7dvs3")
+metadata/_edit_group_ = true
+
+[node name="Button" parent="UILayer/MenuScreenManager/HighScoreScreen/GameModeContainer" instance=ExtResource("7_a10ok")]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+button_pressed = true
+text = "CLASSIC"
+
+[node name="Button2" parent="UILayer/MenuScreenManager/HighScoreScreen/GameModeContainer" instance=ExtResource("7_a10ok")]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+text = "MARATHON"
+value = 1
+
 [node name="GameplayLabel" type="Label" parent="UILayer/MenuScreenManager/HighScoreScreen"]
 layout_mode = 1
 anchors_preset = 8
@@ -3992,9 +4041,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -119.0
-offset_top = -90.0
+offset_top = -53.0
 offset_right = 71.0
-offset_bottom = -82.0
+offset_bottom = -45.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Gameplay Style"
@@ -4002,9 +4051,9 @@ text = "Gameplay Style"
 [node name="GameplayScrollContainer" parent="UILayer/MenuScreenManager/HighScoreScreen" instance=ExtResource("10_3cebr")]
 layout_mode = 1
 offset_left = -120.0
-offset_top = -79.0
+offset_top = -42.0
 offset_right = 120.0
-offset_bottom = -53.0
+offset_bottom = -16.0
 
 [node name="GameplayContainer" parent="UILayer/MenuScreenManager/HighScoreScreen/GameplayScrollContainer/MarginContainer" index="0" node_paths=PackedStringArray("highScorePanel")]
 script = ExtResource("66_5mwtl")
@@ -4018,9 +4067,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -119.0
-offset_top = -47.0
-offset_right = -39.0
-offset_bottom = -28.0
+offset_top = -11.0
+offset_right = -57.0
+offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Fall
@@ -4034,9 +4083,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -119.0
-offset_top = -23.0
-offset_right = -57.0
-offset_bottom = 33.0
+offset_top = 13.0
+offset_right = -63.0
+offset_bottom = 69.0
 grow_horizontal = 2
 grow_vertical = 2
 vertical = true
@@ -4064,6 +4113,59 @@ layout_mode = 2
 text = "HIGH"
 value = 2
 
+[node name="DifficultyLabel" type="Label" parent="UILayer/MenuScreenManager/HighScoreScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -59.0
+offset_top = -6.0
+offset_right = -19.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Diff."
+
+[node name="DifficultyContainer" type="BoxContainer" parent="UILayer/MenuScreenManager/HighScoreScreen" node_paths=PackedStringArray("highScorePanel")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -59.0
+offset_top = 13.0
+offset_right = -3.0
+offset_bottom = 69.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical = true
+script = ExtResource("66_5mwtl")
+highScorePanel = NodePath("../HighScorePanel")
+settingName = &"VirusDifficulty"
+commonGameSettings = ExtResource("17_7dvs3")
+metadata/_edit_group_ = true
+
+[node name="Button" parent="UILayer/MenuScreenManager/HighScoreScreen/DifficultyContainer" instance=ExtResource("7_a10ok")]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+button_pressed = true
+text = "EASY"
+
+[node name="Button2" parent="UILayer/MenuScreenManager/HighScoreScreen/DifficultyContainer" instance=ExtResource("7_a10ok")]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+text = "NORM"
+value = 1
+
+[node name="Button3" parent="UILayer/MenuScreenManager/HighScoreScreen/DifficultyContainer" instance=ExtResource("7_a10ok")]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+text = "HARD"
+value = 2
+
 [node name="ScoreKeepLabel" type="Label" parent="UILayer/MenuScreenManager/HighScoreScreen"]
 layout_mode = 1
 anchors_preset = 8
@@ -4071,10 +4173,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -119.0
-offset_top = 39.0
-offset_right = -39.0
-offset_bottom = 58.0
+offset_left = -59.0
+offset_top = -10.0
+offset_right = -19.0
+offset_bottom = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Score
@@ -4085,10 +4187,10 @@ layout_mode = 1
 anchors_preset = 8
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = -83.0
-offset_top = 63.0
-offset_right = -71.0
-offset_bottom = 77.0
+offset_left = -23.0
+offset_top = 14.0
+offset_right = -11.0
+offset_bottom = 28.0
 grow_vertical = 2
 title = "SCORE KEEP"
 description = "Score Keep is when your score doesn't reset when progressing onto the next level.
@@ -4098,24 +4200,24 @@ popUpGroup = NodePath("../../../PopUpGroup")
 
 [node name="ScoreKeepButton" parent="UILayer/MenuScreenManager/HighScoreScreen" node_paths=PackedStringArray("highScorePanel") instance=ExtResource("17_03x8y")]
 layout_mode = 1
-offset_left = -119.0
-offset_top = 62.0
-offset_right = -87.0
-offset_bottom = 78.0
+offset_left = -59.0
+offset_top = 13.0
+offset_right = -27.0
+offset_bottom = 29.0
 script = ExtResource("67_bnmyu")
 highScorePanel = NodePath("../HighScorePanel")
 settingName = &"UseScoreKeep"
 isCommonSetting = true
 
-[node name="HighScorePanel" type="Panel" parent="UILayer/MenuScreenManager/HighScoreScreen" node_paths=PackedStringArray("scoresLabel", "scrollContainer")]
+[node name="HighScorePanel" type="Panel" parent="UILayer/MenuScreenManager/HighScoreScreen" node_paths=PackedStringArray("scoresLabel", "scrollContainer", "difficultyControls", "scoreKeepControls")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -53.0
-offset_top = -49.0
+offset_left = 1.0
+offset_top = -11.0
 offset_right = 120.0
 offset_bottom = 105.0
 grow_horizontal = 2
@@ -4124,6 +4226,10 @@ script = ExtResource("66_q4e3w")
 highScoreList = ExtResource("4_jecqt")
 scoresLabel = NodePath("ScrollContainer/LabelContainer/Label")
 scrollContainer = NodePath("ScrollContainer")
+commonGameSettings = ExtResource("17_7dvs3")
+difficultyControls = [NodePath("../DifficultyLabel"), NodePath("../DifficultyContainer")]
+scoreKeepControls = [NodePath("../ScoreKeepLabel"), NodePath("../PopUpButton"), NodePath("../ScoreKeepButton")]
+metadata/_edit_group_ = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="UILayer/MenuScreenManager/HighScoreScreen/HighScorePanel"]
 layout_mode = 1
@@ -4141,7 +4247,7 @@ vertical_scroll_mode = 2
 scroll_deadzone = 10
 
 [node name="LabelContainer" type="Control" parent="UILayer/MenuScreenManager/HighScoreScreen/HighScorePanel/ScrollContainer"]
-custom_minimum_size = Vector2(0, 445)
+custom_minimum_size = Vector2(0, 443)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
@@ -4290,7 +4396,6 @@ button_group = SubResource("ButtonGroup_5b5yk")
 text = "W5"
 
 [node name="AltGameplayScreen" type="Control" parent="UILayer/MenuScreenManager"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -4313,7 +4418,7 @@ grow_horizontal = 2
 text = "GAME RULES"
 horizontal_alignment = 1
 
-[node name="VirusLabel" type="Label" parent="UILayer/MenuScreenManager/AltGameplayScreen"]
+[node name="DifficultyLabel" type="Label" parent="UILayer/MenuScreenManager/AltGameplayScreen"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -4321,14 +4426,14 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -111.0
-offset_top = -65.0
+offset_top = -58.0
 offset_right = -31.0
-offset_bottom = -57.0
+offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Difficulty"
 
-[node name="VirusContainer" type="BoxContainer" parent="UILayer/MenuScreenManager/AltGameplayScreen"]
+[node name="DifficultyContainer" type="BoxContainer" parent="UILayer/MenuScreenManager/AltGameplayScreen"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -4336,9 +4441,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -112.0
-offset_top = -54.0
+offset_top = -47.0
 offset_right = 112.0
-offset_bottom = -38.0
+offset_bottom = -31.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
@@ -4347,19 +4452,19 @@ settingName = &"VirusDifficulty"
 commonGameSettings = ExtResource("17_7dvs3")
 metadata/_edit_group_ = true
 
-[node name="Button" parent="UILayer/MenuScreenManager/AltGameplayScreen/VirusContainer" instance=ExtResource("7_a10ok")]
+[node name="Button" parent="UILayer/MenuScreenManager/AltGameplayScreen/DifficultyContainer" instance=ExtResource("7_a10ok")]
 custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 button_pressed = true
 text = "EASY"
 
-[node name="Button2" parent="UILayer/MenuScreenManager/AltGameplayScreen/VirusContainer" instance=ExtResource("7_a10ok")]
+[node name="Button2" parent="UILayer/MenuScreenManager/AltGameplayScreen/DifficultyContainer" instance=ExtResource("7_a10ok")]
 custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 text = "NORM"
 value = 1
 
-[node name="Button3" parent="UILayer/MenuScreenManager/AltGameplayScreen/VirusContainer" instance=ExtResource("7_a10ok")]
+[node name="Button3" parent="UILayer/MenuScreenManager/AltGameplayScreen/DifficultyContainer" instance=ExtResource("7_a10ok")]
 custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 text = "HARD"
@@ -4373,19 +4478,46 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -111.0
-offset_top = -33.0
+offset_top = -24.0
 offset_right = 1.0
-offset_bottom = -25.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Gameplay Style"
 
+[node name="PopUpButton" parent="UILayer/MenuScreenManager/AltGameplayScreen" node_paths=PackedStringArray("popUpGroup") instance=ExtResource("19_utcow")]
+layout_mode = 1
+anchors_preset = 8
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 5.0
+offset_top = -27.0
+offset_right = 17.0
+offset_bottom = -13.0
+grow_vertical = 2
+title = "GAMEPLAY STYLE"
+description = "MODERN: Has hold slot and generous lock delay
+
+CLASSIC: Gameplay closer to older Dr. Mario games
+
+Dr. LUIGI: Modern with L-shaped pills
+
+QUAD: Modern with 4 colours
+
+ITEMS: Modern with power-ups
+
+PILL MIX: Modern with various pill shapes
+
+CUSTOM: Use custom game rules"
+alignDescToLeft = true
+popUpGroup = NodePath("../../../PopUpGroup")
+
 [node name="GameplayScrollContainer" parent="UILayer/MenuScreenManager/AltGameplayScreen" instance=ExtResource("10_3cebr")]
 layout_mode = 1
 offset_left = -112.0
-offset_top = -20.0
+offset_top = -11.0
 offset_right = 112.0
-offset_bottom = 6.0
+offset_bottom = 15.0
 
 [node name="SpeedLabel" type="Label" parent="UILayer/MenuScreenManager/AltGameplayScreen"]
 layout_mode = 1
@@ -4395,9 +4527,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -111.0
-offset_top = 11.0
+offset_top = 22.0
 offset_right = 9.0
-offset_bottom = 19.0
+offset_bottom = 30.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Fall Speed"
@@ -4410,9 +4542,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -112.0
-offset_top = 24.0
+offset_top = 35.0
 offset_right = 112.0
-offset_bottom = 40.0
+offset_bottom = 51.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
@@ -4438,33 +4570,6 @@ custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 text = "HIGH"
 value = 2
-
-[node name="PopUpButton" parent="UILayer/MenuScreenManager/AltGameplayScreen" node_paths=PackedStringArray("popUpGroup") instance=ExtResource("19_utcow")]
-layout_mode = 1
-anchors_preset = 8
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 5.0
-offset_top = -36.0
-offset_right = 17.0
-offset_bottom = -22.0
-grow_vertical = 2
-title = "GAMEPLAY STYLE"
-description = "MODERN: Has hold slot and generous lock delay
-
-CLASSIC: Gameplay closer to older Dr. Mario games
-
-Dr. LUIGI: Modern with L-shaped pills
-
-QUAD: Modern with 4 colours
-
-ITEMS: Modern with power-ups
-
-PILL MIX: Modern with various pill shapes
-
-CUSTOM: Use custom game rules"
-alignDescToLeft = true
-popUpGroup = NodePath("../../../PopUpGroup")
 
 [node name="BackButton" type="Button" parent="UILayer/MenuScreenManager/AltGameplayScreen"]
 layout_mode = 1

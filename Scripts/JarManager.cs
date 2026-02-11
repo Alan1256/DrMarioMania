@@ -192,7 +192,7 @@ public partial class JarManager : Node
 	{
 		UpdatePoppedAtlasPositions();
 		if (CommonGameSettings.PlayerCount == 1)
-			uiMan.SetHighScoreLabel(HighScoreList.GetGameRuleHighScore());
+			uiMan.SetHighScoreLabel(HighScoreList.GetCurrentHighScore());
 		SetProcess(false);
 
 		SetVirusTileAnimationState(IsInEditorScene ? false : CommonGameSettings.EnableVirusTileAnimation);
@@ -2160,7 +2160,7 @@ public partial class JarManager : Node
 			if (CommonGameSettings.PlayerCount == 1)
 			{
 				uiMan.SetScoreLabel(score);
-				if (score > HighScoreList.GetGameRuleHighScore())
+				if (score > HighScoreList.GetCurrentHighScore())
 					uiMan.SetHighScoreLabel(score);
 			}
 
