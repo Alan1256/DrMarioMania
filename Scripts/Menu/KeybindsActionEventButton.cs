@@ -23,7 +23,13 @@ public partial class KeybindsActionEventButton : Button
         // if controller...
         if (isController)
         {
-            eventText = evnt.AsText().Replace("Joypad", "");
+            if (evnt is InputEventJoypadMotion)
+            {
+                InputEventJoypadMotion jm = evnt as InputEventJoypadMotion;
+                eventText = jm.Axis.ToString() + (jm.AxisValue > 0.0f ? "+" : "-");
+            }
+            else
+                eventText = (evnt as InputEventJoypadButton).ButtonIndex.ToString();
         }
         // if keyboard...
         else
