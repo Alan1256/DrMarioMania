@@ -1586,7 +1586,7 @@ public partial class JarManager : Node
 		}
 
 		// speed up music if 3 or less viruses remain
-		if (virusesRemaining.Count <= 3 && killedViruses)
+		if (virusesRemaining.Count <= 3 && killedViruses && CommonGameSettings.GameMode != 1)
 			GameMan.PlayHurryUpJingleIfEnabled();
 
         pillMan.ThrowNextPill();
@@ -2058,7 +2058,7 @@ public partial class JarManager : Node
 
 		if (VirusRing != null)
 		{
-            VirusRing.StunVirus(colour, !virusesRemaining.ContainsValue(colour));
+            VirusRing.StunVirus(colour, !virusesRemaining.ContainsValue(colour) && CommonGameSettings.GameMode != 1);
 		}
 
 		IncrementVirusCombo();
