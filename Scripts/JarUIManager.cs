@@ -50,6 +50,8 @@ public partial class JarUIManager : Node
 	[Export] private Godot.Collections.Array<Control> uiShadows;
 
 	[ExportSubgroup("Other")]
+    [Export] private PushUpWarningGroup pushUpWarningGroup;
+    public PushUpWarningGroup PushUpWarningGroup { get { return pushUpWarningGroup; } }
 	[Export] private Sprite2D powerUpIcon;
 	[Export] private PowerUpMeter powerUpMeter;
 	public PowerUpMeter PowerUpMeter { get { return powerUpMeter; } }
@@ -343,6 +345,8 @@ public partial class JarUIManager : Node
 
 		tlMarker.Position -= offset;
 		brMarker.Position += offset;
+
+        pushUpWarningGroup.SetWarningWidth(size.X);
 
         previousJarSize = size;
     }

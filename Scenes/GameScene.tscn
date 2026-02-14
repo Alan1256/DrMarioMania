@@ -478,6 +478,10 @@ bus = &"SFX"
 volume_db = -4.0
 bus = &"SFX"
 
+[node name="PushUpWarning" type="AudioStreamPlayer" parent="SfxManager"]
+volume_db = -4.0
+bus = &"SFX"
+
 [node name="GameThemer" type="Node" parent="." node_paths=PackedStringArray("sfxMan", "musicMan", "bgTexture", "gameMan")]
 script = ExtResource("22_1mga1")
 sfxMan = NodePath("../SfxManager")

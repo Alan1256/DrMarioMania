@@ -522,7 +522,7 @@ position = Vector2(32, -66)
 [node name="PowerUpPill" parent="." index="12"]
 position = Vector2(32, -66)
 
-[node name="UIManager" parent="." index="14" node_paths=PackedStringArray("scoreLabel", "highScoreLabel", "levelLabel", "speedLabel", "virusLabel", "holdLabel", "uiBoxes", "uiLabels", "uiLightLabels", "uiShadows", "mario", "virusRing", "docBoxTexRec", "holdGroupRect", "hudGroup", "topLeftHud", "holdGroup", "rightHudGroup", "leftAlignedNodes", "rightAlignedNodes", "leftAlignedPills", "rightAlignedPills")]
+[node name="UIManager" parent="." index="15" node_paths=PackedStringArray("scoreLabel", "highScoreLabel", "levelLabel", "speedLabel", "virusLabel", "holdLabel", "uiBoxes", "uiLabels", "uiLightLabels", "uiShadows", "mario", "virusRing", "docBoxTexRec", "holdGroupRect", "hudGroup", "topLeftHud", "holdGroup", "rightHudGroup", "leftAlignedNodes", "rightAlignedNodes", "leftAlignedPills", "rightAlignedPills")]
 scoreLabel = NodePath("../HUD/LeftGroup/TopLeftHUD/ScoreLabel")
 highScoreLabel = NodePath("../HUD/LeftGroup/TopLeftHUD/HighScoreLabel")
 levelLabel = NodePath("../HUD/RightGroup/BottomRightHUD/LevelLabel")
@@ -531,7 +531,7 @@ virusLabel = NodePath("../HUD/RightGroup/BottomRightHUD/VirusLabel")
 holdLabel = NodePath("../HUD/LeftGroup/TopLeftHUD/HoldGroup/HoldTitle")
 uiBoxes = [NodePath("../HUD/LeftGroup/TopLeftHUD/UIBox"), NodePath("../HUD/RightGroup/BottomRightHUD/UIBox")]
 uiLabels = [NodePath("../HUD/LeftGroup/TopLeftHUD/ScoreTitle"), NodePath("../HUD/LeftGroup/TopLeftHUD/ScoreLabel"), NodePath("../HUD/RightGroup/BottomRightHUD/LevelTitle"), NodePath("../HUD/RightGroup/BottomRightHUD/LevelLabel"), NodePath("../HUD/RightGroup/BottomRightHUD/SpeedTitle"), NodePath("../HUD/RightGroup/BottomRightHUD/SpeedLabel"), NodePath("../HUD/RightGroup/BottomRightHUD/VirusTitle"), NodePath("../HUD/RightGroup/BottomRightHUD/VirusLabel"), NodePath("../Overlay/OverlayTitle"), NodePath("../HUD/LeftGroup/TopLeftHUD/HighScoreTitle"), NodePath("../HUD/LeftGroup/TopLeftHUD/HighScoreLabel"), NodePath("../HUD/LeftGroup/TopLeftHUD/HoldGroup/HoldTitle")]
-uiLightLabels = [NodePath("../HUD/LeftGroup/TopLeftHUD/HoldGroup/HoldTitle")]
+uiLightLabels = [NodePath("../HUD/LeftGroup/TopLeftHUD/HoldGroup/HoldTitle"), NodePath("../PushUpWarningGroup/PushUpLabel")]
 uiShadows = [NodePath("../JarShadow"), NodePath("../JarShadowTop"), NodePath("../HUD/LeftGroup/TopLeftHUD/UIBoxShadow"), NodePath("../HUD/RightGroup/BottomRightHUD/UIBoxShadow"), NodePath("../HUD/RightGroup/DocBoxShadow"), NodePath("../HUD/LeftGroup/VirusRing/VirusRingShadow")]
 mario = NodePath("../HUD/RightGroup/Mario")
 virusRing = NodePath("../HUD/LeftGroup/VirusRing")
@@ -546,10 +546,10 @@ rightAlignedNodes = [NodePath("../HUD/RightGroup"), NodePath("../PowerUpMeter")]
 leftAlignedPills = [NodePath("../HoldPill")]
 rightAlignedPills = [NodePath("../NextPill"), NodePath("../PowerUpPill")]
 
-[node name="TopLeftMarker" parent="." index="17"]
+[node name="TopLeftMarker" parent="." index="18"]
 position = Vector2(-120, -74)
 
-[node name="BottomRightMarker" parent="." index="18"]
+[node name="BottomRightMarker" parent="." index="19"]
 position = Vector2(120, 96)
 
 [editable path="PowerUpPill"]

@@ -174,29 +174,53 @@ public partial class JarManager : Node
     // marathon/endless mode parameters =========================
 
 	// no. of throws before next push up occurs
-    private const int throwsBeforePushUp = 10;
-	// no. of throws that the push-up warning will show for
-    private const int throwsDuringPushUpWarnin = 3;
-	// no. of lines to push-up upon clearing all viruses
-    private const int clearPushUpLines = 6;
+    private int throwsBeforePushUp = initialThrowsBeforePushUp;
+	// same as above, but scaled to jar width (larger jar = more throws before push-up)
+    private int ScaledThrowsBeforePushUp { get { return throwsBeforePushUp * (JarSize.X / baseJarSize.X); } }
+    // initial possible value of pushUpRows
+    private const int initialThrowsBeforePushUp = 10;
+    private int ScaledInitialThrowsBeforePushUp { get { return initialThrowsBeforePushUp * (JarSize.X / baseJarSize.X); } }
+	// min possible value of pushUpRows
+    private const int minThrowsBeforePushUp = 4;
+	// no. of push ups that have to occur before the no. of throws per push up decreases
+    private const int noOfPushUpsForThrowDecrease = 8;
+
+
+	// no. of rows thst will get pushed up once the push up occurs
+    private int pushUpRows = initialPushUpRows;
+	// initial value of above
+    private const int initialPushUpRows = 1;
+	// max possible value of pushUpRows
+    private const int maxRegularPushUpRows = 4;
+	// no. of push ups that have to occur before the no. of rows per push up increases
+    private const int noOfPushUpsForRowIncrease = 4;
+	// no. of rows to push-up upon clearing all viruses
+    private const int clearPushUpRows = 6;
+
+
 	// no. of times push-ups (of any line amount) have been done
     private int pushUpCount = 0;
 	// push-up countdown, decreases with every throw and resets when a push-up occurs
-    private int pushUpCountdown = throwsBeforePushUp;
+    private int pushUpCountdown;
 
 	// no. of push-ups (of any line amount) before a virus level increase
-    private const int pushUpsBeforeLvlIncrease = 3;
+    private const int noOfPushUpsForLvlIncrease = 2;
 
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
-		UpdatePoppedAtlasPositions();
+        pushUpCountdown = ScaledInitialThrowsBeforePushUp;
+
+        UpdatePoppedAtlasPositions();
 		if (CommonGameSettings.PlayerCount == 1)
 			uiMan.SetHighScoreLabel(HighScoreList.GetCurrentHighScore());
 		SetProcess(false);
 
 		SetVirusTileAnimationState(IsInEditorScene ? false : CommonGameSettings.EnableVirusTileAnimation);
+
+        uiMan.PushUpWarningGroup.SetPushUpRows(pushUpRows);
+        uiMan.PushUpWarningGroup.Visible = false;
 	}
  
 	// Enables/disables the animation of the virus tiles AND animated object tiles
@@ -601,8 +625,14 @@ public partial class JarManager : Node
 		destroyTimer = 0;
 		autoFallTimer = 0;
 
+        throwsBeforePushUp = initialThrowsBeforePushUp;
         pushUpCount = 0;
-		pushUpCountdown = throwsBeforePushUp;
+        pushUpRows = initialPushUpRows;
+        pushUpCountdown = ScaledInitialThrowsBeforePushUp;
+        uiMan.PushUpWarningGroup.Visible = false;
+
+		if (CommonGameSettings.GameMode == 1)
+        	uiMan.PushUpWarningGroup.SetPushUpRows(pushUpRows);
 
         ResetCombo();
 		isJunkFalling = false;
@@ -1603,24 +1633,50 @@ public partial class JarManager : Node
 		{
 			GD.Print("ALL CLEARED, PUSHING UP MORE");
 
-			pushUpCountdown = throwsBeforePushUp;
-            DoPushUp(clearPushUpLines, delayFall);
+            DoPushUp(clearPushUpRows, delayFall);
+			pushUpCountdown = 0;
 		}
 		else
 		{
 			pushUpCountdown--;
 
-			GD.Print(pushUpCountdown);
-
-			// reset countdown and do push up
+			// do push up
 			if (pushUpCountdown <= 0)
 			{
-				pushUpCountdown = throwsBeforePushUp;
 				// to-do: variable push up row amounts (random within range? based on highest virus y pos (closer to bottom = more rows)?)
-				DoPushUp(1, delayFall);
+				DoPushUp(pushUpRows, delayFall);
+			}
+			else if (pushUpCountdown == 1)
+			{
+				SfxMan.Play("PushUpWarning");
 			}
 		}
-	}
+
+		if (pushUpCountdown <= 0)
+		{
+			if (pushUpCount % noOfPushUpsForLvlIncrease == 0 && virusLevel < PlayerGameSettings.VirusDifficultyLevel + 8)
+			{
+				virusLevel++;
+			}
+			if (pushUpCount % noOfPushUpsForRowIncrease == 0 && pushUpRows < maxRegularPushUpRows)
+			{
+				pushUpRows++;
+			}
+			if (pushUpCount % noOfPushUpsForThrowDecrease == 0 && throwsBeforePushUp > minThrowsBeforePushUp)
+			{
+                throwsBeforePushUp--;
+            }
+
+			// set pushUpCountdown to jar-scaled version of throwsBeforePushUp
+			pushUpCountdown = ScaledThrowsBeforePushUp;
+
+			// set ui push up rows
+        	uiMan.PushUpWarningGroup.SetPushUpRows(pushUpRows);
+		}
+
+		// set ui push up countdown
+        uiMan.PushUpWarningGroup.SetPushUpCountdownLabel(pushUpCountdown);
+    }
 
     // push up every tile by ROWS, and generates new viruses in the new bottom rows
     // if any tiles go above the top of the jar, its joever
@@ -1628,14 +1684,6 @@ public partial class JarManager : Node
     {
         bool pushedOutOfJar = false;
         pushUpCount++;
-
-        GD.Print("PUSH UP, ROWS: " + rows);
-
-		if (pushUpCount % pushUpsBeforeLvlIncrease == 0)
-		{
-            virusLevel++;
-            GD.Print("VIRUS LEVEL INCREASE");
-        }
 
         // Push up existing tiles by ROWS
         for (int y = 0; y < JarSize.Y; y++)

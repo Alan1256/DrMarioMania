@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bcukequpvinoq"]
+[gd_scene load_steps=22 format=3 uid="uid://bcukequpvinoq"]
 
 [ext_resource type="Script" path="res://Scripts/JarGroup.cs" id="1_pfaj2"]
 [ext_resource type="Texture2D" uid="uid://pn63ad76k4o2" path="res://Assets/Sprites/Themes/Modern/Jar.png" id="2_2kpyg"]
@@ -15,6 +15,8 @@
 [ext_resource type="Resource" uid="uid://cwxx0untun2hu" path="res://Assets/Resources/ThemeList.tres" id="10_pvq4b"]
 [ext_resource type="Script" path="res://Scripts/JarManager.cs" id="11_60qpv"]
 [ext_resource type="Texture2D" uid="uid://c0y4bel7qlvop" path="res://Assets/Sprites/Themes/Modern/PowerUpMeterEmpty.png" id="11_yerus"]
+[ext_resource type="Script" path="res://Scripts/Menu/PushUpWarningGroup.cs" id="12_pxxap"]
+[ext_resource type="Material" uid="uid://du3sckml2oyki" path="res://Assets/Materials/RedFlashMaterial.tres" id="13_me8wa"]
 [ext_resource type="Resource" uid="uid://gnwx1etyo6q7" path="res://Assets/Resources/PowerUpPrefabs.tres" id="13_nwj07"]
 
 [sub_resource type="Animation" id="Animation_krv7k"]
@@ -418,7 +420,56 @@ patch_margin_bottom = 2
 axis_stretch_vertical = 1
 metadata/_edit_lock_ = true
 
-[node name="UIManager" type="Node" parent="." node_paths=PackedStringArray("overlay", "overlayTitleLabel", "overlayAniPlayer", "nextButton", "quitButton", "jarRects", "jarMainRect", "jarTopLeftRect", "jarTopRightRect", "jarShadowRect", "jarOverlayDarkenRect", "jarTiles", "jarGroup", "activePill", "nextPill", "holdPill", "powerUpPill", "uiBoxes", "uiBoxesSmall", "uiLabels", "uiLightLabels", "uiButtons", "uiShadows", "powerUpIcon", "powerUpMeter", "leftAlignedNodes", "rightAlignedNodes", "leftAlignedPills", "rightAlignedPills", "tlMarker", "brMarker", "jarMan")]
+[node name="PushUpWarningGroup" type="Control" parent="." node_paths=PackedStringArray("pushUpCountdownLabel", "pushUpRowBox")]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("12_pxxap")
+pushUpCountdownLabel = NodePath("PushUpLabel")
+pushUpRowBox = NodePath("PushUpRowBox")
+
+[node name="PushUpLabel" type="Label" parent="PushUpWarningGroup"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -60.0
+offset_right = 4.0
+offset_bottom = -52.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0.498039, 1)
+text = "0"
+
+[node name="PushUpRowBox" type="ColorRect" parent="PushUpWarningGroup"]
+self_modulate = Color(1, 1, 1, 0.498039)
+material = ExtResource("13_me8wa")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -48.0
+offset_right = 32.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UIManager" type="Node" parent="." node_paths=PackedStringArray("overlay", "overlayTitleLabel", "overlayAniPlayer", "nextButton", "quitButton", "jarRects", "jarMainRect", "jarTopLeftRect", "jarTopRightRect", "jarShadowRect", "jarOverlayDarkenRect", "jarTiles", "jarGroup", "activePill", "nextPill", "holdPill", "powerUpPill", "uiBoxes", "uiBoxesSmall", "uiLabels", "uiLightLabels", "uiButtons", "uiShadows", "pushUpWarningGroup", "powerUpIcon", "powerUpMeter", "leftAlignedNodes", "rightAlignedNodes", "leftAlignedPills", "rightAlignedPills", "tlMarker", "brMarker", "jarMan")]
 script = ExtResource("8_ihds5")
 overlay = NodePath("../Overlay")
 overlayTitleLabel = NodePath("../Overlay/OverlayTitle")
@@ -440,9 +491,10 @@ powerUpPill = NodePath("../PowerUpPill")
 uiBoxes = []
 uiBoxesSmall = []
 uiLabels = [NodePath("../Overlay/OverlayTitle")]
-uiLightLabels = []
+uiLightLabels = [NodePath("../PushUpWarningGroup/PushUpLabel")]
 uiButtons = [NodePath("../Overlay/ButtonsContainer/NextButton"), NodePath("../Overlay/ButtonsContainer/QuitButton")]
 uiShadows = [NodePath("../JarShadow"), NodePath("../JarShadowTop")]
+pushUpWarningGroup = NodePath("../PushUpWarningGroup")
 powerUpIcon = NodePath("../PowerUpIcon")
 powerUpMeter = NodePath("../PowerUpMeter")
 leftAlignedNodes = []
