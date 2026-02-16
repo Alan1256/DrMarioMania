@@ -393,6 +393,13 @@ script = ExtResource("13_bgt3e")
 title = "v0.0.0 - CHANGE LOG"
 description = "GAMEPLAY:
 
+Added Marathon game mode:
+  In this mode, viruses
+  continue to rise from
+  the bottom of the
+  screen. How long can
+  you survive?
+
 Paint bucket power up:
   Change the colour of
   viruses, pills, etc in
@@ -412,11 +419,16 @@ Next colour overrides:
   into the jar.
 
 FIXES:
+
 Fixed a pill-falling delay occuring when attempting to hold while the last held pill is in play.
 
 The random music option can no longer pick \"mute\" and try to find a non-existent song.
 
 OTHER:
+
+Added 2 new songs:
+  Whistlestop Summit
+  Dino Dino Jungle
 
 Added clear and toggle power-up buttons to the Custom Gameplay Style screen.
 
@@ -679,7 +691,6 @@ focus_neighbor_left = NodePath("../BackButton")
 text = "NEXT"
 
 [node name="VisualsScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("InitialHoverNode")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -3042,7 +3053,7 @@ theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 0
 theme_override_constants/outline_size = 0
 theme_override_constants/shadow_outline_size = 0
-text = "(default binds)"
+text = "(Default binds)"
 horizontal_alignment = 2
 vertical_alignment = 2
 
@@ -3175,11 +3186,13 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
-text = "CLASSIC: Clear the viruses and go for a high score! You can choose the gameplay style, difficulty, music and visuals.
+text = "CLASSIC: Clear the viruses and aim for a high score.
 
-LEVEL PACKS: Play through and clear a selection of hand-crafted levels!
+MARATHON: Survive for as long as possible as new viruses enter the bottom of the jar.
 
-CUSTOM LEVELS: Design, play and export your own levels! You can also import level codes made by others."
+LEVEL PACKS: Play through a selection of pre-made levels.
+
+CUSTOM LEVELS: Design, play and export your own levels. You can also import level codes made by others."
 vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("20_ahywv")
@@ -4401,6 +4414,7 @@ button_group = SubResource("ButtonGroup_5b5yk")
 text = "W5"
 
 [node name="AltGameplayScreen" type="Control" parent="UILayer/MenuScreenManager"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
