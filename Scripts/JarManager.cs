@@ -8,209 +8,218 @@ using static PowerUpEnums;
 
 public partial class JarManager : Node
 {
-	// handles an individual player's jar, including checking for matching colours, destroying segments, causing tiles to fall, etc AND scoring
-	// basically a player-spefific game manager rather than the entire game
+    // handles an individual player's jar, including checking for matching colours, destroying segments, causing tiles to fall, etc AND scoring
+    // basically a player-spefific game manager rather than the entire game
 
-	[ExportGroup("Tilemap")]
-	[Export] private TileMapLayer jarTiles;
-	public TileMapLayer JarTiles { get { return jarTiles; } }
-	[Export] private TileMapLayer previewTiles;
-	public TileMapLayer PreviewTiles { get { return previewTiles; } }
-	[Export] private TileMapLayer foregroundTiles;
-	public TileMapLayer ForegroundTiles { get { return foregroundTiles; } }
+    [ExportGroup("Tilemap")]
+    [Export] private TileMapLayer jarTiles;
+    public TileMapLayer JarTiles { get { return jarTiles; } }
+    [Export] private TileMapLayer previewTiles;
+    public TileMapLayer PreviewTiles { get { return previewTiles; } }
+    [Export] private TileMapLayer foregroundTiles;
+    public TileMapLayer ForegroundTiles { get { return foregroundTiles; } }
 
-	// Top-left tile of jar
-	[Export] private Vector2I jarOrigin;
-	public Vector2I JarOrigin { get	{ return jarOrigin; } }
-	public Vector2I JarSize { get { return PlayerGameSettings.JarSize; } }
-	private Vector2I baseJarSize = new Vector2I(8, 16);
-	public Vector2I BaseJarSize { get { return baseJarSize; } }
+    // Top-left tile of jar
+    [Export] private Vector2I jarOrigin;
+    public Vector2I JarOrigin { get { return jarOrigin; } }
+    public Vector2I JarSize { get { return PlayerGameSettings.JarSize; } }
+    private Vector2I baseJarSize = new Vector2I(8, 16);
+    public Vector2I BaseJarSize { get { return baseJarSize; } }
 
-	[ExportGroup("Speeds")]
-	[Export] private float destroyRowSpeed;
-	[Export] private float destroyDisappearSpeed;
-	public float DestroyDisappearSpeed { get { return destroyDisappearSpeed; } }
-	[Export] private int virusGenerationSpeed;
+    [ExportGroup("Speeds")]
+    [Export] private float destroyRowSpeed;
+    [Export] private float destroyDisappearSpeed;
+    public float DestroyDisappearSpeed { get { return destroyDisappearSpeed; } }
+    [Export] private int virusGenerationSpeed;
 
-	[ExportGroup("References")]
-	[Export] private PowerUpPrefabs powerUpPrefabs;
-	private PowerUpMeter PowerUpMeter { get { return uiMan.PowerUpMeter; } }
-	private VirusRing VirusRing  { get { return uiMan.VirusRing; } }
-	[Export] private JarUIManager uiMan;
-	public JarUIManager UIMan { get { return uiMan; } }
-	[Export] private PillManager pillMan;
-	public PillManager PillMan { get { return pillMan; } }
+    [ExportGroup("References")]
+    [Export] private PowerUpPrefabs powerUpPrefabs;
+    private PowerUpMeter PowerUpMeter { get { return uiMan.PowerUpMeter; } }
+    private VirusRing VirusRing { get { return uiMan.VirusRing; } }
+    [Export] private JarUIManager uiMan;
+    public JarUIManager UIMan { get { return uiMan; } }
+    [Export] private PillManager pillMan;
+    public PillManager PillMan { get { return pillMan; } }
 
-	// common/global settings shared between all players
-	public CommonGameSettings CommonGameSettings { get; set; }
-	// player-specific game settings, this will either be the player's own chosen settings or the one provided by the custom level
-	public PlayerGameSettings PlayerGameSettings { get; set; }
-	public PlayerMultiInputSettings PlayerMultiInputSettings { get; set; }
-	public HighScoreList HighScoreList { get; set; }
-	public int PlayerID { get; set; }
-	
-	private SfxManager sfxMan;
-	public SfxManager SfxMan
-	{
-		get
-		{
-			return sfxMan;
-		}
-		set
-		{
-			sfxMan = value;
-			PillMan.SfxMan = value;
-			if (VirusRing != null)
-				VirusRing.SfxMan = value;
-		}
-	}
-	public GameManager GameMan { get; set; }
-	public GameThemer GameThemer { get; set; }
+    // common/global settings shared between all players
+    public CommonGameSettings CommonGameSettings { get; set; }
+    // player-specific game settings, this will either be the player's own chosen settings or the one provided by the custom level
+    public PlayerGameSettings PlayerGameSettings { get; set; }
+    public PlayerMultiInputSettings PlayerMultiInputSettings { get; set; }
+    public HighScoreList HighScoreList { get; set; }
+    public int PlayerID { get; set; }
 
-	public Vector2 TilemapGlobalPos { get { return jarTiles.GlobalPosition; } }
-	public Vector2I JarCellSize { get { return jarTiles.TileSet.TileSize; } }
+    private SfxManager sfxMan;
+    public SfxManager SfxMan
+    {
+        get
+        {
+            return sfxMan;
+        }
+        set
+        {
+            sfxMan = value;
+            PillMan.SfxMan = value;
+            if (VirusRing != null)
+                VirusRing.SfxMan = value;
+        }
+    }
+    public GameManager GameMan { get; set; }
+    public GameThemer GameThemer { get; set; }
 
-	// Jar edge positions
-	public float JarTopPos { get { return jarTiles.GlobalPosition.Y + JarCellSize.Y * (-JarSize.Y / 2.0f + 0.5f); } }
-	public float JarBottomPos { get { return jarTiles.GlobalPosition.Y + JarCellSize.Y * (JarSize.Y / 2.0f - 0.5f); } }
-	public float JarLeftPos { get { return jarTiles.GlobalPosition.X + JarCellSize.X * (-JarSize.X / 2.0f + 0.5f); } }
-	public float JarRightPos { get { return jarTiles.GlobalPosition.X + JarCellSize.X * (JarSize.X / 2.0f - 0.5f); } }
+    public Vector2 TilemapGlobalPos { get { return jarTiles.GlobalPosition; } }
+    public Vector2I JarCellSize { get { return jarTiles.TileSet.TileSize; } }
+
+    // Jar edge positions
+    public float JarTopPos { get { return jarTiles.GlobalPosition.Y + JarCellSize.Y * (-JarSize.Y / 2.0f + 0.5f); } }
+    public float JarBottomPos { get { return jarTiles.GlobalPosition.Y + JarCellSize.Y * (JarSize.Y / 2.0f - 0.5f); } }
+    public float JarLeftPos { get { return jarTiles.GlobalPosition.X + JarCellSize.X * (-JarSize.X / 2.0f + 0.5f); } }
+    public float JarRightPos { get { return jarTiles.GlobalPosition.X + JarCellSize.X * (JarSize.X / 2.0f - 0.5f); } }
 
 
-	// key = y pos
-	// value = x pos list
-	// Tiles to be destroyed (turned into "popped" tiles)
-	private Dictionary<int, List<int>> tilesToDestroy = new Dictionary<int, List<int>>();
-	// Destroyed/popped tiles that need to be cleared
-	private Dictionary<int, List<int>> destroyedTiles = new Dictionary<int, List<int>>();
-	// Tiles to be shifted downwards
-	private Dictionary<int, List<int>> tilesToFall = new Dictionary<int, List<int>>();
-	public bool DoTilesToFallExist { get { return tilesToFall.Count != 0; } }
+    // key = y pos
+    // value = x pos list
+    // Tiles to be destroyed (turned into "popped" tiles)
+    private Dictionary<int, List<int>> tilesToDestroy = new Dictionary<int, List<int>>();
+    // Destroyed/popped tiles that need to be cleared
+    private Dictionary<int, List<int>> destroyedTiles = new Dictionary<int, List<int>>();
+    // Tiles to be shifted downwards
+    private Dictionary<int, List<int>> tilesToFall = new Dictionary<int, List<int>>();
+    public bool DoTilesToFallExist { get { return tilesToFall.Count != 0; } }
 
     // Tiles that have landed after auto-falling that will be checked if any matches are present at them
     private List<Vector2I> uncheckedLandedTiles = new List<Vector2I>();
 
-	private bool destructionContainsVirus = false;
-	private double destroyTimer = 0;
-	private double autoFallTimer = 0;
-	private int destroyRow;
-	// key = pos, value = original virus colour (if painted, value should still be its original colour)
-	private Dictionary<Vector2I, int> virusesRemaining = new Dictionary<Vector2I, int>();
+    private bool destructionContainsVirus = false;
+    private double destroyTimer = 0;
+    private double autoFallTimer = 0;
+    private int destroyRow;
+    // key = pos, value = original virus colour (if painted, value should still be its original colour)
+    private Dictionary<Vector2I, int> virusesRemaining = new Dictionary<Vector2I, int>();
 
 
-	// all the colours of the initial jar tiles (excluding -1 and 0 as they corrispond to non-colour and rainbow)
-	private List<int> jarColours = new List<int>();
-	public List<int> JarColours { get { return jarColours; } }
+    // all the colours of the initial jar tiles (excluding -1 and 0 as they corrispond to non-colour and rainbow)
+    private List<int> jarColours = new List<int>();
+    public List<int> JarColours { get { return jarColours; } }
 
-	// possible colours pill/power-ups can be
-	// these are set to jarColours's colours unless specified in advanced settings
-	private List<int> possiblePillColours = new List<int>();
-	public List<int> PossiblePillColours { get { return possiblePillColours; } }
-	private List<int> possiblePowerUpColours = new List<int>();
-	public List<int> PossiblePowerUpColours { get { return possiblePowerUpColours; } }
+    // possible colours pill/power-ups can be
+    // these are set to jarColours's colours unless specified in advanced settings
+    private List<int> possiblePillColours = new List<int>();
+    public List<int> PossiblePillColours { get { return possiblePillColours; } }
+    private List<int> possiblePowerUpColours = new List<int>();
+    public List<int> PossiblePowerUpColours { get { return possiblePowerUpColours; } }
 
-	// if overrideCustomLevelColours exist, the original colours prior to being replaced are added here
-	private List<int> originalJarColours = new List<int>();
-	private bool HaveColoursBeenReplaced { get { return originalJarColours.Count > 0; } }
+    // if overrideCustomLevelColours exist, the original colours prior to being replaced are added here
+    private List<int> originalJarColours = new List<int>();
+    private bool HaveColoursBeenReplaced { get { return originalJarColours.Count > 0; } }
 
 
-	// power-up tiles which are forced to not fall - used for power-ups place in the level editor, which shouldn't fall unlike obtained power-ups
-	private List<Vector2I> frozenPowerUps = new List<Vector2I>();
+    // power-up tiles which are forced to not fall - used for power-ups place in the level editor, which shouldn't fall unlike obtained power-ups
+    private List<Vector2I> frozenPowerUps = new List<Vector2I>();
 
-	private int score = 0;
-	public int Score { get { return score; } }
-	private int virusLevel = -1;
-	public int VirusLevel { get { return virusLevel; } set { virusLevel = value; } }
-	public int SpeedLevel { get { return PlayerGameSettings.SpeedLevel; } }
+    private int score = 0;
+    public int Score { get { return score; } }
+    private int virusLevel = -1;
+    public int VirusLevel { get { return virusLevel; } set { virusLevel = value; } }
+    public int SpeedLevel { get { return PlayerGameSettings.SpeedLevel; } }
 
-	// viruses killed in one move
-	private int virusCombo = 0;
-	// lines cleared (columns and/or rows) in one move
-	private int lineCombo = 0;
-	// times a match is made in one move - this differs from line combos as if multiple lines are cleared at a time, lineCombo will go up two or more times, whereas comboMatches goes up once
-	private int matchCombo = 0;
+    // viruses killed in one move
+    private int virusCombo = 0;
+    // lines cleared (columns and/or rows) in one move
+    private int lineCombo = 0;
+    // times a match is made in one move - this differs from line combos as if multiple lines are cleared at a time, lineCombo will go up two or more times, whereas comboMatches goes up once
+    private int matchCombo = 0;
 
-	private bool isPlayerOut = false;
-	public bool IsPlayerOut { get { return isPlayerOut; } }
+    private bool isPlayerOut = false;
+    public bool IsPlayerOut { get { return isPlayerOut; } }
 
-	// List of colours destroyed per line in a single turn/move
-	private List<int> lineComboColours = new List<int>();
-	// List of colour(s) destroyed on the first match in a single turn/move (before any pills fall to create another match)
-	private List<int> initialLineComboColours = new List<int>();
+    // List of colours destroyed per line in a single turn/move
+    private List<int> lineComboColours = new List<int>();
+    // List of colour(s) destroyed on the first match in a single turn/move (before any pills fall to create another match)
+    private List<int> initialLineComboColours = new List<int>();
 
-	// List of groups of junk segments that will spawn at the top of the screen on the next turn (if list isn't empty)
-	// Each turn will spawn the oldest group of junk segments in this list and remove it from the list
-	// NOTE: The int IDs don't represent colour IDs, but rather the index of this player's specific colours (e.g. if player has yellow, green, purple, 0 = yellow, 1 = green, etc)
-	private List<List<int>> queuedJunkSegments = new List<List<int>>();
-	// List of power-ups that have been matched-up and activated
-	private List<BasePowerUp> activePowerUps = new List<BasePowerUp>();
+    // List of groups of junk segments that will spawn at the top of the screen on the next turn (if list isn't empty)
+    // Each turn will spawn the oldest group of junk segments in this list and remove it from the list
+    // NOTE: The int IDs don't represent colour IDs, but rather the index of this player's specific colours (e.g. if player has yellow, green, purple, 0 = yellow, 1 = green, etc)
+    private List<List<int>> queuedJunkSegments = new List<List<int>>();
+    // List of power-ups that have been matched-up and activated
+    private List<BasePowerUp> activePowerUps = new List<BasePowerUp>();
 
-	// Whether or not junk segments are falling down
-	private bool isJunkFalling = false;
-	// The maximum no. of junk segments a player can send to another in one batch
-	private const int maxJunkSegments = 4;
+    // Whether or not junk segments are falling down
+    private bool isJunkFalling = false;
+    // The maximum no. of junk segments a player can send to another in one batch
+    private const int maxJunkSegments = 4;
 
-	// The X position for the popped state atlas of each tile type
-	private int pillPoppedAtlasX;
-	private int virusPoppedAtlasX;
-	private int powerUpPoppedAtlasX;
-	private Dictionary<Vector2I, JarTileData> customLevelTiles;
-	public bool IsInEditorScene { get; set; } = false;
-	public bool DisablePowerUpSpawning { get; set; } = false;
+    // The X position for the popped state atlas of each tile type
+    private int pillPoppedAtlasX;
+    private int virusPoppedAtlasX;
+    private int powerUpPoppedAtlasX;
+    private Dictionary<Vector2I, JarTileData> customLevelTiles;
+    public bool IsInEditorScene { get; set; } = false;
+    public bool DisablePowerUpSpawning { get; set; } = false;
 
-	// Jar-specific random number generator
-	RandomNumberGenerator localRng = new RandomNumberGenerator();
-	public RandomNumberGenerator LocalRng { get { return localRng; } }
+    // Jar-specific random number generator
+    RandomNumberGenerator localRng = new RandomNumberGenerator();
+    public RandomNumberGenerator LocalRng { get { return localRng; } }
 
-	// Whether or not the player won or not on their last round
-	private bool lastWinState = false;
-	public bool LastWinState { get { return lastWinState; } }
-	// No. of rounds won against other players in multiplayer
-	private int roundWins = 0;
-	// Whether or not this player has won enough rounds to be declared the winner of the overall game
-	public bool HasWonEnoughRounds { get { return roundWins == CommonGameSettings.MultiplayerRequiredWinCount; } }
+    // Whether or not the player won or not on their last round
+    private bool lastWinState = false;
+    public bool LastWinState { get { return lastWinState; } }
+    // No. of rounds won against other players in multiplayer
+    private int roundWins = 0;
+    // Whether or not this player has won enough rounds to be declared the winner of the overall game
+    public bool HasWonEnoughRounds { get { return roundWins == CommonGameSettings.MultiplayerRequiredWinCount; } }
 
 
     // marathon/endless mode parameters =========================
 
+    // no. of times push-ups (of any line amount) have been done
+    private int pushUpCount = 0;
+    // push-up countdown, decreases with every throw and resets when a push-up occurs
+    private int pushUpCountdown;
+	// if all viruses are cleared during marathon/endless mode, this score bonus will be added on to the player's score
+    private int PushUpClearBonus { get { return 2000 + (PlayerGameSettings.VirusDifficulty * 250); } }
+
+
+    // like virusLevel, but specifically for viruses created due to push-ups. determines how many viruses spawn from push-ups
+    private int pushUpVirusLevel = 0;
+    private int InitialPushUpVirusLevel { get { return 2 + PlayerGameSettings.VirusDifficulty; } }
+    private const int pushUpVirusLevelMax = 6;
+
 	// no. of throws before next push up occurs
-    private int throwsBeforePushUp = initialThrowsBeforePushUp;
+    private int throwsBeforePushUp;
 	// same as above, but scaled to jar width (larger jar = more throws before push-up)
     private int ScaledThrowsBeforePushUp { get { return throwsBeforePushUp * (JarSize.X / baseJarSize.X); } }
     // initial possible value of pushUpRows
-    private const int initialThrowsBeforePushUp = 10;
-    private int ScaledInitialThrowsBeforePushUp { get { return initialThrowsBeforePushUp * (JarSize.X / baseJarSize.X); } }
-	// min possible value of pushUpRows
-    private const int minThrowsBeforePushUp = 4;
+    private int InitialThrowsBeforePushUp { get { return 12 - PlayerGameSettings.VirusDifficulty; } }
+	// same as above scaled to jar width (larger jar = more throws before push-up)
+    private int ScaledInitialThrowsBeforePushUp { get { return InitialThrowsBeforePushUp * (JarSize.X / baseJarSize.X); } }
+	// min possible value of pushUpRows (unused)
+    //private const int minThrowsBeforePushUp = 4;
 	// no. of push ups that have to occur before the no. of throws per push up decreases
     private const int noOfPushUpsForThrowDecrease = 8;
-
 
 	// no. of rows thst will get pushed up once the push up occurs
     private int pushUpRows = initialPushUpRows;
 	// initial value of above
     private const int initialPushUpRows = 1;
-	// max possible value of pushUpRows
-    private const int maxRegularPushUpRows = 4;
-	// no. of push ups that have to occur before the no. of rows per push up increases
-    private const int noOfPushUpsForRowIncrease = 4;
+    // max possible value of pushUpRows
+    private const int maxRegularPushUpRows = 2;
+    // no. of push ups that have to occur before the no. of rows per push up increases
+    private const int noOfPushUpsForRowIncrease = 6;
 	// no. of rows to push-up upon clearing all viruses
     private const int clearPushUpRows = 6;
 
-
-	// no. of times push-ups (of any line amount) have been done
-    private int pushUpCount = 0;
-	// push-up countdown, decreases with every throw and resets when a push-up occurs
-    private int pushUpCountdown;
-
-	// no. of push-ups (of any line amount) before a virus level increase
-    private const int noOfPushUpsForLvlIncrease = 2;
+    // no. of push-ups (of any line amount) before pushUpVirusLevel increases
+    private const int noOfPushUpsForLvlIncrease = 3;
 
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
+		throwsBeforePushUp = InitialThrowsBeforePushUp;
         pushUpCountdown = ScaledInitialThrowsBeforePushUp;
+        pushUpVirusLevel = InitialPushUpVirusLevel;
 
         UpdatePoppedAtlasPositions();
 		if (CommonGameSettings.PlayerCount == 1)
@@ -625,10 +634,14 @@ public partial class JarManager : Node
 		destroyTimer = 0;
 		autoFallTimer = 0;
 
-        throwsBeforePushUp = initialThrowsBeforePushUp;
+        throwsBeforePushUp = InitialThrowsBeforePushUp;
+        pushUpCountdown = ScaledInitialThrowsBeforePushUp;
+        pushUpVirusLevel = InitialPushUpVirusLevel;
+
         pushUpCount = 0;
         pushUpRows = initialPushUpRows;
         pushUpCountdown = ScaledInitialThrowsBeforePushUp;
+
         uiMan.PushUpWarningGroup.Visible = false;
 
 		if (CommonGameSettings.GameMode == 1)
@@ -703,7 +716,7 @@ public partial class JarManager : Node
 		else
 		{
             UpdateJarSize();
-            GenerateViruses();
+            GenerateAllViruses();
 		}
 	}
 
@@ -1006,16 +1019,101 @@ public partial class JarManager : Node
         uiMan.UpdateJarSpriteSize();
     }
 
-	public async void GenerateViruses()
+	// chooses a random virus from a list of cell positions/colours, places it, and removes it from the lists
+	private void PlaceRandomVirusFromList(List<Vector2I> possibleCells, List<int> virusColours)
 	{
+		// get random position index and virus colour index
+		int posIndex = localRng.RandiRange(0, possibleCells.Count - 1);
+		int virusIndex = localRng.RandiRange(0, virusColours.Count - 1);
+
+		// get pos and colour using the above indexes
+		Vector2I pos = possibleCells[posIndex];
+		int virusColour = virusColours[virusIndex];
+
+		// if this pos isn't valid, find another valid pos in this row
+		if (!ValidVirusPosition(pos, virusColour))
+		{
+			bool posValid = false;
+			Vector2I potentialPos = pos;
+
+			// search left
+			while (potentialPos.X > jarOrigin.X)
+			{
+				potentialPos.X--;
+
+				// skip if virus is already here
+				if (virusesRemaining.ContainsKey(potentialPos))
+					continue;
+
+				posValid = ValidVirusPosition(potentialPos, virusColour);
+				if (posValid)
+					break;
+			}
+
+			// search right
+			if (!posValid)
+			{
+				potentialPos = pos;
+
+				while (potentialPos.X < jarOrigin.X + JarSize.X - 1)
+				{
+					potentialPos.X++;
+
+					// skip if virus is already here
+					if (virusesRemaining.ContainsKey(potentialPos))
+						return;
+
+					posValid = ValidVirusPosition(potentialPos, virusColour);
+					if (posValid)
+						break;
+				}
+			}
+
+			// if position found...
+			if (posValid)
+			{
+				// set pos to potentialPos
+				pos = potentialPos;
+				// if the pos found was also in possibleCells, remove it from there
+				if (possibleCells.Contains(pos))
+					possibleCells.Remove(pos);
+			}
+			// if not found, remove pos from possibleCells and the virus colour
+			else
+			{
+				possibleCells.RemoveAt(posIndex);
+				virusColours.RemoveAt(virusIndex);
+				return;
+			}
+		}
+		// if pos is valid, remove the pos from possibleCells
+		else
+			possibleCells.RemoveAt(posIndex);
+
+		// remove the virus colour from virus colours list
+		virusColours.RemoveAt(virusIndex);
+		
+		// place virus in jar tilemap
+		jarTiles.SetCell(pos, GameConstants.virusSourceID, Vector2I.Down * (virusColour - 1));
+
+		// add virus to viruses remaining dictonary
+		virusesRemaining.Add(pos, virusColour);
+	}
+
+	// fills jar of all the viruses needed for the current virusLevel/difficulty
+	public async void GenerateAllViruses()
+	{
+		// if gamemode is classic, set virus level to initial virus level if current virusLevel is at a placeholder value (below zero, otherwise continue from prev level)
 		if (CommonGameSettings.GameMode == 0)
 		{
 			if (virusLevel < 0)
 				virusLevel = PlayerGameSettings.InitialVirusLevel;
 		}
+		// else, set virus level based on the difficulty
 		else
 			virusLevel = PlayerGameSettings.VirusDifficultyLevel;
 
+		// update virus level label
 		if (CommonGameSettings.GameMode == 0)
 			uiMan.SetLevelLabel(virusLevel);
 		else
@@ -1031,6 +1129,7 @@ public partial class JarManager : Node
 			
 		}
 
+		// set total virus count based on virus level
 		int virusCount = (virusLevel + 1) * 4;
 
 		// adjust virus count based on jar size
@@ -1043,6 +1142,7 @@ public partial class JarManager : Node
 		virusesRemaining.Clear();
 		jarColours.Clear();
 
+		// set height of the virus-less gap at the top of the jar
 		int gap = 6;
 		if (virusLevel > 18)
 			gap = 3;
@@ -1051,7 +1151,6 @@ public partial class JarManager : Node
 		else if (virusLevel > 14)
 			gap = 5;
 	
-
 		// possible positions the viruses could spawn
 		for (int i = gap; i < JarSize.Y; i++)
 		{
@@ -1061,14 +1160,26 @@ public partial class JarManager : Node
 			}
 		}
 
+        bool isGraduallyAddingColours = true;
+
+		// if gamemode is endless/marathon, add ChosenColours to jarColours immediately
+        if (CommonGameSettings.GameMode == 1)
+		{
+			jarColours = new List<int>(PlayerGameSettings.ChosenColours);
+            isGraduallyAddingColours = false;
+        }
+
 		// create list of each virus colour to use
-		int firstVirus = localRng.RandiRange(0, PlayerGameSettings.ColourCount - 1);
+		// start with a random colour index
+		int firstColourIndex = localRng.RandiRange(0, PlayerGameSettings.ColourCount - 1);
+		// add each colour to virus colours list from ChosenColours for each virus, looping back to first colour once reached end of chosen colour list
+		// if isGraduallyAddingColours is true, add colour to jar colours if it hasn't already been added
 		for (int i = 0; i < virusCount; i++)
 		{
-			int colour = PlayerGameSettings.ChosenColours[(firstVirus + i) % PlayerGameSettings.ColourCount];
+			int colour = PlayerGameSettings.ChosenColours[(firstColourIndex + i) % PlayerGameSettings.ColourCount];
 			virusColours.Add(colour);
 
-			if (!jarColours.Contains(colour))
+			if (isGraduallyAddingColours && !jarColours.Contains(colour))
 				jarColours.Add(colour);
 		}
 
@@ -1084,89 +1195,67 @@ public partial class JarManager : Node
 		if (VirusRing != null)
 			VirusRing.CreateViruses(jarColours);
 
+		// for each no. of viruses to spawn...
 		for (int i = 0; i < virusCount; i++)
 		{
+			// break early if no possible cells exist
 			if (possibleCells.Count == 0)
 				break;
-			
-			int posIndex = localRng.RandiRange(0, possibleCells.Count - 1);
-			int virusIndex = localRng.RandiRange(0, virusColours.Count - 1);
 
-			Vector2I pos = possibleCells[posIndex];
-			int virusColour = virusColours[virusIndex];
+			// place randomly virus from possibleCells/virusColours
+            PlaceRandomVirusFromList(possibleCells, virusColours);
 
-			// if this pos isn't valid, find another valid pos in this row
-			if (!ValidVirusPosition(pos, virusColour))
-			{
-				bool posValid = false;
-				Vector2I potentialPos = pos;
-
-				// search left
-				while (potentialPos.X > jarOrigin.X)
-				{
-					potentialPos.X--;
-
-					// skip if virus is already here
-					if (virusesRemaining.ContainsKey(potentialPos))
-						continue;
-
-					posValid = ValidVirusPosition(potentialPos, virusColour);
-					if (posValid)
-						break;
-				}
-
-				// search right
-				if (!posValid)
-				{
-					potentialPos = pos;
-
-					while (potentialPos.X < jarOrigin.X + JarSize.X - 1)
-					{
-						potentialPos.X++;
-
-						// skip if virus is already here
-						if (virusesRemaining.ContainsKey(potentialPos))
-							continue;
-
-						posValid = ValidVirusPosition(potentialPos, virusColour);
-						if (posValid)
-							break;
-					}
-				}
-
-				// if position found...
-				if (posValid)
-				{
-					// set pos to potentialPos
-					pos = potentialPos;
-					// if the pos found was also in possibleCells, remove it from there
-					if (possibleCells.Contains(pos))
-						possibleCells.Remove(pos);
-				}
-				// if not found, remove pos from possibleCells and the virus colour
-				else
-				{
-					possibleCells.RemoveAt(posIndex);
-					virusColours.RemoveAt(virusIndex);
-					continue;
-				}
-			}
-			else
-				possibleCells.RemoveAt(posIndex);
-
-
-			virusColours.RemoveAt(virusIndex);
-			
-			jarTiles.SetCell(pos, GameConstants.virusSourceID, Vector2I.Down * (virusColour - 1));
-
-			virusesRemaining.Add(pos, virusColour);
-
+			// update virus count label
 			uiMan.SetVirusLabel(virusesRemaining.Count);
 
+			// delay spawning next virus
 			await Task.Delay(1000 / virusGenerationSpeed);
-		}
+        }
 
 		GameMan.IndicateFinishedFillingJar();
+	}
+
+	public void FillsBottomRowsWithViruses(int rows)
+	{
+        // set total virus count based on pushUpVirusLevel and no. of rows
+        int virusCount = pushUpVirusLevel * rows;
+
+        // adjust virus count based on jar size AND no. of rows
+        float virusCountModifier = JarSize.X / (float)baseJarSize.X; // jar width
+        virusCount = Mathf.FloorToInt(virusCount * virusCountModifier);
+
+        List<Vector2I> possibleCells = new List<Vector2I>();
+		List<int> virusColours = new List<int>();
+
+		// fill list of possible positions the viruses could spawn
+		// also create list of each virus colour to use, starting with a random colour index
+		int firstColourIndex = localRng.RandiRange(0, PlayerGameSettings.ColourCount - 1);
+
+		for (int i = JarSize.Y - rows; i < JarSize.Y; i++)
+		{
+			for (int j = 0; j < JarSize.X; j++)
+			{
+				possibleCells.Add(jarOrigin + new Vector2I(j, i));
+
+                // add each colour to virus colours list from ChosenColours for each virus, looping back to first colour once reached end of chosen colour list
+                int colour = PlayerGameSettings.ChosenColours[(firstColourIndex + virusColours.Count) % PlayerGameSettings.ColourCount];
+				virusColours.Add(colour);
+			}
+		}
+
+		// for each virus to make...
+		for (int i = 0; i < virusCount; i++)
+		{
+			// break early if no possible cells exist
+			if (possibleCells.Count == 0)
+				break;
+
+			// place randomly virus from possibleCells/virusColours
+            PlaceRandomVirusFromList(possibleCells, virusColours);
+        }
+
+		// update virus count label
+		uiMan.SetVirusLabel(virusesRemaining.Count);
 	}
 
 	public void StartGame()
@@ -1629,13 +1718,19 @@ public partial class JarManager : Node
 	// ONLY USED FOR marathon/endless mode
 	public void ReducePushUpCountdown(bool delayFall = false)
 	{
+		// if no viruses remain, push up [clearPushUpRows] rows more and award a bonus to the player's score
 		if (virusesRemaining.Count == 0)
 		{
-			GD.Print("ALL CLEARED, PUSHING UP MORE");
-
             DoPushUp(clearPushUpRows, delayFall);
 			pushUpCountdown = 0;
-		}
+
+            score += PushUpClearBonus;
+
+            uiMan.SetScoreLabel(score);
+
+            sfxMan.Play("ObtainBonus");
+        }
+		// else, reduce pushUpCountdown. if reached zero, push up [pushUpRows] rows
 		else
 		{
 			pushUpCountdown--;
@@ -1648,30 +1743,32 @@ public partial class JarManager : Node
 			}
 			else if (pushUpCountdown == 1)
 			{
-				SfxMan.Play("PushUpWarning");
+				sfxMan.Play("PushUpWarning");
 			}
 		}
 
 		if (pushUpCountdown <= 0)
 		{
-			if (pushUpCount % noOfPushUpsForLvlIncrease == 0 && virusLevel < PlayerGameSettings.VirusDifficultyLevel + 8)
+			if (pushUpCount % noOfPushUpsForLvlIncrease == 0 && pushUpVirusLevel < pushUpVirusLevelMax)
 			{
-				virusLevel++;
-			}
+                pushUpVirusLevel++;
+            }
 			if (pushUpCount % noOfPushUpsForRowIncrease == 0 && pushUpRows < maxRegularPushUpRows)
 			{
 				pushUpRows++;
 			}
+			/*
 			if (pushUpCount % noOfPushUpsForThrowDecrease == 0 && throwsBeforePushUp > minThrowsBeforePushUp)
 			{
                 throwsBeforePushUp--;
             }
+			*/
 
 			// set pushUpCountdown to jar-scaled version of throwsBeforePushUp
 			pushUpCountdown = ScaledThrowsBeforePushUp;
 
-			// set ui push up rows
-        	uiMan.PushUpWarningGroup.SetPushUpRows(pushUpRows);
+            // set ui push up rows
+            uiMan.PushUpWarningGroup.SetPushUpRows(pushUpRows);
 		}
 
 		// set ui push up countdown
@@ -1723,11 +1820,9 @@ public partial class JarManager : Node
         }
 
         // to-do: generate new row(s) containing viruses
-		// ENSURE VIRUSES SPAWNED DON'T MATCH MORE THAN 2 OF THE SAME VIRUSES IN A ROW *OR* HAVE THE SAME COLOUR AS THE PILL/POWE-UP ABOVE
-		// IF THE RULES ABOVE CAUSE NO VIRUSES TO SPAWN, FORCE MATCHING VIRUSES TO APPEAR AND DO MATCH CHECKS TO DESTROY (only if a pill/power-up is above)
-		{
-
-		}
+        // ENSURE VIRUSES SPAWNED DON'T MATCH MORE THAN 2 OF THE SAME VIRUSES IN A ROW *OR* HAVE THE SAME COLOUR AS THE PILL/POWE-UP ABOVE
+        // IF THE RULES ABOVE CAUSE NO VIRUSES TO SPAWN, FORCE MATCHING VIRUSES TO APPEAR AND DO MATCH CHECKS TO DESTROY (only if a pill/power-up is above)
+        FillsBottomRowsWithViruses(rows);
 
         // if pushedOutOfJar is true (aka tiles have gone out the top of the jar), do a game over
         if (pushedOutOfJar)

@@ -414,6 +414,8 @@ Next colour overrides:
 FIXES:
 Fixed a pill-falling delay occuring when attempting to hold while the last held pill is in play.
 
+The random music option can no longer pick \"mute\" and try to find a non-existent song.
+
 OTHER:
 
 Added clear and toggle power-up buttons to the Custom Gameplay Style screen.
