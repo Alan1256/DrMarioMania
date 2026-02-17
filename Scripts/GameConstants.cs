@@ -12,8 +12,12 @@ public static class GameConstants
 	public static string MusicFolderPath { get { return ExternalFolderPath + MusicFolder + "/"; } }
 	public static string MusicFolder { get { return IsOnMobile ? "DrMarioMania/Music" : "music"; } }
 
-	// music id used to declare than a custom song is being used (customMusicFile in common game settings)
-	public const int customMusicID = -5;
+	// special music ids
+    public const int themeFeverMusicID = -1; // music id for current theme's fever song
+    public const int themeChillMusicID = -2; // music id for current theme's chill song
+    public const int randomMusicID = -4; // music id for randomised songs
+	public const int customMusicID = -5; // music id used to declare than a custom song is being used (customMusicFile in common game settings)
+
 	public const string forbiddenLevelNameChars = "/;,\"";
 
 	// no. of levels in each level pack

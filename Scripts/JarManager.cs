@@ -562,7 +562,8 @@ public partial class JarManager : Node
 		DisablePowerUpSpawning = true;
 		DeleteAllPowerUps();
 
-        VirusRing.DefeatAllNonDefeatedViruses();
+		if (VirusRing != null)
+        	VirusRing.DefeatAllNonDefeatedViruses();
     }
 
 	public void GameOver()

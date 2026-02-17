@@ -1,12 +1,14 @@
-[gd_scene load_steps=45 format=3 uid="uid://up7l7b7sr6ch"]
+[gd_scene load_steps=46 format=3 uid="uid://up7l7b7sr6ch"]
 
 [ext_resource type="Script" path="res://Scripts/PauseManager.cs" id="1_40uu0"]
 [ext_resource type="Material" uid="uid://d0mvlpdi7fs7q" path="res://Assets/Materials/BlurMaterial.tres" id="1_eplak"]
 [ext_resource type="Texture2D" uid="uid://crkrr2jd53bhj" path="res://Assets/Sprites/Themes/Modern/BGLow.png" id="1_knt7d"]
 [ext_resource type="FontFile" uid="uid://c2e4sl3d40to5" path="res://Assets/Fonts/PressStart2P.ttf" id="1_q2dbg"]
+[ext_resource type="Script" path="res://Scripts/Menu/MusicDetails.cs" id="3_76map"]
 [ext_resource type="Script" path="res://Scripts/Menu/Screens/BaseScreen.cs" id="3_c841w"]
 [ext_resource type="PackedScene" uid="uid://blrcky0050ep3" path="res://Assets/Prefabs/ScreenTransition.tscn" id="3_tamir"]
 [ext_resource type="PackedScene" uid="uid://mdtbub1d7nur" path="res://Assets/Prefabs/Screens/SettingsScreen.tscn" id="5_ek13n"]
+[ext_resource type="Texture2D" uid="uid://joupxudgfk56" path="res://Assets/Sprites/UI/MusicNote.png" id="6_bv6r2"]
 [ext_resource type="Material" uid="uid://csmp6th1p5ym4" path="res://Assets/Materials/BgTintMaterial.tres" id="6_d3q6h"]
 [ext_resource type="Resource" uid="uid://cwxx0untun2hu" path="res://Assets/Resources/ThemeList.tres" id="7_7mg6x"]
 [ext_resource type="Resource" uid="uid://bbsie5itk63lc" path="res://Assets/Resources/MusicList.tres" id="11_oh0kq"]
@@ -94,6 +96,18 @@ tracks/3/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MusicDetails:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_t6ddt"]
 length = 0.001
@@ -144,6 +158,18 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MusicDetails:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_mjd7c"]
@@ -197,16 +223,24 @@ tracks/3/keys = {
 "update": 1,
 "values": [true]
 }
-
-[sub_resource type="Animation" id="Animation_nt83l"]
-resource_name = "new_animation"
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MusicDetails:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v3bw1"]
 _data = {
 "Hide": SubResource("Animation_fmwac"),
 "RESET": SubResource("Animation_t6ddt"),
-"Show": SubResource("Animation_mjd7c"),
-"new_animation": SubResource("Animation_nt83l")
+"Show": SubResource("Animation_mjd7c")
 }
 
 [node name="GameScene" type="Node2D"]
@@ -215,8 +249,9 @@ _data = {
 layer = 2
 visible = false
 
-[node name="PauseManager" type="Node" parent="PauseLayer" node_paths=PackedStringArray("pauseAni", "gameMan", "screenContainer")]
+[node name="PauseManager" type="Node" parent="PauseLayer" node_paths=PackedStringArray("musicDetails", "pauseAni", "gameMan", "screenContainer")]
 script = ExtResource("1_40uu0")
+musicDetails = NodePath("../MusicDetails")
 pauseAni = NodePath("../PauseAniPlayer")
 gameMan = NodePath("../../GameManager")
 screenContainer = NodePath("../ScreenCentre/ScreenContainer")
@@ -250,6 +285,52 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
+[node name="MusicDetails" type="Control" parent="PauseLayer" node_paths=PackedStringArray("titleLabel", "gameLabel")]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 63.0
+grow_horizontal = 2
+script = ExtResource("3_76map")
+titleLabel = NodePath("TitleLabel")
+gameLabel = NodePath("GameLabel")
+musicList = ExtResource("11_oh0kq")
+commonGameSettings = ExtResource("23_1agr5")
+
+[node name="TitleLabel" type="Label" parent="PauseLayer/MusicDetails"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 6.0
+offset_right = -27.0
+offset_bottom = 14.0
+grow_horizontal = 2
+text = "Never Gonna Give You Up"
+horizontal_alignment = 2
+
+[node name="GameLabel" type="Label" parent="PauseLayer/MusicDetails"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 19.0
+offset_right = -27.0
+offset_bottom = 27.0
+grow_horizontal = 2
+text = "Rick Astley"
+horizontal_alignment = 2
+
+[node name="MusicNote" type="TextureRect" parent="PauseLayer/MusicDetails"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_top = 7.0
+offset_right = -6.0
+offset_bottom = 26.0
+grow_horizontal = 0
+texture = ExtResource("6_bv6r2")
+
 [node name="ScreenCentre" type="Control" parent="PauseLayer"]
 layout_mode = 3
 anchors_preset = 15
@@ -269,7 +350,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PauseMainScreen" type="Control" parent="PauseLayer/ScreenCentre/ScreenContainer" node_paths=PackedStringArray("InitialHoverNode")]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -335,6 +415,7 @@ theme_override_font_sizes/font_size = 8
 text = "QUIT"
 
 [node name="SettingsScreen" parent="PauseLayer/ScreenCentre/ScreenContainer" instance=ExtResource("5_ek13n")]
+visible = false
 layout_mode = 1
 
 [node name="Button" parent="PauseLayer/ScreenCentre/ScreenContainer/SettingsScreen/TabButtons" index="0"]

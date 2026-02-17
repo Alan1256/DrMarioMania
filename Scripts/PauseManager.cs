@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public partial class PauseManager : BaseHistoryScreenManager
 {
     [ExportGroup("Local References")]
+    [Export] private MusicDetails musicDetails;
     [Export] private AnimationPlayer pauseAni;
     [ExportGroup("External References")]
     [Export] private GameManager gameMan;
@@ -19,6 +20,9 @@ public partial class PauseManager : BaseHistoryScreenManager
     {
         pauseAni.Play(b ? "Show" : "Hide");
         menuVisible = true;
+        
+        if (musicDetails != null && b)
+            musicDetails.UpdateDetails();
     }
 
     public override void GoBack()

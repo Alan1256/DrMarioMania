@@ -7,10 +7,13 @@ public partial class MusicList : Resource
     // Stores list of music paths and provides audio streams from these paths
     
     [Export] private Godot.Collections.Array<string> musicPaths;
+    [Export] private Godot.Collections.Array<string> musicTitles;
+    [Export] private Godot.Collections.Array<string> musicGames;
     [Export] private CommonGameSettings commonGameSettings;
     [Export] private ThemeList themeList;
 
     private string pathPrefix = "res://Assets/Audio/Music/";
+    private int lastRandomMusic = -1;
 
     private AudioStream LoadCustomMusic(string path)
     {
@@ -142,14 +145,16 @@ public partial class MusicList : Resource
         }
 
         // fever based on theme
-        if (id == -1)
-            path = themeList.GetFeverMusicPath(commonGameSettings.CurrentTheme, commonGameSettings.IsMultiplayer);
+        if (id == GameConstants.themeFeverMusicID)
+            path = pathPrefix + themeList.GetFeverMusicPath(commonGameSettings.CurrentTheme, commonGameSettings.IsMultiplayer);
         // chill based on theme
-        else if (id == -2)
-            path = themeList.GetChillMusicPath(commonGameSettings.CurrentTheme, commonGameSettings.IsMultiplayer);
+        else if (id == GameConstants.themeChillMusicID)
+            path = pathPrefix + themeList.GetChillMusicPath(commonGameSettings.CurrentTheme, commonGameSettings.IsMultiplayer);
         // random
-        else if (id == -4)
-            path = pathPrefix + musicPaths[GD.RandRange(1, musicPaths.Count - 1)];
+        else if (id == GameConstants.randomMusicID){
+            lastRandomMusic = GD.RandRange(1, musicPaths.Count - 1);
+            path = pathPrefix + musicPaths[lastRandomMusic];
+        }
         else
             path = pathPrefix + musicPaths[id];
         
@@ -163,5 +168,61 @@ public partial class MusicList : Resource
         path = themeList.GetMusicFolderPath(commonGameSettings.CurrentTheme) + "/" + name + ".ogg";
 
         return ResourceLoader.Load<AudioStream>(path);
+    }
+
+    public string GetCurrentMusicTitle(int id, string customMusicFile = "")
+    {
+        if (id >= 0)
+            return musicTitles[id];
+        else if (id == GameConstants.themeFeverMusicID || id == GameConstants.themeChillMusicID)
+        {
+            string path;
+            
+            if (id == GameConstants.themeFeverMusicID)
+                path = themeList.GetFeverMusicPath(commonGameSettings.CurrentTheme, commonGameSettings.IsMultiplayer);
+            else
+                path = themeList.GetChillMusicPath(commonGameSettings.CurrentTheme, commonGameSettings.IsMultiplayer);
+            
+            if (musicPaths.Contains(path))
+            {
+                int id2 = musicPaths.IndexOf(path);
+
+                return musicTitles[id2];
+            }
+        }
+        else if (id == GameConstants.randomMusicID)
+            return musicTitles[lastRandomMusic];
+        else if (id == GameConstants.customMusicID)
+            return customMusicFile.Split('.')[0];
+
+        return "Unknown";
+    }
+
+    public string GetCurrentMusicGame(int id)
+    {
+        if (id >= 0)
+            return musicGames[id];
+        else if (id == GameConstants.themeFeverMusicID || id == GameConstants.themeChillMusicID)
+        {
+            string path;
+            
+            if (id == GameConstants.themeFeverMusicID)
+                path = themeList.GetFeverMusicPath(commonGameSettings.CurrentTheme, commonGameSettings.IsMultiplayer);
+            else
+                path = themeList.GetChillMusicPath(commonGameSettings.CurrentTheme, commonGameSettings.IsMultiplayer);
+            
+            if (musicPaths.Contains(path))
+            {
+                int id2 = musicPaths.IndexOf(path);
+
+                return musicGames[id2];
+            }
+        }
+        else if (id == GameConstants.randomMusicID)
+            return musicGames[lastRandomMusic];
+        else if (id == GameConstants.customMusicID)
+            return "User Music";
+
+        return "???";
     }
 }

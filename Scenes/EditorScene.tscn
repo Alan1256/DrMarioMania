@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://dhy6fjq1xc4w2"]
+[gd_scene load_steps=65 format=3 uid="uid://dhy6fjq1xc4w2"]
 
 [ext_resource type="PackedScene" uid="uid://up7l7b7sr6ch" path="res://Scenes/GameScene.tscn" id="1_s5m0s"]
 [ext_resource type="Script" path="res://Scripts/Editor/EditorBaseSelector.cs" id="2_g5ukp"]
@@ -218,15 +218,11 @@ tracks/3/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_nt83l"]
-resource_name = "new_animation"
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v3bw1"]
 _data = {
 "Hide": SubResource("Animation_fmwac"),
 "RESET": SubResource("Animation_t6ddt"),
-"Show": SubResource("Animation_mjd7c"),
-"new_animation": SubResource("Animation_nt83l")
+"Show": SubResource("Animation_mjd7c")
 }
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7hvga"]
@@ -523,7 +519,7 @@ text = "NO"
 visible = false
 layout_mode = 1
 
-[node name="SongCategoryContainer" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/MusicScreen" index="1" node_paths=PackedStringArray("screenMan", "musicPreviewPlayer")]
+[node name="SongCategoryContainer" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/MusicScreen" index="4" node_paths=PackedStringArray("screenMan", "musicPreviewPlayer")]
 screenMan = NodePath("../../../../EditorPauseManager")
 musicPreviewPlayer = NodePath("../../../../../MusicPreviewPlayer")
 settingName = &"CustomLevelMusic"
@@ -871,10 +867,10 @@ layout_mode = 1
 popUpGroup = NodePath("../../../PopUpGroup")
 InitialHoverNode = NodePath("SettingsContainer/BoxContainer/Streak/PopUpButton")
 
-[node name="Colour" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer" index="0"]
+[node name="Colour" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer" index="1"]
 visible = false
 
-[node name="JarSize" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer" index="1"]
+[node name="JarSize" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer" index="2"]
 visible = false
 
 [node name="Number" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer/JarSize/JarSizeLabel" index="0"]
@@ -902,7 +898,7 @@ popUpGroup = NodePath("../../../../../../../PopUpGroup")
 [node name="PopUpButton" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer/PowerUpMeter" index="1" node_paths=PackedStringArray("popUpGroup")]
 popUpGroup = NodePath("../../../../../../../PopUpGroup")
 
-[node name="OverrideColours" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer" index="6"]
+[node name="OverrideColours" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer" index="7"]
 visible = true
 
 [node name="PopUpButton" parent="EditorPauseLayer/ScreenCentre/ScreenContainer/AdvancedGameplayScreen/SettingsContainer/BoxContainer/Hold" index="2" node_paths=PackedStringArray("popUpGroup")]

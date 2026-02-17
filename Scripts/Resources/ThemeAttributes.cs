@@ -44,10 +44,10 @@ public partial class ThemeAttributes : Resource
     // The ring/magnifying glass have a separate overlay sprite to be used on top of the viruses
     [Export] public bool HasRingOverlay { get; set; }
 
-    public string FeverMusicPath { get { return MusicFolderPath + "/Fever.ogg"; } }
-    public string ChillMusicPath { get { return MusicFolderPath + "/Chill.ogg"; } }
-    public string MultiFeverMusicPath { get { return MusicFolderPath + "/VSFever.ogg"; } }
-    public string MultiChillMusicPath { get { return MusicFolderPath + "/VSChill.ogg"; } }
+    public string FeverMusicPath { get { return MusicFolder + "/Fever.ogg"; } }
+    public string ChillMusicPath { get { return MusicFolder + "/Chill.ogg"; } }
+    public string MultiFeverMusicPath { get { return MusicFolder + "/VSFever.ogg"; } }
+    public string MultiChillMusicPath { get { return MusicFolder + "/VSChill.ogg"; } }
     public string MusicFolderPath
     {
         get

@@ -409,14 +409,23 @@ Paint bucket power up:
 
 Custom keybinds:
   You can now configure
-  the inputs for the full
-  keyboard and controller.
+  the gameplay inputs for
+  the full keyboard and
+  controller.
 
 Next colour overrides:
   Custom levels can now
   specify which colours
   of pills/power-ups drop
   into the jar.
+
+MUSIC:
+
+Added 2 new songs:
+  Whistlestop Summit
+  Dino Dino Jungle
+
+The current song title and its corresponding game now display in the pause menu.
 
 FIXES:
 
@@ -425,10 +434,6 @@ Fixed a pill-falling delay occuring when attempting to hold while the last held 
 The random music option can no longer pick \"mute\" and try to find a non-existent song.
 
 OTHER:
-
-Added 2 new songs:
-  Whistlestop Summit
-  Dino Dino Jungle
 
 Added clear and toggle power-up buttons to the Custom Gameplay Style screen.
 
