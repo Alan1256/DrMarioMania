@@ -159,7 +159,7 @@ public partial class JarManager : Node
     public bool DisablePowerUpSpawning { get; set; } = false;
 
     // Jar-specific random number generator
-    RandomNumberGenerator localRng = new RandomNumberGenerator();
+    private RandomNumberGenerator localRng = new RandomNumberGenerator();
     public RandomNumberGenerator LocalRng { get { return localRng; } }
 
     // Whether or not the player won or not on their last round

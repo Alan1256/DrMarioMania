@@ -432,7 +432,11 @@ Added 2 new songs:
 
 Added clear and toggle power-up buttons to the Custom Gameplay Style screen.
 
-Expanded help menu to explain additional game modes and multiplayer."
+Expanded help menu to explain additional game modes and multiplayer.
+
+Replaced music screen OK button with text telling you to double click the song.
+
+Other small menu UI changes."
 alignDescToLeft = true
 popUpGroup = NodePath("../../../PopUpGroup")
 
@@ -691,6 +695,7 @@ focus_neighbor_left = NodePath("../BackButton")
 text = "NEXT"
 
 [node name="VisualsScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("InitialHoverNode")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1021,7 +1026,7 @@ popUpGroup = NodePath("../../../../../../PopUpGroup")
 visible = false
 layout_mode = 1
 
-[node name="SongCategoryContainer" parent="UILayer/MenuScreenManager/MusicScreen" index="1" node_paths=PackedStringArray("screenMan", "musicPreviewPlayer")]
+[node name="SongCategoryContainer" parent="UILayer/MenuScreenManager/MusicScreen" index="4" node_paths=PackedStringArray("screenMan", "musicPreviewPlayer")]
 screenMan = NodePath("../..")
 musicPreviewPlayer = NodePath("../../../../MusicPreviewPlayer")
 
@@ -4413,8 +4418,7 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_5b5yk")
 text = "W5"
 
-[node name="AltGameplayScreen" type="Control" parent="UILayer/MenuScreenManager"]
-visible = false
+[node name="AltGameplayScreen" type="Control" parent="UILayer/MenuScreenManager" node_paths=PackedStringArray("InitialHoverNode")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -4423,6 +4427,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("2_ig0jp")
+InitialHoverNode = NodePath("DifficultyContainer/Button")
 
 [node name="Title" type="Label" parent="UILayer/MenuScreenManager/AltGameplayScreen"]
 layout_mode = 1
@@ -4575,18 +4580,21 @@ metadata/_edit_group_ = true
 [node name="Button" parent="UILayer/MenuScreenManager/AltGameplayScreen/SpeedContainer" instance=ExtResource("7_a10ok")]
 custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
+focus_neighbor_bottom = NodePath("../../NextButton")
 button_pressed = true
 text = "LOW"
 
 [node name="Button2" parent="UILayer/MenuScreenManager/AltGameplayScreen/SpeedContainer" instance=ExtResource("7_a10ok")]
 custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
+focus_neighbor_bottom = NodePath("../../NextButton")
 text = "MEDIUM"
 value = 1
 
 [node name="Button3" parent="UILayer/MenuScreenManager/AltGameplayScreen/SpeedContainer" instance=ExtResource("7_a10ok")]
 custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
+focus_neighbor_bottom = NodePath("../../NextButton")
 text = "HIGH"
 value = 2
 
