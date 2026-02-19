@@ -400,8 +400,10 @@ Added Marathon game mode:
   screen. How long can
   you survive?
 
+Added a sixth level pack (8 new levels)
+
 Paint bucket power up:
-  Change the colour of
+  Changes the colour of
   viruses, pills, etc in
   its path. Comes in
   vertical and horizontal
@@ -526,9 +528,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -111.0
-offset_top = -33.0
+offset_top = -32.0
 offset_right = 1.0
-offset_bottom = -25.0
+offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Gameplay Style"
@@ -1230,9 +1232,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -110.0
-offset_top = -29.0
+offset_top = -28.0
 offset_right = 10.0
-offset_bottom = -21.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Virus Level:"
@@ -1318,6 +1320,8 @@ QUAD: Modern with 4 colours
 ITEMS: Modern with power-ups
 
 PILL MIX: Modern with various pill shapes
+
+BIG JAR: Modern with a wider jar
 
 CUSTOM: Use custom game rules"
 alignDescToLeft = true
@@ -4455,9 +4459,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -111.0
-offset_top = -58.0
+offset_top = -60.0
 offset_right = -31.0
-offset_bottom = -50.0
+offset_bottom = -52.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Difficulty"
@@ -4507,9 +4511,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -111.0
-offset_top = -24.0
+offset_top = -23.0
 offset_right = 1.0
-offset_bottom = -16.0
+offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Gameplay Style"
@@ -4536,6 +4540,8 @@ QUAD: Modern with 4 colours
 ITEMS: Modern with power-ups
 
 PILL MIX: Modern with various pill shapes
+
+BIG JAR: Modern with a wider jar
 
 CUSTOM: Use custom game rules"
 alignDescToLeft = true
