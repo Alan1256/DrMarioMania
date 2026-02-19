@@ -639,7 +639,7 @@ public partial class PlayerGameSettings : Resource
                 }
                 
 
-                if (codeChunks.Length > 20 && false)
+                if (codeChunks.Length > 20)
                 {
                     string[] pillData = codeChunks[20].Split(subItemDivider);
                     string[] pwrData = codeChunks[21].Split(subItemDivider);

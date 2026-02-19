@@ -16,10 +16,7 @@ public partial class MusicDetails : Control
 
 	public void UpdateDetails()
 	{
-		GD.Print("a");
         titleLabel.Text = musicList.GetCurrentMusicTitle(commonGameSettings.CurrentMusic, commonGameSettings.CurrentCustomMusicFile);
-		GD.Print("b");
         gameLabel.Text = musicList.GetCurrentMusicGame(commonGameSettings.CurrentMusic);
-		GD.Print("c");
     }
 }
