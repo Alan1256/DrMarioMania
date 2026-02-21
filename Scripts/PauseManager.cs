@@ -25,6 +25,15 @@ public partial class PauseManager : BaseHistoryScreenManager
             musicDetails.UpdateDetails();
     }
 
+    public override void SetScreen(int nextScreen)
+	{
+		base.SetScreen(nextScreen);
+
+        // show music details if on screen 0, otherwise hide
+        if (musicDetails != null)
+            musicDetails.Visible = currentScreen == 0;
+    }
+
     public override void GoBack()
     {
         backFrame = Engine.GetFramesDrawn();
@@ -44,5 +53,9 @@ public partial class PauseManager : BaseHistoryScreenManager
 		currentScreen = prevScreen;
 
 		GrabFocusOfLastButton();
+
+        // show music details if on screen 0, otherwise hide
+        if (musicDetails != null)
+            musicDetails.Visible = currentScreen == 0;
     }
 }

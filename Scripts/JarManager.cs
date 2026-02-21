@@ -1306,6 +1306,7 @@ public partial class JarManager : Node
 	public bool IsTileUnbreakable(Vector2I pos) { return IsObjectWithAttribute(pos, "Unbreakable"); }
 	public bool ShouldTileBeForeground(Vector2I pos)  { return IsObjectWithAttribute(pos, "Foreground"); }
 	public bool IsTileHazard(Vector2I pos)  { return IsObjectWithAttribute(pos, "Hazard"); }
+	public bool DoesTileHaveColour(Vector2I pos)  { return GetTileColour(pos) > 0; }
 	public int GetTileSourceID(Vector2I pos)  { return jarTiles.GetCellSourceId(pos); }
 	public Vector2I GetTileAtlas(Vector2I pos)  { return jarTiles.GetCellAtlasCoords(pos); }
 	public bool IsTilePill(Vector2I pos)  { return jarTiles.GetCellSourceId(pos) == GameConstants.pillSourceID; }

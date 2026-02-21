@@ -77,7 +77,8 @@ public partial class PowerUpPaint : BaseShootPowerUp
 
                 for (int j = 0; j < positions.Count; j++)
                 {
-                    if (jarMan.DoesTileCauseRebound(positions[j]))
+                    // end if tile is present and it isn't paintable
+                    if (jarMan.IsTilePresent(positions[j]) && !jarMan.DoesTileHaveColour(positions[j]))
                     {
                         doRebound = true;
                         finishedProjectiles[i] = true;
