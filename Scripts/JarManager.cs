@@ -1758,7 +1758,6 @@ public partial class JarManager : Node
 			// do push up
 			if (pushUpCountdown <= 0)
 			{
-				// to-do: variable push up row amounts (random within range? based on highest virus y pos (closer to bottom = more rows)?)
 				DoPushUp(pushUpRows, delayFall);
 			}
 			else if (pushUpCountdown == 1)
