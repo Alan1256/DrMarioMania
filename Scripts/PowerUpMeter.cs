@@ -85,7 +85,10 @@ public partial class PowerUpMeter : Control
                 currentLevel = PlayerGameSettings.PowerUpMeterMaxLevel - 1;
             // Else, set isPowerUpReady to true
             else
+            {
+                jarMan.SfxMan.Play("PowerUpMeterFull");
                 isPowerUpReady = true;
+            }
 
             currentLevel -= PlayerGameSettings.PowerUpMeterMaxLevel;
         }

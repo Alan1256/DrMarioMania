@@ -1584,7 +1584,7 @@ public partial class JarManager : Node
 			// If rainbow and not on a hazard, auto-activate power-up
 			if (pill.CentreSegmentColour == 0 && !IsTileHazard(centrePos))
 			{
-				SfxMan.Play("Land");
+				sfxMan.Play("Land");
 				ActivatePowerUp(pill.CurrentPowerUp, pill.CentreSegmentColour, centrePos);
 
 				SetProcess(true);

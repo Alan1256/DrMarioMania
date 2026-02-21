@@ -323,6 +323,9 @@ public partial class PillManager : Node
 	{
         isPillWaitingToFall = false;
         SetProcess(true);
+
+		if (activePill.IsPowerUp)
+			SfxMan.Play("PowerUpGet");
     }
 
     private void ActivateNextPill()
@@ -416,7 +419,12 @@ public partial class PillManager : Node
 				jarMan.SetProcess(true);
 			}
 			else
-				SetProcess(true);
+			{
+                SetProcess(true);
+
+				if (activePill.IsPowerUp)
+					SfxMan.Play("PowerUpGet");
+			}
 		}
 		else
 		{

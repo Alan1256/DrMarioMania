@@ -424,13 +424,15 @@ Custom keybinds:
   the full keyboard and
   controller.
 
-MUSIC:
+AUDIO:
 
 Added 2 new songs:
   Whistlestop Summit
   Dino Dino Jungle
 
 The current song title and its corresponding game now display in the pause menu.
+
+Added sound effects for when the power-up gauge fills up and when a power-up enter the jar.
 
 FIXES:
 
