@@ -270,7 +270,7 @@ public partial class PillManager : Node
 		if (!readyCalled)
 			_Ready();
 
-		if (!CommonGameSettings.IsMultiplayer && !usingHoldPill && !powerUpMeter.IsPowerUpReady)
+		if (!CommonGameSettings.IsMultiplayer && !usingHoldPill && !powerUpMeter.IsPowerUpReady && !jarMan.IsPlayerOut)
 			Mario.PlayAnimation("Throw");
 
 		// If power-up is ready and not using a held pill, throw and set powerUpPill then queue a new power-ups
@@ -332,7 +332,7 @@ public partial class PillManager : Node
 	{
         pillsUsed++;
 
-		if (!CommonGameSettings.IsMultiplayer)
+		if (!CommonGameSettings.IsMultiplayer && !jarMan.IsPlayerOut)
 			Mario.ResetFrame();
 
 		// if holding left or right, auto set moveTimer to zero so it starts auto repeat right away
@@ -400,6 +400,14 @@ public partial class PillManager : Node
 
 		activePill.Visible = true;
 
+		// disable, hide pills and return if player is out
+		if (jarMan.IsPlayerOut)
+		{
+            activePill.Visible = false;
+            nextPill.Visible = false;
+            SetProcess(false);
+            return;
+        }
 		// Check for hazards, if found disable processing to signal to place the pill right away (if found here, the player's gonna be in a fun loop)
 		if (ArePillTilesTouchingHazard(activePill.GridPos))
 		{

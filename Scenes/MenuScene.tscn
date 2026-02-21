@@ -391,7 +391,11 @@ text = "v0.0.0"
 icon = null
 script = ExtResource("13_bgt3e")
 title = "v0.0.0 - CHANGE LOG"
-description = "GAMEPLAY:
+description = "Hotfix for an issue with reading old level codes and a game over bug in Marathon.
+
+==== v1.4.0 CHANGES ====
+
+GAMEPLAY:
 
 Added Marathon game mode:
   In this mode, viruses

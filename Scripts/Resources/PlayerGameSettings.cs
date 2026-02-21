@@ -610,7 +610,7 @@ public partial class PlayerGameSettings : Resource
                         }
                     }
                 }
-
+                
                 PowerUpMeterMaxLevel = int.Parse(codeChunks[16]);
 
                 if (codeChunks.Length > 17)
@@ -639,7 +639,7 @@ public partial class PlayerGameSettings : Resource
                 }
                 
 
-                if (codeChunks.Length > 20)
+                if (codeChunks.Length > 21)
                 {
                     string[] pillData = codeChunks[20].Split(subItemDivider);
                     string[] pwrData = codeChunks[21].Split(subItemDivider);
